@@ -1,1 +1,82 @@
+spring:
+  application:
+    name: MapleBridgeServer
+
+  # security安全框架配置
+  security:
+    # Security 过滤器优先级默认-100，此处可以不用设置，是为了方便学习
+    filter:
+      order: -100
+    jwt:
+      key: WGjFZaFYUh1yQKZVwgSZA5Zr1nhBWi37
+      # 分
+      expire: 1
+      # 天
+      refresh_expire: 7
+
+  #数据源
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/maple_bridge_db?characterEncoding=UTF-8
+    username: root
+    password: root
+
+  #邮件服务
+  mail:
+    host: smtp.163.com
+    username: weiguang_mr_han@163.com
+    password: XOWCJBJXGVLZHQYV
+
+  #RabbitMQ消息队列
+  rabbitmq:
+    addresses: localhost
+    username: admin
+    password: admin
+    virtual-host: /maple_bridge
+
+  #Kafka消息队列
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
+
+  data:
+    # redis 配置
+    redis:
+      host: 127.0.0.1
+      password: wgRedis010517
+      port: 6379
+      
+    # MongoDB 配置
+    mongodb:
+      host: localhost
+      port: 27017
+      database: myDataBase
+      authentication-database: admin
+      username: mongo
+      password: mongo
+
+# 服务器配置
+server:
+  port: 9999
+  servlet:
+    context-path: /
+
+# 持久层框架配置
+mybatis-plus:
+  #SQL映射文件位置
+  mapper-locations: classpath*:/mapper/*Mapper.xml,classpath*:/mapper/*Mapper/*Mapper.xml
+  #别名
+  type-aliases-package: priv.backend.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

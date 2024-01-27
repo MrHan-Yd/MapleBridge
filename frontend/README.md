@@ -1,24 +1,7 @@
-# frontend
+### 重置密码方案
+### 方案一
+用户先带着验证码请求对应接口，然后后端存储对应用户已经通过的标记，用户填写新的密码之后然后请求重置密码的接口，在接口验证是否已经通过，然后才重置密码
 
-## Project setup
-```
-yarn install
-```
+### 方案二
+用户带着验证码请求对应接口，然后后端仅对验证码是否进行验证，用户填写新的密码之后请求重置密码接口，不仅需要带上密码，还要之前的验证码一起，然后在此验证验证码，如果正确那么就重置密码
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

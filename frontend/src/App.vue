@@ -1,26 +1,27 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+<script setup>
+import {useDark, useToggle} from "@vueuse/core" ;
+/* element-plus深色模式适配*/
+useDark({
+  selector: 'html' ,
+  attribute: 'class' ,
+  valueDark: 'dark' ,
+  valueLight: 'light'
+}) ;
+/*设置*/
+useDark({
+  /*当浏览器手动去切换颜色，同步*/
+  onChanged(dark) {
+    useToggle(dark) ;
   }
-}
+})
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<template>
+  <div>
+    <router-view />
+  </div>
+</template>
+
+<style scoped>
+
 </style>
