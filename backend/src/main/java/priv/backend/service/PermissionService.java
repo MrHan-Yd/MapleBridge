@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.Permission;
+import priv.backend.domain.dto.StatusRole;
 import priv.backend.domain.vo.request.RestPermissionVO;
+import priv.backend.domain.vo.request.RestRoleStateVO;
 import priv.backend.domain.vo.response.RespPermissionVO;
 import priv.backend.mapper.PermissionMapper;
 import priv.backend.util.CurrentUtils;
@@ -27,22 +29,28 @@ public class PermissionService {
     private PermissionMapper mapper ;
 
     /* TODO: Written by - Han Yongding 2024/01/27 查询权限表 */
-    public Page<RespPermissionVO> getAllPermission(int pageNum, int pageSize) {
-        Page<Permission> page = new Page<>(pageNum, pageSize) ;
-        Page<Permission> returnPage = mapper.getAllPermission(page) ;
+    public Object getAllPermission(int pageNum, int pageSize, boolean isItPaginated) {
+        if (isItPaginated) {
+            Page<Permission> page = new Page<>(pageNum, pageSize) ;
+            Page<Permission> returnPage = mapper.getPagePermission(page) ;
 
-        /* TODO: Written by - Han Yongding 2024/01/27 拷贝属性 */
-        List<RespPermissionVO> list = returnPage
-                .getRecords()
-                .stream()
-                .map(p -> p.asViewObject(RespPermissionVO.class))
-                .toList() ;
+            /* TODO: Written by - Han Yongding 2024/01/27 拷贝属性 */
+            List<RespPermissionVO> list = returnPage
+                    .getRecords()
+                    .stream()
+                    .map(p -> p.asViewObject(RespPermissionVO.class))
+                    .toList() ;
 
-        return PageUtils.convertToPage(returnPage, list) ;
+            return PageUtils.convertToPage(returnPage, list) ;
+        } else {
+            List<RespPermissionVO> list = mapper.getAllPermission().stream().map(p -> p.asViewObject(RespPermissionVO.class)).toList();
+            return list ;
+        }
+
     }
 
     /* TODO: Written by - Han Yongding 2024/01/27 新增权限 */
-    public String addPermission(RestPermissionVO vo) {
+    public String insertPermission(RestPermissionVO vo) {
         if (vo == null) {
             return "数据不能为空，请稍后重试" ;
         }
@@ -62,6 +70,36 @@ public class PermissionService {
         }
 
         /* TODO: Written by - Han Yongding 2024/01/27 添加成功 */
+        return null ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 修改权限 */
+    public String updatePermission(RestPermissionVO vo) {
+        if (vo == null) {
+            return "数据不能为空，请稍后重试" ;
+        }
+
+        /* TODO: Written by - Han Yongding 2024/01/27 根据id修改 */
+        if (mapper.updateById(vo.asViewObject(Permission.class)) < 1) {
+            return "修改失败，请稍后重试" ;
+        }
+        return null ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 删除权限(伪删除) */
+    public String deletePermission(String permissionId) {
+        if (permissionId == null) {
+            return "数据为空，请稍后重试" ;
+        }
+
+        /* TODO: Written by - Han Yongding 2024/01/28 伪删除状态 */
+        Permission vo = new Permission() ;
+        vo.setPermissionId(permissionId) ;
+        vo.setStatusId("1750807870989885442") ;
+        /* TODO: Written by - Han Yongding 2024/01/27 根据id修改为删除标识 */
+        if (mapper.updateById(vo) < 1) {
+            return "删除失败，请稍后重试" ;
+        }
         return null ;
     }
 }

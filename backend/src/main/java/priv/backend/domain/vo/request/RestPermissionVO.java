@@ -3,6 +3,8 @@ package priv.backend.domain.vo.request;
 import lombok.Data;
 import priv.backend.domain.BaseData;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -12,6 +14,8 @@ import priv.backend.domain.BaseData;
  */
 @Data
 public class RestPermissionVO implements BaseData {
+    private String permissionId ;
     private String permissionName ;
     private String permissionUrl ;
+    private String statusId ;
 }

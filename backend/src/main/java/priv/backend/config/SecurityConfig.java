@@ -46,7 +46,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/api/auth/*", "/error").permitAll() // 允许访问 "/api/auth/*" 和 "/error" 路径的请求
+                        .requestMatchers("/api/auth/*", "/api/auth/*/*", "error").permitAll() // 允许访问 "/api/auth/*" 和 "/error" 路径的请求
                         .requestMatchers("/api/auth/backend-admin/*").hasAuthority("ROLE_SUPER_ADMIN") // 需要 "role_admin" 权限才能访问 "/api/auth/backend-admin" 路径
                         .anyRequest().authenticated() // 其他请求需要进行身份验证
                 )

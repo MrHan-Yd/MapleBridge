@@ -1,13 +1,13 @@
 package priv.backend.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
-import priv.backend.domain.vo.request.RestPermissionStateVO;
-import priv.backend.domain.vo.request.RestRoleStateVO;
-import priv.backend.domain.vo.request.RestStatusPermissionVO;
-import priv.backend.domain.vo.request.RestStatusRoleVO;
+import priv.backend.domain.vo.request.*;
+import priv.backend.domain.vo.response.RespRoleVO;
 import priv.backend.service.PermissionService;
+import priv.backend.service.RoleService;
 import priv.backend.service.StatusPermissionService;
 import priv.backend.service.StatusRoleService;
 import priv.backend.util.ReturnUtils;
@@ -94,8 +94,56 @@ public class UserController {
     @GetMapping("permission")
     public RestBean<Object> getAllPermission(
             @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false, defaultValue = "true") boolean isItPaginated) {
         return ReturnUtils
-                .messageHandleData(() -> permissionService.getAllPermission(pageNum, pageSize)) ;
+                .messageHandleData(() -> permissionService.getAllPermission(pageNum, pageSize, isItPaginated)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 新增权限 */
+    @PostMapping("permission")
+    public RestBean<Void> addPermission(@RequestBody RestPermissionVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, permissionService::insertPermission) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 修改权限 */
+    @PutMapping("permission")
+    public RestBean<Void> updatePermission(@RequestBody RestPermissionVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, permissionService::updatePermission) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 删除权限 */
+    @DeleteMapping("permission/{permissionId}")
+    public RestBean<Void> deletePermission(@PathVariable("permissionId") String permissionId) {
+        return ReturnUtils
+                .messageHandle(() -> permissionService.deletePermission(permissionId)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/29 注入角色业务层 */
+    @Resource
+    private RoleService roleService ;
+
+    /* TODO: Written by - Han Yongding 2024/01/31 查询所有角色和相应权限 */
+    @GetMapping("role")
+    public RestBean<Page<RespRoleVO>> getRole(@RequestParam(defaultValue = "1") int pageNum,
+                                              @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnUtils.messageHandleData(() -> roleService.getRoles(pageNum, pageSize)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/29 新增角色权限 */
+    @PostMapping("role")
+    public RestBean<Void> addRole(@RequestBody RestRoleVO vo) {
+        return ReturnUtils.messageHandle(vo,roleService::insertRole) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/31 修改角色状态 */
+    @PutMapping("role")
+    public RestBean<Void> updateRole(@RequestBody RestRoleVO vo) {
+        System.out.println(vo) ;
+//        return ReturnUtils
+//                .messageHandle(vo, roleService::updateRole) ;
+        return null ;
     }
 }

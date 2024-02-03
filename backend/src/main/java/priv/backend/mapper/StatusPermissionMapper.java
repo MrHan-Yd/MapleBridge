@@ -15,6 +15,5 @@ import priv.backend.domain.dto.StatusRole;
  */
 public interface StatusPermissionMapper extends BaseMapper<StatusPermission> {
     /* TODO: Written by - Han Yongding 2024/01/26 分页查询所有权限状态 */
-    @Select("select status_id, status_name, state, create_id, create_time, update_id, update_time from status_permission where state != '2'")
     Page<StatusPermission> getAllStatusPermission(Page<StatusPermission> page);
 }

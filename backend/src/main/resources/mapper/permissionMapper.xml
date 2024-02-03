@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="priv.backend.mapper.StatusRoleMapper">
+<mapper namespace="priv.backend.mapper.PermissionMapper">
     <!--SQL-->
 
     <!--SQL-->
@@ -13,17 +13,26 @@
     <!--Map-->
 
     <!--Select-->
-    <select id="getAllStatusRoles" resultType="StatusRole">
+    <select id="getPagePermission" resultType="Permission" >
         select
+            permission_id,
+            permission_name,
+            permission_url,
             status_id,
-            status_name,
-            state,
             create_id,
             create_time,
             update_id,
             update_time
-        from status_role
-        where state != '2'
+        from permission
+        where status_id != '1750807870989885442'
+    </select>
+    <select id="getAllPermission" resultType="Permission">
+        select
+            permission_id,
+            permission_name,
+            permission_url
+        from permission
+        where status_id != '1750807870989885442'
     </select>
     <!--Select-->
 

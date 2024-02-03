@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Select;
 import priv.backend.domain.dto.Permission;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -15,6 +17,9 @@ import priv.backend.domain.dto.Permission;
 
 public interface PermissionMapper extends BaseMapper<Permission> {
 
-    @Select("select permission_id, permission_name, permission.permission_url, status_id, create_id, create_time, update_id, update_time from permission where status_id != '1750807870989885442'")
-    Page<Permission> getAllPermission(Page<Permission> page) ;
+    /* TODO: Written by - Han Yongding 2024/01/30 分页查询权限 */
+    Page<Permission> getPagePermission(Page<Permission> page) ;
+
+    /* TODO: Written by - Han Yongding 2024/01/30 查询所有权限，用于新增角色 */
+    List<Permission> getAllPermission() ;
 }

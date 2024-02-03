@@ -7,7 +7,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn" ;
 import "element-plus/dist/index.css"
 
 /* 暗黑模式css */
-// import '@/element-plus/theme-chalk/dark/css-vars.css' ;
+import 'element-plus/theme-chalk/dark/css-vars.css' ;
 
 /* 滚动条样式 */
 import '@/assets/css/global.css';

@@ -272,8 +272,6 @@ function deleteStatusData(statusId) {
           }
         },
         (message, code) => {
-          console.log(code)
-          console.log(message)
           ElError(message);
         }
     );

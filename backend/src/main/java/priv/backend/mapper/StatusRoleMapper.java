@@ -17,6 +17,5 @@ import priv.backend.domain.vo.request.RestStatusRoleVO;
 public interface StatusRoleMapper extends BaseMapper<StatusRole> {
 
     /* TODO: Written by - Han Yongding 2024/01/23 分页查询所有角色状态 */
-    @Select("select status_id, status_name, state, create_id, create_time, update_id, update_time from status_role where state != '2'")
     Page<StatusRole> getAllStatusRoles(Page<StatusRole> page);
 }

@@ -133,7 +133,7 @@ function internalDelete(url, header, success = defaultSuccess, failure = default
         headers: header
     }).then(({data}) => {
         if(data.code === 200) {
-            success(data.message) ;
+            success(data) ;
         } else {
             failure(data.message, data.code, url) ;
         }
@@ -156,7 +156,7 @@ function put(url, data, success = defaultSuccess, failure = defaultFailure) {
 }
 
 /* 普通delete 暴露给外面使用 */
-function delete_(url, success, failure = defaultFailure) {
+function delete_(url, success = defaultSuccess, failure = defaultFailure) {
     internalDelete(url, accessHeader(), success, failure) ;
 }
 
