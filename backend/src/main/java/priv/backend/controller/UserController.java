@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.*;
 import priv.backend.domain.vo.response.RespRoleVO;
-import priv.backend.service.PermissionService;
-import priv.backend.service.RoleService;
-import priv.backend.service.StatusPermissionService;
-import priv.backend.service.StatusRoleService;
+import priv.backend.service.impl.*;
 import priv.backend.util.ReturnUtils;
 
 /**
@@ -25,7 +22,7 @@ public class UserController {
 
     /* TODO: Written by - Han Yongding 2024/01/23 注入角色状态业务层 */
     @Resource
-    private StatusRoleService statusRoleService;
+    private StatusRoleServiceImpl statusRoleService;
 
 
     /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
@@ -60,7 +57,7 @@ public class UserController {
 
     /* TODO: Written by - Han Yongding 2024/01/26 注入权限状态业务层 */
     @Resource
-    private StatusPermissionService statusPermissionService ;
+    private StatusPermissionServiceImpl statusPermissionService ;
 
     /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
     @PostMapping("permission-status")
@@ -88,7 +85,7 @@ public class UserController {
 
     /* TODO: Written by - Han Yongding 2024/01/27 注入权限业务层 */
     @Resource
-    private PermissionService permissionService ;
+    private PermissionServiceImpl permissionService ;
 
     /* TODO: Written by - Han Yongding 2024/01/27 查询所有权限数据，后续再优化 */
     @GetMapping("permission")
@@ -123,7 +120,7 @@ public class UserController {
 
     /* TODO: Written by - Han Yongding 2024/01/29 注入角色业务层 */
     @Resource
-    private RoleService roleService ;
+    private RoleServiceImpl roleService ;
 
     /* TODO: Written by - Han Yongding 2024/01/31 查询所有角色和相应权限 */
     @GetMapping("role")
@@ -146,4 +143,74 @@ public class UserController {
 //                .messageHandle(vo, roleService::updateRole) ;
         return null ;
     }
+
+    /* TODO: Written by - Han Yongding 2024/01/27 删除角色 */
+    @DeleteMapping("role/{roleId}")
+    public RestBean<Void> deleteRole(@PathVariable("roleId") String roleId) {
+        System.out.println(roleId);
+//        return ReturnUtils
+//                .messageHandle(() -> permissionService.deletePermission(permissionId)) ;
+        return null;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 注入用户等级表业务层 */
+    @Resource
+    private UserLevelServiceImpl userLevelService ;
+
+    /* TODO: Written by - Han Yongding 2024/02/06 分页查询用户等级表所有数据 */
+    @GetMapping("user-level")
+    public RestBean<Object> getAllUserLevel(
+            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnUtils.messageHandleData(() -> userLevelService.getAllUserLevel(pageNum, pageSize)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 新增用户等级 */
+    @PostMapping("user-level")
+    public RestBean<Void> insertUserLevel(@RequestBody RestUserLevelVO vo) {
+        return ReturnUtils.messageHandle(vo, userLevelService::insertUserLevel) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 修改用户状态 */
+    @PutMapping("user-level")
+    public RestBean<Void> updateUserLevel(@RequestBody RestUserLevelVO vo) {
+        return ReturnUtils.messageHandle(vo, userLevelService::updateUserLevel) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 根据等级ID删除用户等级 */
+    @DeleteMapping("user-level/{levelId}")
+    public RestBean<Void> deleteUserLevel(@PathVariable("levelId") String levelId) {
+        return ReturnUtils.messageHandle(() -> userLevelService.deleteUserLevel(levelId)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/08 注入用户状态业务层 */
+    @Resource
+    private StatusUserServiceImpl statusUserService ;
+
+    /* TODO: Written by - Han Yongding 2024/02/06 分页查询用户状态表所有数据 */
+    @GetMapping("user-status")
+    public RestBean<Object> getAllStatusUser(
+            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnUtils.messageHandleData(() -> statusUserService.getAllStatusUsers(pageNum, pageSize)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 新增用户状态 */
+    @PostMapping("user-status")
+    public RestBean<Void> insertStatusUser(@RequestBody RestStatusUserVO vo) {
+        return ReturnUtils.messageHandle(vo, statusUserService::insertStatusUser) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 修改用户状态 */
+    @PutMapping("user-status")
+    public RestBean<Void> updateStatusUser(@RequestBody RestUserStateVO vo) {
+        return ReturnUtils.messageHandle(vo, statusUserService::updateStatusUserStateById) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/06 根据等级ID删除用户等级 */
+    @DeleteMapping("user-status/{statusId}")
+    public RestBean<Void> deleteStatusUser(@PathVariable("statusId") String statusId) {
+        return ReturnUtils.messageHandle(() -> statusUserService.deleteStatusUserByStatusId(statusId)) ;
+    }
+
 }

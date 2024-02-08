@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.PathConfigMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+    <!--Map-->
+    <!--Select-->
+    <select id="getAllPathConfigs" resultType="PathConfig">
+        select
+            p.permission_url as path_pattern ,
+            r.role_name as role_name
+        from
+            role r
+        left join
+            role_permission rp on r.role_id = rp.role_id
+        left join
+            permission p on rp.permission_id = p.permission_id
+        where r.status_id = '1749402591433838593'
+        and p.status_id = '1750807828107321346'
+    </select>
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

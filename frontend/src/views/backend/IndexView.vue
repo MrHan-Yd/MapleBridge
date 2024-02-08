@@ -14,6 +14,7 @@ import {
   TurnOff, UserFilled, Connection
 } from '@element-plus/icons-vue' ;
 import {onMounted} from "vue";
+import MyIcon from "@/components/MyIcon.vue";
 
 /* 页面打开时默认调用 */
 onMounted(() => {
@@ -87,51 +88,89 @@ const handleClose = (key, keyPath) => {
           >
             <el-sub-menu index="1" >
               <template #title>
-                <el-icon><House /></el-icon>
-                <span>首页</span>
+                <my-icon name="icon-yibiaopan" />
+                <span>仪表盘</span>
               </template>
                 <el-menu-item index="1-1">
                   <el-icon><DataLine /></el-icon>
                   <span @click="router.push('backend-workbench')">工作台</span>
                 </el-menu-item>
-                <el-menu-item index="1-2">
-                  <el-icon><Odometer /></el-icon>
-                  <span>数据可视化分析</span>
-                </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="2">
               <template #title>
-                <el-icon><UserFilled /></el-icon>
-                <span>角色管理</span>
+                <el-icon><Odometer /></el-icon>
+                <span>数据可视化</span>
               </template>
               <el-menu-item index="2-1">
-                <el-icon><Avatar /></el-icon>
-                <span @click="router.push('/backend-role')">平台角色管理</span>
+                <my-icon name="icon-shujufenxi"/>
+                <span @click="router.push('/backend-user-level')">数据分析</span>
               </el-menu-item>
               <el-menu-item index="2-2">
-                <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-role-status')">角色状态管理</span>
+                <my-icon name="icon-duoweishujufenxi"/>
+                <span @click="router.push('/backend-user-level')">多维数据分析</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="3">
               <template #title>
-                <el-icon><Connection /></el-icon>
-                <span>权限管理</span>
+                <my-icon name="icon-yonghu"/>
+                <span>用户管理</span>
               </template>
               <el-menu-item index="3-1">
-                <el-icon><Connection /></el-icon>
-                <span @click="router.push('/backend-permission')">平台权限管理</span>
+                <my-icon name="icon-yonghuguanli"/>
+                <span @click="router.push('/backend-user')">平台用户管理</span>
               </el-menu-item>
               <el-menu-item index="3-2">
+                <el-icon><TurnOff /></el-icon>
+                <span @click="router.push('/backend-user-status')">用户状态管理</span>
+              </el-menu-item>
+              <el-menu-item index="3-3">
+                <my-icon name="icon-gongzuo" />
+                <span @click="router.push('/backend-work-types')">工作类型管理</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="4">
+              <template #title>
+                <my-icon name="icon-guanliyuan_jiaoseguanli"/>
+                <span>角色管理</span>
+              </template>
+              <el-menu-item index="4-1">
+                <my-icon name="icon-jiaoseguanli"/>
+                <span @click="router.push('/backend-role')">平台角色管理</span>
+              </el-menu-item>
+              <el-menu-item index="4-2">
+                <el-icon><TurnOff /></el-icon>
+                <span @click="router.push('/backend-role-status')">角色状态管理</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="5">
+              <template #title>
+                <my-icon name="icon-quanxianguanli-" />
+                <span>权限管理</span>
+              </template>
+              <el-menu-item index="5-1">
+                <my-icon name="icon-authority"/>
+                <span @click="router.push('/backend-permission')">平台权限管理</span>
+              </el-menu-item>
+              <el-menu-item index="5-2">
                 <el-icon><TurnOff /></el-icon>
                 <span @click="router.push('/backend-permission-status')">权限状态管理</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="4" disabled>
+            <el-sub-menu index="6">
+              <template #title>
+                <my-icon name="icon-menhu_yonghudengjiguanli"/>
+                <span>等级管理</span>
+              </template>
+              <el-menu-item index="6-1">
+                <my-icon name="icon-dengjiguanli1"/>
+                <span @click="router.push('/backend-user-level')">平台等级管理</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="7" disabled>
               <el-icon><document /></el-icon>
               <span>Navigator Three</span>
             </el-menu-item>
-            <el-menu-item index="5">
+            <el-menu-item index="8">
               <el-icon><setting /></el-icon>
               <span>Navigator Four</span>
             </el-menu-item>

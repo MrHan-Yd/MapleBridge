@@ -1,0 +1,100 @@
+{
+  "id": "4434038",
+  "name": "校友会",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "36605506",
+      "name": "数据分析",
+      "font_class": "shujufenxi",
+      "unicode": "e809",
+      "unicode_decimal": 59401
+    },
+    {
+      "icon_id": "37968208",
+      "name": "多维数据分析",
+      "font_class": "duoweishujufenxi",
+      "unicode": "e78c",
+      "unicode_decimal": 59276
+    },
+    {
+      "icon_id": "15644402",
+      "name": "仪表盘",
+      "font_class": "yibiaopan",
+      "unicode": "e6cf",
+      "unicode_decimal": 59087
+    },
+    {
+      "icon_id": "4933437",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e768",
+      "unicode_decimal": 59240
+    },
+    {
+      "icon_id": "6742356",
+      "name": "工作",
+      "font_class": "gongzuo",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    },
+    {
+      "icon_id": "26876073",
+      "name": "用户管理",
+      "font_class": "yonghuguanli",
+      "unicode": "ea49",
+      "unicode_decimal": 59977
+    },
+    {
+      "icon_id": "10213489",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "4772826",
+      "name": "平台管理—角色管理",
+      "font_class": "pingtaiguanlijiaoseguanli",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "5466784",
+      "name": "等级管理",
+      "font_class": "dengjiguanli1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "29762393",
+      "name": "门户_用户等级管理",
+      "font_class": "menhu_yonghudengjiguanli",
+      "unicode": "e7f7",
+      "unicode_decimal": 59383
+    },
+    {
+      "icon_id": "3161597",
+      "name": "管理员_角色管理",
+      "font_class": "guanliyuan_jiaoseguanli",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "4700542",
+      "name": "权限",
+      "font_class": "authority",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "12548446",
+      "name": "权限管理",
+      "font_class": "quanxianguanli-",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    }
+  ]
+}

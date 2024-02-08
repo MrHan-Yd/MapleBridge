@@ -84,11 +84,11 @@
             <scope>test</scope>
         </dependency>
         <!--解决yaml依赖1.33版本漏洞问题-->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${yaml.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.yaml</groupId>-->
+<!--            <artifactId>snakeyaml</artifactId>-->
+<!--            <version>${yaml.version}</version>-->
+<!--        </dependency>-->
         <!--解决yaml依赖1.33版本漏洞问题-->
         <!--阿里Json格式化依赖-->
         <dependency>

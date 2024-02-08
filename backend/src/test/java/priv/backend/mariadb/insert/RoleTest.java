@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import priv.backend.domain.dto.Role;
-import priv.backend.service.RoleService;
+import priv.backend.service.impl.RoleServiceImpl;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,7 +16,7 @@ import priv.backend.service.RoleService;
 @SpringBootTest
 public class RoleTest {
     @Resource
-    private RoleService service;
+    private RoleServiceImpl service;
     @Test
     public void insertRole() {
         Role role = new Role() ;

@@ -1,4 +1,4 @@
-package priv.backend.service.system;
+package priv.backend.service.system.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

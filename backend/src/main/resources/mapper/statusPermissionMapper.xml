@@ -22,7 +22,8 @@
             create_time,
             update_id,
             update_time
-        from status_permission
+        from
+            status_permission
         where state != '2'
     </select>
     <!--Select-->

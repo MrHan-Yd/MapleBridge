@@ -36,7 +36,8 @@
         create_time,
         update_id,
         update_time
-        from role
+        from
+            role
         where status_id != '1749415120449003521'
     </select>
     <!--查询角色-->

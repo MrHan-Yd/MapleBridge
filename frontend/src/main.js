@@ -6,6 +6,9 @@ import ElementPlus from "element-plus" ;
 import zhCn from "element-plus/es/locale/lang/zh-cn" ;
 import "element-plus/dist/index.css"
 
+import './assets/iconfont/iconfont.css'; // 引入自定义图标样式文件
+import MyIcon from '@/components/MyIcon.vue'; // 你自己的vue文件路径
+
 /* 暗黑模式css */
 import 'element-plus/theme-chalk/dark/css-vars.css' ;
 
@@ -24,5 +27,8 @@ app.use(router) ;
 app.use(ElementPlus, {
     locale: zhCn
 }) ;
+
+/* 使用自定义组件，ICON */
+app.component('MyIcon', MyIcon) ;
 
 app.mount('#app') ;

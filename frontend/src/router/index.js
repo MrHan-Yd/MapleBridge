@@ -48,6 +48,22 @@ const router = createRouter({
                     path: '/backend-permission-status',
                     name: 'backend-permission-status',
                     component: () => import('@/views/backend/index/PermissionStatusPage.vue')
+                } , {
+                    path: '/backend-user-level',
+                    name: 'backend-user-level',
+                    component: () => import('@/views/backend/index/UserLevelPage.vue')
+                } , {
+                    path: '/backend-user-status',
+                    name: 'backend-user-status',
+                    component: () => import('@/views/backend/index/UserStatusPage.vue')
+                } , {
+                    path: '/backend-user',
+                    name: 'backend-user',
+                    component: () => import('@/views/backend/index/UserPage.vue')
+                } , {
+                    path: '/backend-work-types',
+                    name: 'backend-work-types',
+                    component: () => import('@/views/backend/index/WorkTypePage.vue')
                 }
             ]
         }

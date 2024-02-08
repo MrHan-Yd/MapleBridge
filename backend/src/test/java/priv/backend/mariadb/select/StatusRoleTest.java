@@ -5,7 +5,7 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import priv.backend.domain.vo.response.RespStatusRoleVO;
-import priv.backend.service.StatusRoleService;
+import priv.backend.service.impl.StatusRoleServiceImpl;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +18,7 @@ import priv.backend.service.StatusRoleService;
 public class StatusRoleTest {
 
     @Resource
-    private StatusRoleService service ;
+    private StatusRoleServiceImpl service ;
 
     @Test
     public void queryStatusRole() {
