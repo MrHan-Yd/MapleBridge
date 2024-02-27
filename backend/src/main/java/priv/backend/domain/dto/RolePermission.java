@@ -10,7 +10,7 @@ import lombok.Data;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 角色对应权限表
+ * @Description : 角色对应权限表DTO
  * @CreateDate :  2024-01-30 16:01
  */
 @Data

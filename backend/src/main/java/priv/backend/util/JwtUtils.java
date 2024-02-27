@@ -9,10 +9,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import priv.backend.domain.dto.AccessToken;
+import priv.backend.domain.dto.RefreshToken;
 import priv.backend.domain.vo.response.RespCreateJwtVO;
 import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,9 +36,12 @@ import java.util.concurrent.TimeUnit;
 @Log4j2
 @Component
 public class JwtUtils {
-    /** TODO: Written by - Han Yongding 2023/09/11 加密Key */
-    @Value("${spring.security.jwt.key}")
-    private String key ;
+    /** TODO: Written by - Han Yongding 2023/09/11 Token加密Key */
+    @Value("${spring.security.jwt.token_key}")
+    private String tokenKey ;
+    /* TODO: Written by - Han Yongding 2024/02/16 刷新Token加密Key */
+    @Value("${spring.security.jwt.refresh_token}")
+    private String refreshTokenKey ;
 
     /** TODO: Written by - Han Yongding 2023/09/11 Jwt令牌过期时间 */
     @Value("${spring.security.jwt.expire}")
@@ -49,8 +55,12 @@ public class JwtUtils {
     @Resource
     private StringRedisTemplate template ;
 
+    /* TODO: Written by - Han Yongding 2024/02/17 注入RedisEntity */
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate ;
+
     /** TODO: Written by - Han Yongding 2023/09/11 创建Jwt令牌 */
-    public String createJwt(UserDetails details, String id, String username, String refreshToken) {
+    public String createJwt(UserDetails details, String id, String username) {
         /* TODO: Written by - Han Yongding 2023/09/11 创建令牌并返回 */
         return JWT.create()
                 /* TODO: Written by - Han Yongding 2023/10/20 令牌唯一标识 */
@@ -61,20 +71,22 @@ public class JwtUtils {
                 .withClaim("username", username)
                 /* TODO: Written by - Han Yongding 2023/10/20 角色拥有的权限 */
                 .withClaim("authorities", details.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                /* TODO: Written by - Han Yongding 2024/02/16 令牌类型 */
+                .withClaim("token_type", "access_token")
                 /* TODO: Written by - Han Yongding 2023/10/20 刷新token */
-                .withClaim("refreshToken", refreshToken)
+//                .withClaim("refreshToken", refreshToken)
                 /* TODO: Written by - Han Yongding 2023/09/11 过期时间计算 */
-                .withExpiresAt(this.expireTime())
+                .withExpiresAt(this.expireTime("token"))
                 /* TODO: Written by - Han Yongding 2023/10/20 系统当前时间 */
                 .withIssuedAt(new Date())
                 /* TODO: Written by - Han Yongding 2023/09/11 加密算法 */
-                .sign(this.getAlgorithm()) ;
+                .sign(this.getAlgorithm("token")) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/11/02 创建Jwt令牌 */
-    public String createJwt(RespCreateJwtVO vo, String refreshToken) {
+    public String createJwt(RespCreateJwtVO vo) {
         /* TODO: Written by - Han Yongding 2023/11/16 有错误，过期时间有误  */
-        this.deleteToken(template.opsForValue().get(this.getDecodedJWTByToken(refreshToken).getId()), new Date(10000)) ;
+//        this.deleteToken(template.opsForValue().get(this.getDecodedJWTByToken(refreshToken).getId()), new Date(10000)) ;
         /* TODO: Written by - Han Yongding 2023/09/11 创建令牌并返回 */
         return JWT.create()
                 /* TODO: Written by - Han Yongding 2023/10/20 令牌唯一标识 */
@@ -85,31 +97,35 @@ public class JwtUtils {
                 .withClaim("username", vo.getUsername())
                 /* TODO: Written by - Han Yongding 2023/10/20 角色拥有的权限 */
                 .withClaim("authorities", vo.getAuthorities())
-                /* TODO: Written by - Han Yongding 2023/10/20 刷新token */
-                .withClaim("refreshToken", refreshToken)
+                /* TODO: Written by - Han Yongding 2024/02/16 令牌类型 */
+                .withClaim("token_type", "access_token")
+//                .withClaim("refreshToken", refreshToken)
                 /* TODO: Written by - Han Yongding 2023/09/11 过期时间计算 */
-                .withExpiresAt(this.expireTime())
+                .withExpiresAt(this.expireTime("token"))
                 /* TODO: Written by - Han Yongding 2023/10/20 系统当前时间 */
                 .withIssuedAt(new Date())
                 /* TODO: Written by - Han Yongding 2023/09/11 加密算法 */
-                .sign(this.getAlgorithm()) ;
+                .sign(this.getAlgorithm("token")) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/09/11 令牌过期时间计算 */
-    public Date expireTime() {
+    public Date expireTime(String tokenType) {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.MINUTE, this.expire) ;
+        if (this.judgeTokenType(tokenType)) {
+            instance.add(Calendar.MINUTE, this.expire) ;
+        } else {
+            instance.add(Calendar.HOUR, this.refreshExpire * 24) ;
+        }
         return instance.getTime() ;
     }
 
-    /** TODO: Written by - Han Yongding 2023/10/20 刷新token有效时间计算 */
-    public Date refreshTokenExpireTime() {
-        Calendar instance = Calendar.getInstance() ;
-        instance.add(Calendar.HOUR, this.refreshExpire * 24) ;
-        return instance.getTime() ;
+    /* TODO: Written by - Han Yongding 2024/02/16 判断Token类型 */
+    private boolean judgeTokenType(String tokenType) {
+        return "token".equals(tokenType) ;
     }
 
-    /** TODO: Written by - Han Yongding 2023/09/14 令牌有效状态：有效或无效 */
+
+    /** TODO: Written by - Han Yongding 2023/09/14 使令牌无效 */
     public boolean invalidateJwt(String headerToken) {
         /* TODO: Written by - Han Yongding 2023/09/17 判断token是否合法 */
         String token = this.convertToken(headerToken) ;
@@ -129,7 +145,12 @@ public class JwtUtils {
 
     /** TODO: Written by - Han Yongding 2023/11/02 解析Token，返回DecodedJWT对象 */
     private DecodedJWT getDecodedJWTByToken(String token) {
-        return JWT.require(this.getAlgorithm()).build().verify(token) ;
+        return JWT.require(this.getAlgorithm("token")).build().verify(token) ;
+    }
+
+    /** TODO: Written by - Han Yongding 2023/11/02 解析刷新Token，返回DecodedJWT对象 */
+    private DecodedJWT getDecodedJWTByRefreshToken(String refreshToken) {
+        return JWT.require(this.getAlgorithm("refreshToken")).build().verify(refreshToken) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/09/14 判断Token是否合法 */
@@ -171,7 +192,7 @@ public class JwtUtils {
         }
 
         /* TODO: Written by - Han Yongding 2023/09/17 解析JWT */
-        Algorithm algorithm = this.getAlgorithm() ;
+        Algorithm algorithm = this.getAlgorithm("token") ;
         JWTVerifier build = JWT.require(algorithm).build() ;
 
         /* TODO: Written by - Han Yongding 2023/09/17 jwt有问题会抛出验证异常(运行时异常) */
@@ -218,8 +239,12 @@ public class JwtUtils {
     }
 
     /** TODO: Written by - Han Yongding 2023/10/20 获取加密的Algorithm对象 */
-    public Algorithm getAlgorithm() {
-        return Algorithm.HMAC256(this.key) ;
+    public Algorithm getAlgorithm(String tokenType) {
+        if (this.judgeTokenType(tokenType)) {
+            return Algorithm.HMAC256(this.tokenKey) ;
+        } else {
+            return Algorithm.HMAC256(this.refreshTokenKey) ;
+        }
     }
 
     /** TODO: Written by - Han Yongding 2023/10/20 创建刷新token */
@@ -232,14 +257,16 @@ public class JwtUtils {
                 .withClaim("id", id)
                 /* TODO: Written by - Han Yongding 2023/10/26 用户名 */
                 .withClaim("username", username)
+                /* TODO: Written by - Han Yongding 2024/02/16 令牌类型 */
+                .withClaim("token_type", "refresh_token")
                 /* TODO: Written by - Han Yongding 2023/10/20 角色拥有的权限 */
                 .withClaim("authorities", details.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 /* TODO: Written by - Han Yongding 2023/10/20 过期时间计算 */
-                .withExpiresAt(this.refreshTokenExpireTime())
+                .withExpiresAt(this.expireTime("refresh"))
                 /* TODO: Written by - Han Yongding 2023/10/20 当前时间 */
                 .withIssuedAt(new Date())
                 /* TODO: Written by - Han Yongding 2023/10/20 加密算法 */
-                .sign(this.getAlgorithm()) ;
+                .sign(this.getAlgorithm("refresh")) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/10/20 解析刷新Token */
@@ -253,11 +280,27 @@ public class JwtUtils {
         String refreshToken = this.createRefreshToken(details, id, username) ;
 
         /* TODO: Written by - Han Yongding 2023/09/11 返回Jwt(给用户颁发token) */
-        String token = this.createJwt(details, id, username, refreshToken) ;
+        String token = this.createJwt(details, id, username) ;
 
-        template.opsForValue().set(this.getDecodedJWTByToken(refreshToken).getId(), this.getDecodedJWTByToken(token).getId()) ;
+        /* TODO: Written by - Han Yongding 2023/09/14 防止用户令牌已经过期，还退出登录，redis中会存入负值，所以此处用了Math.max，如果小于0，用0 */
+//        long expire = this.expirationTimeCalculation(this.getDecodedJWTByRefreshToken(refreshToken).getExpiresAt()) ;
+//        long AccessTokenExpire = this.expirationTimeCalculation(this.getDecodedJWTByToken(token).getExpiresAt()) ;
+
+        /* TODO: Written by - Han Yongding 2024/02/17 封装存入Redis中的对象 Token */
+//        AccessToken tokenVO = new AccessToken(token, new Date(AccessTokenExpire));
+
+        /* TODO: Written by - Han Yongding 2024/02/17 缓存用户token到Redis，key为刷新Token */
+        /* TODO: Written by - Han Yongding 2024/02/16 刷新TokenID为KEY， token为VALUE， 过期时间为刷新Token的过期时间和当前时间计算的毫秒值 */
+//        redisTemplate.opsForValue().set(Const.USER_TOKEN_DATA + refreshToken, tokenVO, expire, TimeUnit.MILLISECONDS) ;
 
         return refreshToken + "," + token ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/16 过期时间计算 */
+    private long expirationTimeCalculation(Date time) {
+        Date now = new Date() ;
+        /* TODO: Written by - Han Yongding 2023/09/14 防止用户令牌已经过期，还退出登录，redis中会存入负值，所以此处用了Math.max，如果小于0，用0 */
+        return Math.max(time.getTime() - now.getTime(), 0) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/10/26 获取刷新Token */
@@ -278,10 +321,28 @@ public class JwtUtils {
     /** TODO: Written by - Han Yongding 2023/11/02 令牌是否过期 */
     public boolean tokenExpiredOrNot(String token) {
         /* TODO: Written by - Han Yongding 2023/11/02 token合法，通过截取获取token */
-        String tokens = token.substring(7) ;
+        String tokens = convertToken(token) ;
 
         /* TODO: Written by - Han Yongding 2023/11/02 获取jwt对象 */
         DecodedJWT jwt = this.getDecodedJWTByToken(tokens);
+
+        /* TODO: Written by - Han Yongding 2023/11/09
+         * 当前时间是否超过了规定时间 == new Date.after(jwt.getExpiresAt()) ;
+         * after方法是超过返回true，没超过范围false
+         * 此处为了方便判断没超过，所以取反，则变成没超过返回true，超过返回false
+         */
+        /* TODO: Written by - Han Yongding 2023/11/02 令牌是否过期 */
+        /* TODO: Written by - Han Yongding 2023/11/02 返回true表示未过期，否则返回false，表示已过期，和Date的after方法相反，所以此处取反 */
+        return !new Date().after(jwt.getExpiresAt()) ;
+    }
+
+    /** TODO: Written by - Han Yongding 2023/11/02 刷新令牌是否过期 */
+    public boolean refreshTokenExpiredOrNot(String refreshToken) {
+        /* TODO: Written by - Han Yongding 2023/11/02 token合法，通过截取获取token */
+        String tokens = convertToken(refreshToken) ;
+
+        /* TODO: Written by - Han Yongding 2023/11/02 获取jwt对象 */
+        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(tokens);
 
         /* TODO: Written by - Han Yongding 2023/11/09
          * 当前时间是否超过了规定时间 == new Date.after(jwt.getExpiresAt()) ;
@@ -298,7 +359,7 @@ public class JwtUtils {
         /* TODO: Written by - Han Yongding 2023/11/02 截取刷新令牌 */
         String refreshTokens = this.convertToken(refreshToken) ;
         /* TODO: Written by - Han Yongding 2023/11/02 获取令牌的jwt对象 */
-        DecodedJWT jwt = this.getDecodedJWTByToken(refreshTokens) ;
+        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(refreshTokens) ;
         /* TODO: Written by - Han Yongding 2023/11/02 解析权限 */
         List<String> authorities = this.toAuthorities(jwt) ;
         /* TODO: Written by - Han Yongding 2023/11/02 解析id */
@@ -306,6 +367,11 @@ public class JwtUtils {
         /* TODO: Written by - Han Yongding 2023/11/02 解析用户名 */
         String username = this.toUsername(jwt) ;
 
-        return new RespRefreshTokenVO(refreshTokens, this.createJwt(new RespCreateJwtVO(id, username, authorities), refreshTokens)) ;
+        /* TODO: Written by - Han Yongding 2024/02/17 新令牌 */
+        String token = this.createJwt(new RespCreateJwtVO(id, username, authorities));
+        /* TODO: Written by - Han Yongding 2024/02/17 解析新令牌获取过期时间 */
+        Date expiresAt = this.getDecodedJWTByToken(token).getExpiresAt();
+        /* TODO: Written by - Han Yongding 2024/02/17 生成token和过期时间后返回给前端 */
+        return new RespRefreshTokenVO(token, expiresAt) ;
     }
 }

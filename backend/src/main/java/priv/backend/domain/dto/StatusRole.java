@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 角色状态表
+ * @Description : 角色状态表DTO
  * @CreateDate :  2024-01-22 16:26
  */
 @Data

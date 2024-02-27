@@ -1,5 +1,6 @@
 package priv.backend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.RolePermission;
@@ -25,5 +26,13 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     /* TODO: Written by - Han Yongding 2024/01/31 批量插入 */
     public int batchInsertRolePermission(List<RolePermission> list) {
         return mapper.insertBatchSomeColumn(list) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/16 根据角色ID删除中中间表数据 */
+    @Override
+    public int deleteRolePermissionByRoleId(String roleId) {
+        QueryWrapper<RolePermission> rolePermissionQueryWrapper = new QueryWrapper<>();
+        rolePermissionQueryWrapper.eq("role_id", roleId) ;
+        return mapper.delete(rolePermissionQueryWrapper) ;
     }
 }

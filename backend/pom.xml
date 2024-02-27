@@ -137,6 +137,19 @@
             <version>${commons.version}</version> <!-- 请根据最新版本调整 -->
         </dependency>
         <!-- Apache Commons Lang 验证码依赖 -->
+        <!--Redis实体序列化-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!--Redis实体序列化-->
+        <!--验证码-->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        <!--验证码-->
     </dependencies>
 
     <build>

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import priv.backend.domain.BaseData;
 
 import java.sql.Timestamp;
 
@@ -13,12 +14,12 @@ import java.sql.Timestamp;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 用户表实体类
+ * @Description : 用户表实体类DTO
  * @CreateDate :  2024-02-04 20:06
  */
 @Data
 @TableName("user")
-public class User {
+public class User implements BaseData {
     @TableId(type = IdType.ASSIGN_ID)
     private String id ;
     @TableField("account")
@@ -37,6 +38,8 @@ public class User {
     private String avatarsId ;
     @TableField("profile_id")
     private String profileId ;
+    @TableField("role_id")
+    private String roleId ;
     @TableField("level_id")
     private String levelId ;
     @TableField("experience")

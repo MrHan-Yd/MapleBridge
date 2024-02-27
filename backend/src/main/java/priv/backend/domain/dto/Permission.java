@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 权限表
+ * @Description : 权限表DTO
  * @CreateDate :  2024-01-27 12:49
  */
 @Data

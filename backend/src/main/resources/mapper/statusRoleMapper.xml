@@ -13,19 +13,21 @@
     <!--Map-->
 
     <!--Select-->
-    <select id="getAllStatusRoles" resultType="StatusRole">
-        select
-            status_id,
-            status_name,
-            state,
-            create_id,
-            create_time,
-            update_id,
-            update_time
-        from
-            status_role
-        where state != '2'
-    </select>
+        <!--获取所有角色状态-->
+        <select id="getAllStatusRoles" resultType="StatusRole">
+            select
+                status_id,
+                status_name,
+                state,
+                create_id,
+                create_time,
+                update_id,
+                update_time
+            from
+                status_role
+            where state != '2'
+        </select>
+        <!--获取所有角色状态-->
     <!--Select-->
 
     <!--Update-->

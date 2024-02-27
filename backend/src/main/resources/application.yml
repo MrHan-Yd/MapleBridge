@@ -8,9 +8,12 @@ spring:
     filter:
       order: -100
     jwt:
-      key: WGjFZaFYUh1yQKZVwgSZA5Zr1nhBWi37
+      # Token KEY
+      token_key: WGjFZaFYUh1yQKZVwgSZA5Zr1nhBWi37
+      # 刷新Token KEY
+      refresh_token: mWJnDDQW5hWCMcn0vaENxeTdv2A4Ybm8
       # 分
-      expire: 1
+      expire: 5
       # 天
       refresh_expire: 7
 
@@ -29,10 +32,22 @@ spring:
 
   #RabbitMQ消息队列
   rabbitmq:
-    addresses: localhost
-    username: admin
-    password: admin
-    virtual-host: /maple_bridge
+    #    addresses: localhost:5672
+    username: admin  # RabbitMQ 服务器的用户名
+    password: admin  # RabbitMQ 服务器的密码
+    virtual-host: /maple_bridge  # 虚拟主机，用于隔离不同应用的消息队列
+    host: 127.0.0.1  # RabbitMQ 服务器的主机地址
+    port: 5672  # RabbitMQ 服务器的端口
+
+    #listener:
+    #  simple:
+    #    default-requeue-rejected: false  # 当消息处理失败时，是否重新将消息放入队列
+    #    retry:
+    #      enabled: true  # 是否启用消息重试
+    #      max-attempts: 3  # 最大重试次数
+    #      initial-interval: 5000  # 初始重试间隔（毫秒）
+    #      multiplier: 1.0  # 重试间隔的乘数因子
+    #      max-interval: 10000  # 最大重试间隔（毫秒）
 
   #Kafka消息队列
   kafka:
@@ -54,7 +69,7 @@ spring:
       host: 127.0.0.1
       password: wgRedis010517
       port: 6379
-      
+
     # MongoDB 配置
     mongodb:
       host: localhost

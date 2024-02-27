@@ -14,4 +14,7 @@ import java.util.List;
 public interface RolePermissionService {
     /* TODO: Written by - Han Yongding 2024/01/31 批量插入 */
     int batchInsertRolePermission(List<RolePermission> list) ;
+
+    /* TODO: Written by - Han Yongding 2024/02/16 根据角色ID删除中中间表数据 */
+    int deleteRolePermissionByRoleId(String roleId) ;
 }

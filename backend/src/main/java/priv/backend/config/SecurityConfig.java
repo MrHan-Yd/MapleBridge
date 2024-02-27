@@ -4,9 +4,9 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,15 +18,23 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import priv.backend.domain.PathConfig;
 import priv.backend.domain.RestBean;
+import priv.backend.domain.dto.Account;
+import priv.backend.domain.dto.AccountRedis;
+import priv.backend.domain.vo.response.RespAuthorizeVO;
 import priv.backend.enumeration.RestCodeEnum;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import priv.backend.filter.JwtAuthorizeFilter;
+import priv.backend.service.impl.RoleServiceImpl;
+import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.service.system.Impl.PathConfigServiceImpl;
+import priv.backend.util.Const;
 import priv.backend.util.JwtUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,7 +51,8 @@ public class SecurityConfig {
 
 
     /** TODO: Written by - Han Yongding 2023/10/09 注入用户实体业务层 */
-
+    @Resource
+    private UserServiceImpl service ;
 
     /**
      * TODO: Written by - Han Yongding 2023/09/14 Jwt工具类
@@ -60,6 +69,14 @@ public class SecurityConfig {
     /* TODO: Written by - Han Yongding 2024/02/03 注入角色权限配置业务层实现类 */
     @Resource
     private PathConfigServiceImpl pathConfigService;
+
+    /* TODO: Written by - Han Yongding 2024/02/16 注入角色业务层 */
+    @Resource
+    private RoleServiceImpl roleService;
+
+    /* TODO: Written by - Han Yongding 2024/02/17 注入Redis */
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate ;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -110,28 +127,52 @@ public class SecurityConfig {
                 .build();
     }
 
-    /**
-     * TODO: Written by - Han Yongding 2023/09/05 登录
-     */
+    /* TODO: Written by - Han Yongding 2024/02/16 登录成功 */
     private void onAuthenticationSuccess(HttpServletRequest request,
-                                         HttpServletResponse response,
-                                         Authentication authentication) throws IOException {
+                                               HttpServletResponse response,
+                                               Authentication authentication) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         /* TODO: Written by - Han Yongding 2023/09/06 获取登录信息 */
         User user = (User) authentication.getPrincipal();
-        /* TODO: Written by - Han Yongding 2023/08/11 从数据库中查询用户名，用户可能登陆的是邮箱，所以这里不能直接使用user */
-//        Account account = service.findAccountByNameOrEmail(user.getUsername()) ;
+        priv.backend.domain.dto.User userInformation = service.findAccountByNameOrEmail(user.getUsername()) ;
+        /* TODO: Written by - Han Yongding 2023/08/11 从数据库中查询用户名，用户可能登登录的是邮箱，所以这里不能直接使用user */
+        Account account = userInformation.asViewObject(Account.class) ;
 //        /* TODO: Written by - Han Yongding 2023/09/11 返回Jwt(给用户颁发token) */
-//        String tokenArr = jwtUtils.createTokenAndRefreshToken(user, account.getId(), account.getAccountName()) ;
+        String tokenArr = jwtUtils.createTokenAndRefreshToken(user, account.getId(), account.getAccount()) ;
+        /* TODO: Written by - Han Yongding 2024/02/17 Token */
+        String token = jwtUtils.getToken(tokenArr) ;
+        /* TODO: Written by - Han Yongding 2024/02/17 Token过期时间 */
+        Date accessTokenExpire = jwtUtils.expireTime("token") ;
+        /* TODO: Written by - Han Yongding 2024/02/17 刷新Token */
+        String refreshToken = jwtUtils.getRefreshToken(tokenArr) ;
+        /* TODO: Written by - Han Yongding 2024/02/17 刷新Token过期时间 */
+        Date refreshTokenExpire = jwtUtils.expireTime("refresh");
 //        /* TODO: Written by - Han Yongding 2023/09/11 响应前端的用户实体类 */
-//        AuthorizeVO vo = account.asViewObject(AuthorizeVO.class, v -> {
-//            v.setToken(jwtUtils.getToken(tokenArr)) ;
-//            v.setExpire(jwtUtils.expireTime()) ;
-//            v.setRefreshToken(jwtUtils.getRefreshToken(tokenArr)) ;
-//        }) ;
+        RespAuthorizeVO vo = account.asViewObject(RespAuthorizeVO.class, v -> {
+            v.setRole(roleService.getRoleById(account.getRoleId()));
+            v.setAccessToken(token) ;
+            v.setAccessTokenExpire(accessTokenExpire); ;
+            v.setRefreshToken(refreshToken) ;
+            v.setRefreshTokenExpire(refreshTokenExpire);
+        }) ;
 
-        response.getWriter().write(RestBean.success().asJsonString());
+        /* TODO: Written by - Han Yongding 2024/02/17 缓存用户信息到Redis， key为用用户ID */
+        AccountRedis accountRedis = account.asViewObject(AccountRedis.class, v -> {
+            v.setRefreshToken(refreshToken) ;
+            v.setRefreshTokenExpire(refreshTokenExpire) ;
+        });
+
+        redisTemplate.opsForValue().set(Const.USER_INFORMATION_DATA + account.getId(), accountRedis, 30, TimeUnit.MINUTES) ;
+
+        /** TODO: Written by - Han Yongding 2024/02/17 待解决
+         * 1、解决重复登录问题
+         * 2、修改JwtUtils中的刷新Token方法，
+         *      逻辑为：用户token过期，提示前台，前台携带刷新Token刷新token
+         *      从刷新token种获取用户信息，重新生成token后缓存到Redis中并返回
+         * 3、实现用户强制下线
+         */
+        response.getWriter().write(RestBean.success(vo).asJsonString());
     }
 
     /**
@@ -186,4 +227,5 @@ public class SecurityConfig {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(RestBean.forbidden(exception.getMessage()).asJsonString());
     }
+
 }

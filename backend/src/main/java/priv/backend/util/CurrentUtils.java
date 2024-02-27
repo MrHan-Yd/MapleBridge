@@ -1,5 +1,6 @@
 package priv.backend.util;
 
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import priv.backend.enumeration.DataBaseEnum;
 
@@ -60,4 +61,11 @@ public class CurrentUtils {
     public static boolean isEmptyByDtoInsertOrUpdate(int result) {
         return result < 1 ;
     }
+
+    /* TODO: Written by - Han Yongding 2024/02/11 判断字符串是否为空 */
+    public static boolean isEmpty(String str) {
+        return str == null ;
+    }
+
+
 }

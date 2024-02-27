@@ -18,12 +18,13 @@ import MyIcon from "@/components/MyIcon.vue";
 
 /* 页面打开时默认调用 */
 onMounted(() => {
-  router.push('/backend-index') ;
+  router.push('/backend-index-workbench') ;
 });
 
+/* 退出登录 */
 function userLogout() {
   logout(() => {
-    router.push('/');
+    router.push('/backend-welcome-login');
   });
 }
 
@@ -79,7 +80,7 @@ const handleClose = (key, keyPath) => {
     </div>
     <div id="bottom">
       <el-row style="margin-top: 5px; height: 100%;">
-        <el-col :span="3" style="background-color: white">
+        <el-col :span="3" style="background-color: white; height: 100%;  overflow-x: hidden; overflow-y: scroll;">
           <el-menu
               default-active="1-1"
               class="el-menu-vertical-demo"
@@ -93,7 +94,7 @@ const handleClose = (key, keyPath) => {
               </template>
                 <el-menu-item index="1-1">
                   <el-icon><DataLine /></el-icon>
-                  <span @click="router.push('backend-workbench')">工作台</span>
+                  <span @click="router.push('backend-index-workbench')">工作台</span>
                 </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="2">
@@ -103,11 +104,11 @@ const handleClose = (key, keyPath) => {
               </template>
               <el-menu-item index="2-1">
                 <my-icon name="icon-shujufenxi"/>
-                <span @click="router.push('/backend-user-level')">数据分析</span>
+                <span @click="router.push('/backend-index-user-level')">数据分析</span>
               </el-menu-item>
               <el-menu-item index="2-2">
                 <my-icon name="icon-duoweishujufenxi"/>
-                <span @click="router.push('/backend-user-level')">多维数据分析</span>
+                <span @click="router.push('/backend-index-user-level')">多维数据分析</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="3">
@@ -117,15 +118,15 @@ const handleClose = (key, keyPath) => {
               </template>
               <el-menu-item index="3-1">
                 <my-icon name="icon-yonghuguanli"/>
-                <span @click="router.push('/backend-user')">平台用户管理</span>
+                <span @click="router.push('/backend-index-user')">平台用户管理</span>
               </el-menu-item>
               <el-menu-item index="3-2">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-user-status')">用户状态管理</span>
+                <span @click="router.push('/backend-index-user-status')">用户状态管理</span>
               </el-menu-item>
               <el-menu-item index="3-3">
                 <my-icon name="icon-gongzuo" />
-                <span @click="router.push('/backend-work-types')">工作类型管理</span>
+                <span @click="router.push('/backend-index-work-types')">工作类型管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="4">
@@ -135,11 +136,11 @@ const handleClose = (key, keyPath) => {
               </template>
               <el-menu-item index="4-1">
                 <my-icon name="icon-jiaoseguanli"/>
-                <span @click="router.push('/backend-role')">平台角色管理</span>
+                <span @click="router.push('/backend-index-role')">平台角色管理</span>
               </el-menu-item>
               <el-menu-item index="4-2">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-role-status')">角色状态管理</span>
+                <span @click="router.push('/backend-index-role-status')">角色状态管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="5">
@@ -149,11 +150,11 @@ const handleClose = (key, keyPath) => {
               </template>
               <el-menu-item index="5-1">
                 <my-icon name="icon-authority"/>
-                <span @click="router.push('/backend-permission')">平台权限管理</span>
+                <span @click="router.push('/backend-index-permission')">平台权限管理</span>
               </el-menu-item>
               <el-menu-item index="5-2">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-permission-status')">权限状态管理</span>
+                <span @click="router.push('/backend-index-permission-status')">权限状态管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="6">
@@ -163,7 +164,7 @@ const handleClose = (key, keyPath) => {
               </template>
               <el-menu-item index="6-1">
                 <my-icon name="icon-dengjiguanli1"/>
-                <span @click="router.push('/backend-user-level')">平台等级管理</span>
+                <span @click="router.push('/backend-index-user-level')">平台等级管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-menu-item index="7" disabled>

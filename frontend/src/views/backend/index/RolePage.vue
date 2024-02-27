@@ -1,10 +1,11 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {Avatar, UserFilled} from "@element-plus/icons-vue";
+import {Avatar, CirclePlus, Search, UserFilled} from "@element-plus/icons-vue";
 import {post, get, put, delete_} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
+import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
 const formInline = reactive({
@@ -81,7 +82,7 @@ const form = reactive({
   roleId: '',
   roleName: '',
   roleNameCn: '',
-  permissionList: ''
+  permissionIdList: ''
 });
 
 /* 表单判断 */
@@ -96,7 +97,7 @@ const rule = {
       required: true, message: '请输入角色中文名称'
     }
   ],
-  permissionList: [
+  permissionIdList: [
     {
       required: true, message: '请选择角色权限'
     }
@@ -113,11 +114,7 @@ function getPermission() {
 }
 
 /* 新增角色权限选择器 */
-const cities = ref([{
-  "permissionId": '',
-  "permissionName": '',
-  "permissionUrl": '',
-}]);
+const cities = ref([{}]);
 
 /* 新增或修改的抽屉标题 */
 let drawerTitle = "";
@@ -132,8 +129,14 @@ function openDrawer(data) {
     clearStatusRoleForm();
   } else {
     drawerTitle = "编辑角色";
+
+    let permissionIdList = new Array(data.permissionList.length);
+
+    for(let i = 0; i < data.permissionList.length; i++) {
+      permissionIdList[i] = data.permissionList[i].permissionId ;
+    }
     /*修改*/
-    updateStatusRole(data.roleId, data.roleName, data.roleNameCn, data.permissionList);
+    updateStatusRole(data.roleId, data.roleName, data.roleNameCn, permissionIdList);
   }
 
   drawer.value = true;
@@ -144,16 +147,15 @@ function clearStatusRoleForm() {
   form.roleId = '';
   form.roleName = '';
   form.roleNameCn = '';
-  form.permissionList = '';
+  form.permissionIdList = '';
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(roleId, roleName, roleNameCn, permissionList) {
+function updateStatusRole(roleId, roleName, roleNameCn, permissionIdList) {
   form.roleId = roleId;
   form.roleName = roleName;
   form.roleNameCn = roleNameCn;
-  form.permissionList = permissionList ;
-  console.log(permissionList)
+  form.permissionIdList = permissionIdList ;
 }
 
 /* 添加角色 */
@@ -307,7 +309,7 @@ function deleteStatusData(permissionId) {
   if (!(permissionId === "") || !(permissionId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/permission/" + permissionId,
+        "/api/auth/role/" + permissionId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -369,15 +371,18 @@ function getShowAndHide(permissionId) {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-          <el-button @click="onReset">重置</el-button>
+          <el-button :icon="Search" type="primary" @click="onSubmit">查询</el-button>
+          <el-button @click="onReset">
+            <my-icon-button class="el-icon--left reset" name="icon-zhongzhi"/>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
       <el-divider/>
     </div>
     <div id="bottom">
       <div id="buttons">
-        <el-button type="primary" @click="openDrawer({type:1})">新增</el-button>
+        <el-button :icon="CirclePlus" type="primary" @click="openDrawer({type:1})">新增</el-button>
       </div>
       <div id="tables" v-if="isTableDataEmpty()">
         <el-table :data="tableData" :row-key="'roleId'" :height="'53vh'"
@@ -409,17 +414,17 @@ function getShowAndHide(permissionId) {
                 <el-popover
                     placement="top"
                     trigger="click"
-                    :visible="getShowAndHide(scope.row.permissionId)"
+                    :visible="getShowAndHide(scope.row.roleId)"
                     :width="160"
                 >
                   <p>确定要删除此条数据?</p>
                   <div style="text-align: right; margin: 0">
-                    <el-button size="small" text @click="closeDeletePopover(scope.row.permissionId)">取消</el-button>
-                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.permissionId)">确定
+                    <el-button size="small" text @click="closeDeletePopover(scope.row.roleId)">取消</el-button>
+                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.roleId)">确定
                     </el-button>
                   </div>
                   <template #reference>
-                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.permissionId)">
+                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.roleId)">
                       删除
                     </el-button>
                   </template>
@@ -467,7 +472,7 @@ function getShowAndHide(permissionId) {
           </el-form-item>
           <el-form-item prop="permissionList">
             <el-select
-                v-model="form.permissionList"
+                v-model="form.permissionIdList"
                 multiple
                 clearable
                 collapse-tags
@@ -540,7 +545,7 @@ function getShowAndHide(permissionId) {
 }
 
 #role >>> .pagination {
-  margin-top: 20px;
+  margin-top: 12px;
   display: flex;
   justify-content: right;
   align-items: center;

@@ -11,7 +11,7 @@ import priv.backend.domain.BaseData;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 用户等级表
+ * @Description : 用户等级表DTO
  * @CreateDate :  2024-02-06 17:24
  */
 @Data

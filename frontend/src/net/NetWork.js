@@ -1,9 +1,7 @@
 import axios from 'axios' ;
-import {warn} from "vue";
-import {ElMessage} from "element-plus";
 import {ElWarning, ElSuccess} from "@/util/MessageUtil" ;
 
-const authItemName  = "access_token"
+const accessAuthItem  = "access_token";
 /* 默认错误方法 */
 const defaultFailure = (message, code, url) => {
     // console.warn(`请求地址: ${url}, 状态码: ${code}, 错误信息: ${message}`) ;
@@ -23,7 +21,7 @@ const defaultError = (err) => {
 
 /* 获取Token */
 function takeAccessToken() {
-    const str = localStorage.getItem(authItemName) || sessionStorage.getItem(authItemName) ;
+    const str = localStorage.getItem(accessAuthItem) || sessionStorage.getItem(accessAuthItem) ;
     /* 如果都没有拿到则没有保存，返回null */
     if(!str) {
         return null ;
@@ -31,40 +29,80 @@ function takeAccessToken() {
     /* 拿到了封装回authObj */
     const authObj = JSON.parse(str) ;
     /* 过期时间小于当前时间(过期) */
-    if(authObj.expire <= new Date()) {
-        /* 删除Token */
-        deleteAccessToken() ;
-        // ElMessage.warning("登录状态已过期，请重新登录!") ;
-        ElWarning("登录状态已过期，请重新登录!") ;
-        return null ;
+    if(authObj.accessTokenExpire <= new Date()) {
+        /* 刷新token过期则清除用户信息，提示重新登录 */
+        if (authObj.refreshTokenExpire <= new Date()) {
+            /* 删除Token */
+            deleteAccessToken() ;
+            // ElMessage.warning("登录状态已过期，请重新登录!") ;
+            ElWarning("登录状态已过期，请重新登录!") ;
+            return null ;
+        } else {
+            /* 用刷新token 刷新Token */
+            get("api/auth/refresh-token/" + authObj.refreshToken,
+                (rs) => {
+                    if (rs.code === 200) {
+                        authObj.accessToken = rs.data.token;
+                        authObj.accessTokenExpire = rs.data.tokenExpire;
+                        /* 判断有没有勾选记住我 */
+                        if (authObj.remember) {
+                            localStorage.setItem(accessAuthItem, JSON.stringify(authObj)) ;
+                        } else {
+                            sessionStorage.setItem(accessAuthItem, JSON.stringify(authObj)) ;
+                        }
+                    } else {
+                        deleteAccessToken() ;
+                        ElWarning(rs.message + "，请重新登录!") ;
+                    }
+            }) ;
+        }
     }
     /* 如果都没有问题(有Token并且没有过期)，则返回Token */
-    return authObj.token ;
+    return authObj.accessToken ;
 }
 
 /* 删除Token */
 function deleteAccessToken() {
-    localStorage.removeItem(authItemName) ;
-    sessionStorage.removeItem(authItemName) ;
+    localStorage.removeItem(accessAuthItem) ;
+    sessionStorage.removeItem(accessAuthItem) ;
+}
+
+/* 获取角色权限 */
+function getUserRole() {
+    const str = localStorage.getItem(accessAuthItem) || sessionStorage.getItem(accessAuthItem) ;
+    /* 如果都没有拿到则没有保存，返回null */
+    if(!str) {
+        return null ;
+    }
+
+    /* 拿到了封装回authObj */
+    const authObj = JSON.parse(str) ;
+    return authObj.role.roleName ;
+
 }
 
 /* 保存 Token */
-function storeAccessToken(token, remember, expire) {
+function storeAccessToken(token, remember, expire, account, refreshToken, refreshTokenExpire, role) {
     const authObj = {
-        token: token ,
-        expire: expire
+        accessToken: token ,
+        accessTokenExpire: expire,
+        remember: remember,
+        account: account,
+        refreshToken: refreshToken,
+        refreshTokenExpire: refreshTokenExpire,
+        role: role
     } ;
     /* 转成JSON字符串 */
     const str = JSON.stringify(authObj) ;
     /* 勾选记住我 */
     if (remember) {
         /* 长期存储，关闭浏览器依然存在 */
-        localStorage.setItem(authItemName, str) ;
+        localStorage.setItem(accessAuthItem, str) ;
 
     /* 不勾选记住我 */
     } else {
         /* 会话存储，关闭浏览器就不存在了 */
-        sessionStorage.setItem(authItemName, str) ;
+        sessionStorage.setItem(accessAuthItem, str) ;
     }
 
 }
@@ -84,7 +122,11 @@ function internalPost(url, data, header, success = defaultSuccess, failure = def
         headers: header
     }).then(({data}) => {
         if(data.code === 200 || data.code === 403) {
-            success(data.message) ;
+            if (data.code === 200) {
+                success(data) ;
+            } else {
+                success(data.message) ;
+            }
         } else {
             failure(data.message, data.code, url) ;
         }
@@ -120,11 +162,12 @@ function internalGet(url, header, success = defaultSuccess, failure = defaultFai
             failure(data.message, data.code, url) ;
         }
     }).catch(err => {
-        if (err.response.data.code === 403) {
-            success(err.response) ;
-        } else {
-            error(err)
-        }
+        // console.log(err.response)
+        // if (err.response.data.code === 403) {
+        //     success(err.response) ;
+        // } else {
+        //     error(err)
+        // }
     }) ;
 }
 /* 内部使用delete请求 */
@@ -171,5 +214,6 @@ export {
     internalPost,
     storeAccessToken,
     deleteAccessToken,
-    takeAccessToken
+    takeAccessToken,
+    getUserRole
 }

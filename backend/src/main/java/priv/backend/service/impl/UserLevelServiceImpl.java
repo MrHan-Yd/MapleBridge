@@ -27,7 +27,7 @@ public class UserLevelServiceImpl implements UserLevelService {
     @Resource
     private UserLevelMapper mapper ;
 
-    /* TODO: Written by - Han Yongding 2024/02/06 注入用户业务层 */
+    /* TODO: Written by - Han Yongding 2024/02/06 注入用户DAO */
     @Resource
     private UserServiceImpl userService ;
 
@@ -95,5 +95,11 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
         /* TODO: Written by - Han Yongding 2024/02/06 删除成功 */
         return null;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/09 根据经验值获取对应等级ID */
+    @Override
+    public String getLevelIdByExperience(Integer experience) {
+        return mapper.getLevelIdByExperience(experience) ;
     }
 }

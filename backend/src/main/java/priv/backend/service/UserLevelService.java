@@ -24,4 +24,7 @@ public interface UserLevelService {
 
     /* TODO: Written by - Han Yongding 2024/02/06 删除用户等级 */
     String deleteUserLevel(String levelId) ;
+
+    /* TODO: Written by - Han Yongding 2024/02/09 根据经验值获取对应等级ID */
+    String getLevelIdByExperience(Integer experience) ;
 }

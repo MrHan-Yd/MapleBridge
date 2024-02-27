@@ -13,16 +13,40 @@
     <!--Map-->
 
     <!--Select-->
-    <select id="getAllUserLevel" resultType="UserLevel">
-        select
-            level_id,
-            level_name,
-            level,
-            required_experience,
-            privilege_description
-        from
-            user_level
-    </select>
+        <!--获取所有用户等级信息-->
+        <select id="getAllUserLevel" resultType="UserLevel">
+            select
+                level_id,
+                level_name,
+                level,
+                required_experience,
+                privilege_description
+            from
+                user_level
+        </select>
+        <!--获取所有用户等级信息-->
+        <!--根据用户经验值获取对应等级ID-->
+        <select id="getLevelIdByExperience" resultType="String" parameterType="Integer">
+            select
+                level_id
+            from
+                user_level
+            where required_experience = #{experience}
+        </select>
+        <!--根据用户经验值获取对应等级ID-->
+        <!--根据用户id获取对应登记名称-->
+        <select id="getLevelNameById" resultType="RespUserLevelVO" parameterType="String" >
+            select
+                level_id,
+                level_name,
+                level,
+                required_experience
+            from
+                user_level
+            where
+                level_id = #{levelId}
+        </select>
+        <!--根据用户id获取对应登记名称-->
     <!--Select-->
 
     <!--Update-->

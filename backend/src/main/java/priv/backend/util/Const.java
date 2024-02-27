@@ -22,6 +22,11 @@ public class Const {
     public static final String VERIFY_EMAIL_LIMIT = "verify:email:limit:" ;
     public static final String VERIFY_EMAIL_DATA = "verify:email:data:" ;
 
+    /* TODO: Written by - Han Yongding 2024/02/16 缓存用户信息 */
+    public static final String USER_INFORMATION_DATA = "user:information:data:" ;
+    /* TODO: Written by - Han Yongding 2024/02/18 验证码RedisKey */
+    public static final String CAPTCHA_CODE = "captcha:code:";
+
     /** TODO: Written by - Han Yongding 2023/08/22 限流过滤器优先级 */
     public static final int ORDER_LIMIT = -101 ;
 

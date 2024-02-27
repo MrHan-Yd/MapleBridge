@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router" ;
-// import {unauthorized} from "@/net/NetWork";
+import {unauthorized} from "@/net/Login";
+import {getUserRole} from "@/net/NetWork";
 
 const router = createRouter({
     history: createWebHistory(import.meta.BASE_URL) ,
@@ -10,16 +11,16 @@ const router = createRouter({
             component: () => import('@/views/backend/WelcomeView.vue') ,
             children: [
                 {
-                    path: '/backend-login' ,
-                    name: 'backend-login' ,
+                    path: '/backend-welcome-login' ,
+                    name: 'backend-welcome-login' ,
                     component: () => import('@/views/backend/welcome/LoginPage.vue')
                 } , {
-                    path: '/backend-register' ,
-                    name: 'backend-register' ,
+                    path: '/backend-welcome-register' ,
+                    name: 'backend-welcome-register' ,
                     component: () => import('@/views/backend/welcome/RegisterPage.vue')
                 } , {
-                    path: '/backend-reset' ,
-                    name: 'backend-reset' ,
+                    path: '/backend-welcome-reset' ,
+                    name: 'backend-welcome-reset' ,
                     component: () => import('@/views/backend/welcome/ResetPage.vue')
                 }
             ]
@@ -27,63 +28,110 @@ const router = createRouter({
             path: '/backend-index' ,
             name: 'backend-index' ,
             component: () => import('@/views/backend/IndexView.vue'),
+            roles: ['ADMIN'] ,
             children: [
                 {
-                    path: '/backend-workbench',
-                    name: 'backend-workbench' ,
+                    path: '/backend-index-workbench',
+                    name: 'backend-index-workbench' ,
                     component: () => import('@/views/backend/index/WorkbenchPage.vue') ,
                 } , {
-                    path: '/backend-role',
-                    name: 'backend-role',
+                    path: '/backend-index-role',
+                    name: 'backend-index-role',
                     component: () => import('@/views/backend/index/RolePage.vue')
                 } , {
-                    path: '/backend-role-status',
-                    name: 'backend-role-status',
+                    path: '/backend-index-role-status',
+                    name: 'backend-index-role-status',
                     component: () => import('@/views/backend/index/RoleStatusPage.vue') ,
                 } , {
-                    path: '/backend-permission',
-                    name: 'backend-permission',
+                    path: '/backend-index-permission',
+                    name: 'backend-index-permission',
                     component:() => import('@/views/backend/index/PermissionPage.vue')
                 } , {
-                    path: '/backend-permission-status',
-                    name: 'backend-permission-status',
+                    path: '/backend-index-permission-status',
+                    name: 'backend-index-permission-status',
                     component: () => import('@/views/backend/index/PermissionStatusPage.vue')
                 } , {
-                    path: '/backend-user-level',
-                    name: 'backend-user-level',
+                    path: '/backend-index-user-level',
+                    name: 'backend-index-user-level',
                     component: () => import('@/views/backend/index/UserLevelPage.vue')
                 } , {
-                    path: '/backend-user-status',
-                    name: 'backend-user-status',
+                    path: '/backend-index-user-status',
+                    name: 'backend-index-user-status',
                     component: () => import('@/views/backend/index/UserStatusPage.vue')
                 } , {
-                    path: '/backend-user',
-                    name: 'backend-user',
+                    path: '/backend-index-user',
+                    name: 'backend-index-user',
                     component: () => import('@/views/backend/index/UserPage.vue')
                 } , {
-                    path: '/backend-work-types',
-                    name: 'backend-work-types',
+                    path: '/backend-index-work-types',
+                    name: 'backend-index-work-types',
                     component: () => import('@/views/backend/index/WorkTypePage.vue')
                 }
             ]
+        } , {
+            path: "/frontend-welcome",
+            name: 'welcome',
+            component: () => import("@/views/frontend/WelcomeView.vue"),
+            children: [
+                {
+                    path: "/frontend-welcome-login",
+                    name: "welcome-login",
+                    component: () => import("@/views/frontend/welcome/LoginPage.vue")
+                } , {
+                    path: "/frontend-welcome-register",
+                    name: "welcome-register",
+                    component: () => import("@/views/frontend/welcome/RegisterPage.vue")
+                } , {
+                    path: "/frontend-welcome-reset",
+                    name: "welcome-reset",
+                    component: () => import("@/views/frontend/welcome/ResetPage.vue")
+                }
+            ]
+        } , {
+            path: "/frontend-index",
+            name: 'index',
+            component: () => import("@/views/frontend/IndexView.vue"),
+            children: [
+                {
+                    path: "/frontend-index-home",
+                    name: "indexHome",
+                    component: () => import("@/views/frontend/index/IndexPage.vue")
+                }
+            ]
+        } , {
+            /*404*/
+            path: '/404',
+            name: 'not-found',
+            component: () => import('@/views/backend/system/404Page.vue')
+        } , {
+        // 最后的通配符路由{
+            path: '/:catchAll(.*)',
+            redirect: '/404' // 将匹配到的路径重定向到 /not-found,
         }
     ]
 }) ;
 
 /* 配置路由守卫，防止用户不登录能访问需要登录的页面 */
-// router.beforeEach((to, from, next) => {
-//     /* 判断是否登录 */
-//     const isUnauthorized = unauthorized() ;
-//     /* 如果用户已经登录了，还要访问页面的登录页面*/
-//     if(to.name.startsWith("welcome-") && !isUnauthorized) {
-//         next("/index") ;
-//
-//         /*用户没有登录，但是去访问主页*/
-//     } else if(to.fullPath.startsWith("/index") && isUnauthorized) {
-//         next("/") ;
-//     } else {
-//         next() ;
-//     }
-// }) ;
+router.beforeEach((to, from, next) => {
+    const userRole = getUserRole() // 从本地存储获取用户角色信息
+
+    /* 判断是否登录 */
+    const isUnauthorized = unauthorized() ;
+    /* 如果用户已经登录了，还要访问登录页面*/
+    if((to.name.startsWith("backend-welcome-") || to.name.startsWith("frontend-welcome-")) && !isUnauthorized) {
+        if (userRole === "ADMIN") {
+            next("/backend-index") ;
+        } else {
+            next("/frontend-index") ;
+        }
+        /*用户没有登录，但是去访问主页*/
+    } else if(to.fullPath.startsWith("/frontend-index-") && isUnauthorized) {
+        next("/frontend-welcome-login") ;
+    } else if(to.fullPath.startsWith("/backend-index-") && isUnauthorized){
+        next("/backend-welcome-login") ;
+    } else {
+        next() ;
+    }
+}) ;
 
 export default router

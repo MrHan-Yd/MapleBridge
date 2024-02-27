@@ -1,10 +1,11 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {CirclePlus, DataAnalysis, Finished, Reading, TurnOff} from "@element-plus/icons-vue";
+import {CirclePlus, DataAnalysis, Finished, Reading, Search, TurnOff} from "@element-plus/icons-vue";
 import {post, get, put, delete_} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
+import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
 const formInline = reactive({
@@ -183,7 +184,6 @@ const getData = async (num, size) => {
   try {
     const response = await new Promise((resolve, reject) => {
       get("api/auth/user-level?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
-        console.log(rs.code)
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -311,15 +311,18 @@ function getShowAndHide(levelId) {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-          <el-button @click="onReset">重置</el-button>
+          <el-button :icon="Search" type="primary" @click="onSubmit">查询</el-button>
+          <el-button @click="onReset">
+            <my-icon-button class="el-icon--left reset" name="icon-zhongzhi"/>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
       <el-divider/>
     </div>
     <div id="bottom">
       <div id="buttons">
-        <el-button type="primary" @click="openDrawer({type:1})">新增</el-button>
+        <el-button :icon="CirclePlus" type="primary" @click="openDrawer({type:1})">新增</el-button>
       </div>
       <div id="tables" v-if="isTableDataEmpty()">
         <el-table :data="tableData" :row-key="'levelId'" :height="'53vh'"
@@ -450,7 +453,7 @@ function getShowAndHide(levelId) {
 }
 
 #user_level >>> .pagination {
-  margin-top: 20px;
+  margin-top: 12px;
   display: flex;
   justify-content: right;
   align-items: center;

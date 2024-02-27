@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 用户状态实体类
+ * @Description : 用户状态实体类DTO
  * @CreateDate :  2024-02-08 11:23
  */
 @Data

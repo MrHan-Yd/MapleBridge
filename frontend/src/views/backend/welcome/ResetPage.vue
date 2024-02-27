@@ -1,9 +1,10 @@
 <script setup>
 import {computed, reactive, ref} from "vue";
 import {EditPen, Lock, Message} from "@element-plus/icons-vue";
-import {get, post} from "@/net/NetWork";
+import {get, post, put} from "@/net/NetWork";
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import {ElSuccess, ElWarning} from '@/util/MessageUtil' ;
 
 /* 步骤条校验 */
 const active = ref(0) ;
@@ -71,7 +72,7 @@ const rules = {
     {
       min: 6 ,
       max: 20 ,
-      message: '密码的长度必须在6-16个字符之间' ,
+      message: '密码的长度必须在6-20个字符之间' ,
       trigger: ['blur', 'change']
     }
   ] ,
@@ -108,10 +109,13 @@ const rules = {
 function confirmReset() {
   formRef.value.validate((valid) => {
     if(valid) {
-      post('/api/auth/reset-confirm', {
-        email: form.email ,
-        code: form.code
-      }, () => active.value++) ;
+      get('/api/auth/reset-confirm?email=' + form.email + "&code=" + form.code, (rs) => {
+        if (rs.code === 200) {
+          active.value++
+        } else {
+          ElWarning(rs.message) ;
+        }
+      }) ;
     }
   }) ;
 }
@@ -120,9 +124,9 @@ function confirmReset() {
 function doReset() {
   formRef.value.validate((valid) => {
     if(valid) {
-      post('/api/auth/reset-password', {...form}, () => {
-        ElMessage.success("密码重置成功，请重新登录") ;
-        router.push('/') ;
+      put('/api/auth/reset-password', {...form}, () => {
+        ElSuccess("密码重置成功，请重新登录") ;
+        router.push('/backend-welcome-login') ;
       })
     }
   }) ;
@@ -146,7 +150,7 @@ function doReset() {
       <div style="margin-top:50px;">
         <el-form :model="form" :rules="rules" ref="formRef">
           <el-form-item>
-            <el-input v-model="form.email" type="email" placeholder="电子邮件地址">
+            <el-input v-model="form.email" type="text" placeholder="电子邮件地址">
               <template #prefix>
                 <el-icon><Message /></el-icon>
               </template>

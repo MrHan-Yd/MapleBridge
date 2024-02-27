@@ -14,7 +14,7 @@ import java.util.List;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 角色表
+ * @Description : 角色表DTO
  * @CreateDate :  2024-01-26 13:41
  */
 @Data

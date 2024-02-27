@@ -1,10 +1,11 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {Connection, Link} from "@element-plus/icons-vue";
+import {CirclePlus, Connection, Link, Search} from "@element-plus/icons-vue";
 import {post, get, put, delete_} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
+import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
 const formInline = reactive({
@@ -335,15 +336,18 @@ function getShowAndHide(permissionId) {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-          <el-button @click="onReset">重置</el-button>
+          <el-button :icon="Search" type="primary" @click="onSubmit">查询</el-button>
+          <el-button @click="onReset">
+            <my-icon-button class="el-icon--left reset" name="icon-zhongzhi"/>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
       <el-divider/>
     </div>
     <div id="bottom">
       <div id="buttons">
-        <el-button type="primary" @click="openDrawer({type:1})">新增</el-button>
+        <el-button :icon="CirclePlus" type="primary" @click="openDrawer({type:1})">新增</el-button>
       </div>
       <div id="tables" v-if="isTableDataEmpty()">
         <el-table :data="tableData" :row-key="'permissionId'" :height="'53vh'"
@@ -479,7 +483,7 @@ function getShowAndHide(permissionId) {
 }
 
 #permission >>> .pagination {
-  margin-top: 20px;
+  margin-top: 12px;
   display: flex;
   justify-content: right;
   align-items: center;

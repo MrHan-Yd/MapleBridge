@@ -9,26 +9,30 @@
     <!--SQL-->
 
     <!--Map-->
-    <resultMap id="findRolePermissionByRoleIdMap" type="Permission">
-        <id property="permissionId" column="permission_id"/>
-        <result property="permissionName" column="permission_name"/>
-        <result property="permissionUrl" column="permission_url"/>
-    </resultMap>
+        <!--根据角色ID查询对应权限Map-->
+        <resultMap id="findRolePermissionByRoleIdMap" type="Permission">
+            <id property="permissionId" column="permission_id"/>
+            <result property="permissionName" column="permission_name"/>
+            <result property="permissionUrl" column="permission_url"/>
+        </resultMap>
+        <!--根据角色ID查询对应权限Map-->
     <!--Map-->
 
     <!--Select-->
-    <select id="findRolePermissionByRoleId" resultMap="findRolePermissionByRoleIdMap">
-        select
-            p.permission_id   as permission_id,
-            p.permission_name as permission_name,
-            p.permission_url  as permission_url
-        from
-            role_permission rp
-        left join
-            permission p on rp.permission_id = p.permission_id
-        where rp.role_id = #{roleId}
-        and p.status_id = '1750807828107321346'
-    </select>
+        <!--根据角色ID查询对应权限-->
+        <select id="findRolePermissionByRoleId" resultMap="findRolePermissionByRoleIdMap">
+            select
+                p.permission_id   as permission_id,
+                p.permission_name as permission_name,
+                p.permission_url  as permission_url
+            from
+                role_permission rp
+            left join
+                permission p on rp.permission_id = p.permission_id
+            where rp.role_id = #{roleId}
+            and p.status_id = '1750807828107321346'
+        </select>
+        <!--根据角色ID查询对应权限-->
     <!--Select-->
 
     <!--Update-->

@@ -13,19 +13,21 @@
     <!--Map-->
 
     <!--Select-->
-    <select id="getAllStatusUsers" resultType="StatusUser">
-        select
-            status_id,
-            status_name,
-            state,
-            create_id,
-            create_time,
-            update_id,
-            update_time
-        from
-            status_user
-        where state != '2'
-    </select>
+        <!--获取所有用户状态-->
+        <select id="getAllStatusUsers" resultType="StatusUser">
+            select
+                status_id,
+                status_name,
+                state,
+                create_id,
+                create_time,
+                update_id,
+                update_time
+            from
+                status_user
+            where state != '2'
+        </select>
+        <!--获取所有用户状态-->
     <!--Select-->
 
     <!--Update-->

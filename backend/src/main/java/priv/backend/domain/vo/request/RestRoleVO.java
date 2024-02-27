@@ -19,5 +19,5 @@ public class RestRoleVO implements BaseData {
     private String roleName ;
     private String roleNameCn ;
     private String statusId ;
-    private List<Object> permissionList ;
+    private List<String> permissionIdList ;
 }

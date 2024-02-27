@@ -6,7 +6,7 @@
     </div>
     <div class="welcome-title">
       <div style="font-size:30px; font-weight:bold">欢迎来到校友会管理平台</div>
-      <div style="margin-top: 10px">在这里你可以更便捷的管理校友会平台</div>
+      <div style="margin-top: 10px">在这里你可以更高效地管理校友会平台</div>
       <div style="margin-top: 5px"></div>
     </div>
     <div class="right-card">
@@ -20,10 +20,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "WelcomeView"
-}
+<script setup>
+import router from "@/router";
+import {onMounted} from "vue";
+
+/* 页面打开时默认调用 */
+onMounted(() => {
+  router.push('/backend-welcome-login') ;
+});
 </script>
 
 <style scoped>
@@ -35,7 +39,7 @@ export default {
   text-shadow: 0 0 10px black ;
 }
 .right-card {
-  width: 400px ;
+  width: 450px ;
   z-index: 1 ;
   background-color: var(--el-bg-color) ;
 }

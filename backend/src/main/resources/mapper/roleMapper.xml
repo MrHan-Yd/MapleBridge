@@ -8,39 +8,62 @@
     <!--SQL-->
 
     <!--Map-->
-
-    <resultMap id="getRoleMap" type="RespRoleVO">
-        <id property="roleId" column="role_id"/>
-        <result property="roleName" column="role_name"/>
-        <result property="roleNameCn" column="role_name_cn"/>
-        <result property="statusId" column="status_id"/>
-        <result property="createId" column="create_id"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateId" column="update_id"/>
-        <result property="updateTime" column="update_time"/>
-        <!-- 一对多 property：属性名，column：传入id，Permission：查询条数据类型 -->
-        <collection property="permissionList" column="role_id" ofType="Permission"
-        select="priv.backend.mapper.RolePermissionMapper.findRolePermissionByRoleId" />
-    </resultMap>
+        <!--角色Map-->
+        <resultMap id="getRoleMap" type="RespRoleVO">
+            <id property="roleId" column="role_id"/>
+            <result property="roleName" column="role_name"/>
+            <result property="roleNameCn" column="role_name_cn"/>
+            <result property="statusId" column="status_id"/>
+            <result property="createId" column="create_id"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateId" column="update_id"/>
+            <result property="updateTime" column="update_time"/>
+            <!-- 一对多 property：属性名，column：传入id，Permission：查询条数据类型 -->
+            <collection property="permissionList" column="role_id" ofType="Permission"
+            select="priv.backend.mapper.RolePermissionMapper.findRolePermissionByRoleId" />
+        </resultMap>
+        <!--角色Map-->
     <!--Map-->
 
     <!--Select-->
-    <!--查询角色-->
-    <select id="getRole" resultMap="getRoleMap">
-        select
-        role_id,
-        role_name,
-        role_name_cn,
-        status_id,
-        create_id,
-        create_time,
-        update_id,
-        update_time
-        from
-            role
-        where status_id != '1749415120449003521'
-    </select>
-    <!--查询角色-->
+        <!--查询角色-->
+        <select id="getRole" resultMap="getRoleMap">
+            select
+            role_id,
+            role_name,
+            role_name_cn,
+            status_id,
+            create_id,
+            create_time,
+            update_id,
+            update_time
+            from
+                role
+            where status_id != '1749415120449003521'
+        </select>
+        <!--查询角色-->
+        <!--根据角色ID查询对应角色信息-->
+        <select id="getRoleById" resultType="RespUserRoleVo" parameterType="String" >
+            select
+                role_id,
+                role_name,
+                role_name_cn
+            from
+                role
+            where status_id != '1749415120449003521'
+            and role_id = #{roleId}
+        </select>
+        <!--根据角色ID查询对应角色信息-->
+        <!--获取所有角色，用于前端列表选择，不分页-->
+        <select id="getRoleSelect" resultType="RespUserRoleVO">
+            select
+                role_id,
+                role_name,
+                role_name_cn
+            from
+                role
+            where status_id != '1749415120449003521'
+        </select>
     <!--Select-->
 
     <!--Update-->
