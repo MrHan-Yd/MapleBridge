@@ -1,10 +1,9 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {CirclePlus, DataAnalysis, Finished, Reading, Search, TurnOff} from "@element-plus/icons-vue";
+import {CirclePlus, DataAnalysis, Finished, Reading, Search} from "@element-plus/icons-vue";
 import {post, get, put, delete_} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
-import {formatDate} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
@@ -263,7 +262,7 @@ function deleteStatusData(levelId) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

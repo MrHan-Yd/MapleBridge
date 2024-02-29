@@ -4,14 +4,10 @@ import router from "@/router" ;
 import {
   Document,
   HomeFilled,
-  Location,
   Setting,
-  Menu as IconMenu,
-  House,
   DataLine,
   Odometer,
-  Avatar,
-  TurnOff, UserFilled, Connection
+  TurnOff,
 } from '@element-plus/icons-vue' ;
 import {onMounted} from "vue";
 import MyIcon from "@/components/MyIcon.vue";

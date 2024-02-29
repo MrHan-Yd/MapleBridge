@@ -1,13 +1,10 @@
 package priv.backend.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import priv.backend.domain.dto.Permission;
 import priv.backend.domain.dto.TypesWorkExperience;
 import priv.backend.domain.vo.request.RestTypesWorkExperienceVO;
-import priv.backend.domain.vo.response.RespPermissionVO;
 import priv.backend.domain.vo.response.RespTypesWorkExperienceVO;
 import priv.backend.mapper.TypesWorkExperienceMapper;
 import priv.backend.service.TypesWorkExperienceService;

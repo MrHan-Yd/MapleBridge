@@ -1,30 +1,20 @@
 package priv.backend.controller;
 
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
 import priv.backend.enumeration.CodeEnum;
-import priv.backend.enumeration.RestCodeEnum;
 import priv.backend.exception.custom.ProgramCustomException;
 import priv.backend.service.impl.AccountServiceImpl;
-import priv.backend.util.JwtUtils;
 import priv.backend.util.ReturnUtils;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Created by IntelliJ IDEA.

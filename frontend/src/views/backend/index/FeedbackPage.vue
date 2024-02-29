@@ -1,7 +1,7 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {CirclePlus, Document, EditPen, Search} from "@element-plus/icons-vue";
+import {CirclePlus, EditPen, Search} from "@element-plus/icons-vue";
 import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
@@ -242,7 +242,7 @@ function deleteStatusData(feedbackId) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

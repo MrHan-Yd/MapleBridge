@@ -323,7 +323,7 @@ function deleteStatusData(permissionId) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

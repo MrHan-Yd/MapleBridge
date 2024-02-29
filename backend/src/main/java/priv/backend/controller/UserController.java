@@ -1,15 +1,9 @@
 package priv.backend.controller;
 
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.*;
-import priv.backend.domain.vo.response.RespRoleVO;
-import priv.backend.enumeration.CodeEnum;
-import priv.backend.exception.custom.ProgramCustomException;
 import priv.backend.service.impl.*;
 import priv.backend.util.ReturnUtils;
 

@@ -9,7 +9,6 @@ import {
 import {ElMessage} from "element-plus";
 import {ElSuccess} from "@/util/MessageUtil";
 import {getUniqueId} from '@/util/UUID' ;
-import router from "@/router";
 
 
 /* 验证英文验证码 */

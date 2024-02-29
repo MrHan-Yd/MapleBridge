@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.Feedback;
-import priv.backend.domain.dto.TypesWorkExperience;
 import priv.backend.domain.vo.request.RestFeedbackVO;
 import priv.backend.domain.vo.response.RespFeedbackVO;
-import priv.backend.domain.vo.response.RespTypesWorkExperienceVO;
 import priv.backend.mapper.FeedbackMapper;
 import priv.backend.service.FeedbackService;
 import priv.backend.util.CurrentUtils;
@@ -63,7 +61,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         /* TODO: Written by - Han Yongding 2024/02/28 拷贝对象 */
         Feedback feedback = vo.asViewObject(Feedback.class) ;
         /* TODO: Written by - Han Yongding 2024/02/28 获取系统当前时间 */
-        feedback.setTimestamp(CurrentUtils.getTheCurrentSystemTime()); ;
+        feedback.setTimestamp(CurrentUtils.getTheCurrentSystemTime()) ;
 
         /* TODO: Written by - Han Yongding 2024/02/28 新增 */
         if(CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(feedback))) {

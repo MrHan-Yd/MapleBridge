@@ -2,9 +2,7 @@ package priv.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import priv.backend.domain.dto.Permission;
 import priv.backend.domain.dto.TypesWorkExperience;
-import priv.backend.domain.vo.response.RespPermissionSelectVO;
 import priv.backend.domain.vo.response.RespTypesWorkExperienceVO;
 
 import java.util.List;

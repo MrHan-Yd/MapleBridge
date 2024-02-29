@@ -5,7 +5,6 @@ import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
 import {post, get, put, delete_} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
-import MyIcon from "@/components/MyIcon.vue";
 import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
@@ -84,7 +83,7 @@ function resetPassword(id) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );
@@ -355,7 +354,7 @@ function deleteStatusData(id) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

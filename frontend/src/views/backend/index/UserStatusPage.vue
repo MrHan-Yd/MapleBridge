@@ -274,7 +274,7 @@ function deleteStatusData(statusId) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

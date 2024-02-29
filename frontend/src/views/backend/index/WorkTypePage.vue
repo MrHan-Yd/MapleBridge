@@ -250,7 +250,7 @@ function deleteStatusData(typeId) {
             await getData(page.value, pageSize.value);
           }
         },
-        (message, code) => {
+        (message) => {
           ElError(message);
         }
     );

@@ -1,6 +1,6 @@
 <script setup>
-import {reactive, ref, onMounted} from 'vue' ;
-import {ElMessageBox, ElNotification} from "element-plus";
+import {reactive, ref} from 'vue' ;
+import {ElMessageBox} from "element-plus";
 import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
 import {post, get, put} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
@@ -248,7 +248,7 @@ const putState = (data) => {
           ElSuccess(data.state === '0' ? "开启成功" : "禁用成功");
           resolve(rs); // 成功时 resolve
         },
-        (message, code) => {
+        (message) => {
           reject(message); // 失败时 reject
         }
     );

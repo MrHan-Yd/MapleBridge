@@ -3,10 +3,8 @@ import {ChatDotRound, Lock, User} from '@element-plus/icons-vue'
 import {reactive, ref} from "vue" ;
 import {login, validateCaptchaImage} from "@/net/Login";
 import router from "@/router";
-import {get} from "@/net/NetWork";
 import {generateUniqueId} from "@/util/UUID" ;
-import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil";
-import {onMounted} from "vue";
+import {ElError, ElWarning} from "@/util/MessageUtil";
 import axios from "axios";
 
 
