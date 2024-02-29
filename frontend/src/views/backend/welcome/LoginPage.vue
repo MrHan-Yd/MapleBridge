@@ -142,7 +142,7 @@ function userLogin() {
       </el-form>
     </div>
     <div style="margin-top: 40px;">
-      <el-button @click="userLogin" style="width: 270px" round plain>立即登录</el-button>
+      <el-button @click="userLogin" style="width: 270px;height: 50px;font-size: 15px" round plain>立即登录</el-button>
     </div>
     <!--    <el-divider>-->
     <!--      <span style="font-size: 13px; color:grey" >没有账号</span>-->

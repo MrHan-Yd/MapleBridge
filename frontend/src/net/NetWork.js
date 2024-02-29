@@ -81,12 +81,39 @@ function getUserRole() {
 
 }
 
+/* 获取登录用户唯一标识 */
+function getUserId() {
+    const str = localStorage.getItem(accessAuthItem) || sessionStorage.getItem(accessAuthItem) ;
+    /* 如果都没有拿到则没有保存，返回null */
+    if(!str) {
+        return null ;
+    }
+
+    /* 拿到了封装回authObj */
+    const authObj = JSON.parse(str) ;
+    return authObj.id ;
+}
+
+/* 获取登录用户名称 */
+function getUserName() {
+    const str = localStorage.getItem(accessAuthItem) || sessionStorage.getItem(accessAuthItem) ;
+    /* 如果都没有拿到则没有保存，返回null */
+    if(!str) {
+        return null ;
+    }
+
+    /* 拿到了封装回authObj */
+    const authObj = JSON.parse(str) ;
+    return authObj.account ;
+}
+
 /* 保存 Token */
-function storeAccessToken(token, remember, expire, account, refreshToken, refreshTokenExpire, role) {
+function storeAccessToken(token, remember, expire, id, account, refreshToken, refreshTokenExpire, role) {
     const authObj = {
         accessToken: token ,
         accessTokenExpire: expire,
         remember: remember,
+        id: id,
         account: account,
         refreshToken: refreshToken,
         refreshTokenExpire: refreshTokenExpire,
@@ -215,5 +242,7 @@ export {
     storeAccessToken,
     deleteAccessToken,
     takeAccessToken,
-    getUserRole
+    getUserRole,
+    getUserId,
+    getUserName
 }

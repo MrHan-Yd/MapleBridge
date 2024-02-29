@@ -13,6 +13,7 @@ import java.util.Date;
  */
 @Data
 public class RespAuthorizeVO {
+    private String id ;
     private String account ;
     private RespUserRoleNoIdVO role ;
     private String accessToken ;

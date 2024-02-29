@@ -66,6 +66,10 @@ const router = createRouter({
                     path: '/backend-index-work-types',
                     name: 'backend-index-work-types',
                     component: () => import('@/views/backend/index/WorkTypePage.vue')
+                } , {
+                    path: '/backend-index-feedback',
+                    name: 'backend-index-feedback',
+                    component: () => import('@/views/backend/index/FeedbackPage.vue')
                 }
             ]
         } , {

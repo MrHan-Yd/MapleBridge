@@ -167,11 +167,21 @@ const handleClose = (key, keyPath) => {
                 <span @click="router.push('/backend-index-user-level')">平台等级管理</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="7" disabled>
+            <el-sub-menu index="7">
+              <template #title>
+                <my-icon name="icon-fankuiguanli1"/>
+                <span>反馈管理</span>
+              </template>
+              <el-menu-item index="7-1">
+                <my-icon name="icon-fankuiguanli"/>
+                <span @click="router.push('/backend-index-feedback')">平台反馈管理</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="8" disabled>
               <el-icon><document /></el-icon>
               <span>Navigator Three</span>
             </el-menu-item>
-            <el-menu-item index="8">
+            <el-menu-item index="9">
               <el-icon><setting /></el-icon>
               <span>Navigator Four</span>
             </el-menu-item>

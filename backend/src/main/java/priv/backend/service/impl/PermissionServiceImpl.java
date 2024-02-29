@@ -43,7 +43,6 @@ public class PermissionServiceImpl implements PermissionService {
             return PageUtils.convertToPage(returnPage, list);
         }
         return mapper.getAllPermission() ;
-
     }
 
     /* TODO: Written by - Han Yongding 2024/01/27 新增权限 */
@@ -79,7 +78,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         /* TODO: Written by - Han Yongding 2024/01/27 根据id修改 */
-        if (mapper.updateById(vo.asViewObject(Permission.class)) < 1) {
+        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(vo.asViewObject(Permission.class)))) {
             return "修改失败，请稍后重试";
         }
         return null;

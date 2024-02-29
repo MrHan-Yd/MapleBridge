@@ -149,24 +149,24 @@ function doReset() {
       </div>
       <div style="margin-top:50px;">
         <el-form :model="form" :rules="rules" ref="formRef">
-          <el-form-item>
-            <el-input v-model="form.email" type="text" placeholder="电子邮件地址">
+          <el-form-item style="padding: 10px">
+            <el-input style="height: 50px" v-model="form.email" type="text" placeholder="电子邮件地址">
               <template #prefix>
                 <el-icon><Message /></el-icon>
               </template>
             </el-input>
-          </el-form-item>
-          <el-form-item prop="code">
+          </el-form-item >
+          <el-form-item prop="code" style="padding: 10px">
             <el-row :gutter="10" style="width:100%">
               <el-col :span="17">
-                <el-input v-model="form.code" maxlength="6" type="text" placeholder="请输入验证码">
+                <el-input style="height: 50px" v-model="form.code" maxlength="6" type="text" placeholder="请输入验证码">
                   <template #prefix>
                     <el-icon><EditPen /></el-icon>
                   </template>
                 </el-input>
               </el-col>
               <el-col :span="5">
-                  <el-button @click="askCode" :disabled="!isEmailValid || coldTime > 0" type="success">
+                  <el-button style="height: 50px" @click="askCode" :disabled="!isEmailValid || coldTime > 0" type="success">
                     {{coldTime > 0 ? `请稍后${coldTime}秒` : '获取验证码'}}
                   </el-button>
               </el-col>
@@ -175,7 +175,7 @@ function doReset() {
         </el-form>
       </div>
       <div style="margin-top: 80px;">
-        <el-button @click="confirmReset" type="warning" plain style="width:270px;">开始重置密码</el-button>
+        <el-button @click="confirmReset" round plain style="width:270px; height: 50px;font-size: 15px">开始重置密码</el-button>
       </div>
     </div>
     <div style="margin: 0 20px" v-if="active === 1">
@@ -185,15 +185,15 @@ function doReset() {
       </div>
       <div style="margin-top: 50px">
         <el-form :model="form" :rules="rules" ref="formRef">
-          <el-form-item prop="password">
-            <el-input v-model="form.password" maxlength="20" type="password" placeholder="密码">
+          <el-form-item prop="password" style="padding: 10px">
+            <el-input style="height: 50px" v-model="form.password" maxlength="20" type="password" placeholder="密码">
               <template #prefix>
                 <el-icon><Lock /></el-icon>
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="password_repeat">
-            <el-input v-model="form.password_repeat" maxlength="20" type="password" placeholder="重复密码">
+          <el-form-item prop="password_repeat" style="padding: 10px">
+            <el-input style="height: 50px" v-model="form.password_repeat" maxlength="20" type="password" placeholder="重复密码">
               <template #prefix>
                 <el-icon><Lock /></el-icon>
               </template>
@@ -202,11 +202,24 @@ function doReset() {
         </el-form>
       </div>
       <div style="margin-top: 80px;">
-        <el-button @click="doReset" style="width: 270px;" type="danger" plain>立即重置密码</el-button>
+        <el-button  @click="doReset" style="width: 270px; height: 50px;font-size: 15px" type="success" round plain>立即重置密码</el-button>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
+/deep/ input::-webkit-input-placeholder {
+  color: black;
+  font-size: 12px;
+  opacity: .5;
+}
 
+/**改变input框背景颜色*/
+/deep/ .el-input__wrapper {
+  background-color: #f5f5f5 !important;
+}
+
+/deep/ .el-input__inner {
+  background-color: #f5f5f5 !important;
+}
 </style>

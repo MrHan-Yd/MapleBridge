@@ -1,8 +1,8 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
-import {post, get, put} from "@/net/NetWork";
+import {CirclePlus, Document, EditPen, Search} from "@element-plus/icons-vue";
+import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
@@ -16,13 +16,10 @@ const formInline = reactive({
 
 /* 表格数据 */
 const tableData = ref([{
-  "statusId": '',
-  "statusName": '',
-  "state": '',
-  "createId": '',
-  "createTime": '',
-  "updateId": '',
-  "updateTime": '',
+  "feedbackId": '',
+  "userId": '',
+  "feedbackText": '',
+  "timestamp": '',
 }]);
 
 /* 分页参数 */
@@ -50,15 +47,18 @@ const onReset = () => {
 const handleClick = (row) => {
   const data = {
     type: 2,
-    statusId: row.statusId,
-    statusName: row.statusName
+    feedbackId: row.feedbackId,
+    userId: row.userId,
+    feedbackText: row.feedbackText
   }
   openDrawer(data);
 }
+
 /* 分页切换每页数据显示几条 */
 const handleSizeChange = (pageSize) => {
   getData(1, pageSize);
 }
+
 /* 换页 */
 const handleCurrentChange = (pageNum) => {
   getData(pageNum);
@@ -70,15 +70,16 @@ const drawer = ref(false);
 /* 表单校验 */
 const formRef = ref();
 const form = reactive({
-  statusId: '',
-  statusName: ''
+  feedbackId: '',
+  userId: '',
+  feedbackText: ''
 });
 
 /* 表单判断 */
 const rule = {
-  statusName: [
+  feedbackText: [
     {
-      required: true, message: '请输入状态名称 '
+      required: true, message: '请输入反馈内容'
     }
   ]
 }
@@ -90,12 +91,12 @@ let drawerTitle = "";
 function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
-    drawerTitle = "新增角色状态";
+    drawerTitle = "新增平台反馈";
     clearStatusRoleForm();
   } else {
-    drawerTitle = "编辑角色状态";
+    drawerTitle = "编辑平台反馈";
     /*修改*/
-    updateStatusRole(data.statusId, data.statusName);
+    updateStatusRole(data.feedbackId, data.userId, data.feedbackText);
   }
 
   drawer.value = true;
@@ -103,13 +104,16 @@ function openDrawer(data) {
 
 /* 新增，清空表单内容 */
 function clearStatusRoleForm() {
-  form.statusName = '';
+  form.feedbackId = '';
+  form.userId = getUserId();
+  form.feedbackText = '';
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(statusId, statusName) {
-  form.statusId = statusId;
-  form.statusName = statusName;
+function updateStatusRole(feedbackId, userId, feedbackText) {
+  form.feedbackId = feedbackId;
+  form.userId = userId;
+  form.feedbackText = feedbackText;
 }
 
 /* 添加状态 */
@@ -120,9 +124,9 @@ function cancelClick() {
       /* 关闭抽屉后提交 */
       drawer.value = false;
       /* 新增 */
-      if (form.statusId === "") {
+      if (form.feedbackId === "") {
         post(
-            "/api/auth/role-status",
+            "/api/auth/feedback",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -132,7 +136,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/role-status",
+            "/api/auth/feedback",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -157,11 +161,11 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/role-status?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/auth/feedback?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
-          reject(rs);
+          reject(rs) ;
         }
       }, (message, code) => {
         /* 状态码400时，如果只是本页没有数据，但是有上一页(有数据)的同时当前页-1需要大雨等于1时，表示当前页无数据，需要查询上一页，会重新请求上一页 */
@@ -192,7 +196,7 @@ const getData = async (num, size) => {
 
   } catch (error) {
     if (error.data.code === 403) {
-      ElWarning(error.data.message) ;
+      ElWarning(error.data.message);
     } else {
       ElError("获取数据时异常" + error);
     }
@@ -217,43 +221,6 @@ function confirmClick() {
       });
 }
 
-let loading;
-/* 开关事件 */
-/** 修改用户状态 */
-const editStatus = async (row) => {
-  loading = true;
-  const state = row.state === '0' ? '1' : '0';
-  try {
-    await putState({
-      statusId: row.statusId,
-      state
-    });
-    row.state = state;
-    /* 更新数据 */
-    await getData(page.value, pageSize.value);
-  } catch (err) {
-    ElError(err.message);
-  } finally {
-    loading = false;
-  }
-}
-
-/* 修改状态 */
-const putState = (data) => {
-  return new Promise((resolve, reject) => {
-    put("/api/auth/role-status", data,
-        () => {
-          ElSuccess(data.state === '0' ? "开启成功" : "禁用成功");
-          resolve(); // 成功时 resolve
-        },
-        (error) => {
-          ElError(error.message);
-          reject(error); // 失败时 reject
-        }
-    );
-  });
-};
-
 /* 判断表格是否有数据 */
 function isTableDataEmpty() {
   return tableData.value.length > 0 && !tableData.value.every(obj => Object.values(obj).every(value => value === ''));
@@ -261,16 +228,13 @@ function isTableDataEmpty() {
 
 /* 删除 */
 const popoverVisible = ref({}); // 存储弹窗显示状态的对象
+
 /* 确认删除 */
-function deleteStatusData(statusId) {
-  if (!(statusId === "") || !(statusId === undefined)) {
+function deleteStatusData(feedbackId) {
+  if (!(feedbackId === "") || !(feedbackId === undefined)) {
     /* 请求后台删除数据 */
-    put(
-        "/api/auth/role-status",
-        {
-          statusId: statusId,
-          state: "2"
-        },
+    delete_(
+        "/api/auth/feedback/" + feedbackId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -284,47 +248,47 @@ function deleteStatusData(statusId) {
     );
   }
   // 关闭 popover
-  popoverVisible.value[statusId] = false;
+  popoverVisible.value[feedbackId] = false;
 }
 
 /* 删除弹窗取消按钮事件 */
-function closeDeletePopover(statusId) {
+function closeDeletePopover(feedbackId) {
   // 关闭 popover
-  popoverVisible.value[statusId] = false;
+  popoverVisible.value[feedbackId] = false;
 }
 
 /* 显示删除弹窗按钮事件 */
-function showDeletePopover(statusId) {
+function showDeletePopover(feedbackId) {
   if (popoverVisible.value === undefined) {
-    popoverVisible.value[statusId] = true;
+    popoverVisible.value[feedbackId] = true;
   }
-  popoverVisible.value[statusId] = true;
+  popoverVisible.value[feedbackId] = true;
 }
 
 /* 获取删除的对应数据弹窗状态，根据数据ID获取 */
-function getShowAndHide(statusId) {
-  return popoverVisible.value[statusId];
+function getShowAndHide(feedbackId) {
+  return popoverVisible.value[feedbackId];
 }
 
 </script>
 
 <template>
-  <div id="role_status">
+  <div id="feedback">
     <div id="top">
       <el-text class="title">
-        角色状态管理
+        平台反馈管理
       </el-text>
       <el-form :inline="true" :model="formInline" class="form-inline form-top">
         <el-form-item label="唯一标识">
           <el-input v-model="formInline.id" :size="'default'" placeholder="唯一标识" clearable/>
         </el-form-item>
-        <el-form-item label="状态名称">
-          <el-input v-model="formInline.name" placeholder="状态名称" clearable/>
+        <el-form-item label="反馈用户">
+          <el-input v-model="formInline.name" placeholder="反馈用户" clearable/>
         </el-form-item>
-        <el-form-item label="角色状态">
+        <el-form-item label="反馈内容">
           <el-select
               v-model="formInline.state"
-              placeholder="角色状态"
+              placeholder="反馈内容"
               clearable
           >
             <el-option label="在用" value="0"/>
@@ -346,25 +310,12 @@ function getShowAndHide(statusId) {
         <el-button :icon="CirclePlus" type="primary" @click="openDrawer({type:1})">新增</el-button>
       </div>
       <div id="tables" v-if="isTableDataEmpty()">
-        <el-table :data="tableData" :row-key="'statusId'" :height="'53vh'"
+        <el-table :data="tableData" :row-key="'feedbackId'" :height="'53vh'"
                   :header-cell-style="{'background':'#E6E8EB',}" style="width: 100%;">
-          <el-table-column fixed prop="statusId" label="唯一标识" width="200"/>
-          <el-table-column prop="statusName" label="状态名称" width="120"/>
-          <el-table-column prop="state" label="状态" width="120">
-            <template #default="scope">
-              <el-switch
-                  :loading="loading"
-                  :model-value="scope.row.state === '0'"
-                  :checked-value="0"
-                  :unchecked-value="1"
-                  @change="editStatus(scope.row)"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column prop="createId" label="创建人" width="200"/>
-          <el-table-column prop="createTime" label="创建时间" :formatter="formatDate" width="220"/>
-          <el-table-column prop="updateId" label="更新人" width="120"/>
-          <el-table-column prop="updateTime" label="更新时间" :formatter="formatDate" width="220"/>
+          <el-table-column fixed prop="feedbackId" label="唯一标识" width="200"/>
+          <el-table-column prop="userId" label="反馈人" width="200"/>
+          <el-table-column prop="feedbackText" label="反馈内容" width="550"/>
+          <el-table-column prop="timestamp" label="反馈时间" :formatter="formatDate" width="220"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <div>
@@ -374,17 +325,17 @@ function getShowAndHide(statusId) {
                 <el-popover
                     placement="top"
                     trigger="click"
-                    :visible="getShowAndHide(scope.row.statusId)"
+                    :visible="getShowAndHide(scope.row.feedbackId)"
                     :width="160"
                 >
                   <p>确定要删除此条数据?</p>
                   <div style="text-align: right; margin: 0">
-                    <el-button size="small" text @click="closeDeletePopover(scope.row.statusId)">取消</el-button>
-                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.statusId)">确定
+                    <el-button size="small" text @click="closeDeletePopover(scope.row.feedbackId)">取消</el-button>
+                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.feedbackId)">确定
                     </el-button>
                   </div>
                   <template #reference>
-                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.statusId)">删除
+                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.feedbackId)">删除
                     </el-button>
                   </template>
                 </el-popover>
@@ -423,8 +374,8 @@ function getShowAndHide(statusId) {
     <template #default>
       <div>
         <el-form :model="form" :rules="rule" ref="formRef">
-          <el-form-item prop="statusName">
-            <el-input :prefix-icon="TurnOff" v-model="form.statusName" placeholder="状态名称" clearable/>
+          <el-form-item prop="feedText">
+            <el-input :prefix-icon="EditPen" v-model="form.feedbackText" placeholder="反馈内容" clearable/>
           </el-form-item>
         </el-form>
       </div>
@@ -439,44 +390,44 @@ function getShowAndHide(statusId) {
 </template>
 
 <style scoped>
-#role_status {
+#feedback {
   margin-left: 7px;
   margin-right: 7px;
   margin-bottom: 10px;
   background-color: white;
 }
 
-#role_status >>> #top {
+#feedback >>> #top {
   padding-left: 10px;
   padding-right: 10px;
   //margin: 10px ;
 }
 
-#role_status >>> #bottom {
+#feedback >>> #bottom {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
 }
 
-#role_status >>> #buttons {
+#feedback >>> #buttons {
 
 }
 
-#role_status >>> #tables {
+#feedback >>> #tables {
   margin-top: 20px;
 }
 
-#role_status >>> .title {
+#feedback >>> .title {
   display: block;
   padding-top: 10px;
   font-size: 18px;
 }
 
-#role_status >>> .form-top {
+#feedback >>> .form-top {
   margin-top: 25px;
 }
 
-#role_status >>> .pagination {
+#feedback >>> .pagination {
   margin-top: 12px;
   display: flex;
   justify-content: right;

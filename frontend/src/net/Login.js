@@ -32,7 +32,7 @@ function login(username, password, remember, success, failure = defaultFailure) 
         },
         (rs) => {
             /* 存储Token */
-            storeAccessToken(rs.data.accessToken, remember, rs.data.accessTokenExpire, rs.data.account, rs.data.refreshToken, rs.data.refreshTokenExpire, rs.data.role);
+            storeAccessToken(rs.data.accessToken, remember, rs.data.accessTokenExpire, rs.data.id, rs.data.account, rs.data.refreshToken, rs.data.refreshTokenExpire, rs.data.role);
             ElMessage.success("登录成功");
             ElSuccess(`欢迎${rs.data.account}使用校友会管理平台`)
             success(rs);

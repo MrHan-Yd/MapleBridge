@@ -243,4 +243,72 @@ public class UserController {
     public RestBean<Void> deleteUser(@PathVariable("id") String id) {
         return ReturnUtils.messageHandle(() -> userService.deleteUserById(id));
     }
+
+    /* TODO: Written by - Han Yongding 2024/02/28 注入工作类型业务层 */
+    @Resource
+    private TypesWorkExperienceServiceImpl typesWorkExperienceService;
+
+    /* TODO: Written by - Han Yongding 2024/02/28 查询所有工作类型 */
+    @GetMapping("work-types")
+    public RestBean<Object> getAllTypesWorkExperience(@RequestParam(defaultValue = "1") int pageNum,
+                                                    @RequestParam(defaultValue = "10") int pageSize,
+                                                    @RequestParam(required = false, defaultValue = "true") boolean isItPaginated) {
+        return ReturnUtils
+                .messageHandleData(() -> typesWorkExperienceService.getAllTypesWorkExperience(pageNum, pageSize, isItPaginated));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/28 新增工作类型 */
+    @PostMapping("work-types")
+    public RestBean<Void> insertTypesWorkExperience(@RequestBody RestTypesWorkExperienceVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, typesWorkExperienceService::insertTypesWorkExperience) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/28 修改工作类型 */
+    @PutMapping("work-types")
+    public RestBean<Void> updateTypesWorkExperience(@RequestBody RestTypesWorkExperienceVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, typesWorkExperienceService::updateTypesWorkExperience) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/28 删除工作类型 */
+    @DeleteMapping("work-types/{typeId}")
+    public RestBean<Void> deleteTypesWorkExperience(@PathVariable("typeId") String typeId) {
+        return ReturnUtils
+                .messageHandle(() -> typesWorkExperienceService.deleteTypesWorkExperience(typeId)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/29 注入用户反馈业务层 */
+    @Resource
+    private FeedbackServiceImpl feedbackService;
+
+    /* TODO: Written by - Han Yongding 2024/02/29 查询所有用户反馈 */
+    @GetMapping("feedback")
+    public RestBean<Object> getAllFeedback(@RequestParam(defaultValue = "1") int pageNum,
+                                           @RequestParam(defaultValue = "10") int pageSize,
+                                           @RequestParam(required = false, defaultValue = "true") boolean isItPaginated) {
+        return ReturnUtils
+                .messageHandleData(() -> feedbackService.getFeedback(pageNum, pageSize, isItPaginated));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/29 新增用户反馈 */
+    @PostMapping("feedback")
+    public RestBean<Void> insertFeedback(@RequestBody RestFeedbackVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, feedbackService::insertFeedback);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/29 修改用户反馈 */
+    @PutMapping("feedback")
+    public RestBean<Void> updateFeedback(@RequestBody RestFeedbackVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, feedbackService::updateFeedback);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/02/29 删除用户反馈 */
+    @DeleteMapping("feedback/{feedbackId}")
+    public RestBean<Void> deleteFeedback(@PathVariable("feedbackId") String feedbackId) {
+        return ReturnUtils
+                .messageHandle(() -> feedbackService.deleteFeedback(feedbackId));
+    }
 }

@@ -190,16 +190,21 @@ const getData = async (num, size) => {
           reject(rs);
         }
       }, (message, code) => {
-        if (code === 400 && page.value - 1 >= 0) {
+        /* 状态码400时，如果只是本页没有数据，但是有上一页(有数据)的同时当前页-1需要大雨等于1时，表示当前页无数据，需要查询上一页，会重新请求上一页 */
+        if (code === 400 && pageData.pages - 1 >= 1) {
           getData(page.value - 1, pageSize.value);
-        } else {
-          /* 如果只有一条数据，没有查询到时清空原有tableData中的数据缓存 */
+        }
+
+        /* 请求状态码400时，标识没有数据，并且当前页-1小于1表示已删除最后一条数据 */
+        if (code === 400 && pageData.pages - 1 < 1) {
+          tableData.value = "" ;
           ElWarning(message) ;
         }
       });
     });
 
-    if (tableData.value.length > 0) {
+    /* 分页数据大于0条时赋值，否则输出后端返回提示 */
+    if (response.data.total > 0) {
       /* 数据 */
       tableData.value = response.data.records;
       /* 分页数据 */

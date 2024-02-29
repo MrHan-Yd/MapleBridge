@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.TypesWorkExperienceMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+
+    <!--Map-->
+
+    <!--Select-->
+        <!--分页查询工作类型-->
+            <select id="getPageTypesWorkExperience" resultType="TypesWorkExperience">
+                select
+                    type_id,
+                    type_name,
+                    description,
+                    create_id,
+                    create_time,
+                    update_id,
+                    update_time
+                from
+                    types_work_experience
+            </select>
+        <!--分页查询工作类型-->
+        <!--查询所有工作类型-->
+            <select id="getAllTypesWorkExperience" resultType="RespTypesWorkExperienceVO">
+                select
+                    type_id,
+                    type_name
+                from
+                    types_work_experience
+            </select>
+        <!--查询所有工作类型-->
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

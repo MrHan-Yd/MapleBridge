@@ -42,7 +42,7 @@ public class AuthorizeController {
     private AccountServiceImpl accountService ;
 
     /* TODO: Written by - Han Yongding 2024/02/16 获取邮箱验证码 */
-    @GetMapping("/ask-code")
+    @GetMapping("ask-code")
     public RestBean<Void> askVerifyCode(@RequestParam("email") @Email String email,
                                         @RequestParam("type") @Pattern(regexp = "register|reset") String type,
                                         HttpServletRequest request) {
@@ -50,25 +50,25 @@ public class AuthorizeController {
     }
 
     /** TODO: Written by - Han Yongding 2024/02/16 注册 */
-    @PostMapping("/register")
+    @PostMapping("register")
     public RestBean<Void> register(@RequestBody RestEmailRegisterVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::registerEmailAccount) ;
     }
 
     /** TODO: Written by - Han Yongding 2024/02/16 重置密码邮箱确认 */
-    @GetMapping("/reset-confirm")
+    @GetMapping("reset-confirm")
     public RestBean<Void> resetConfirm(@Valid RestConfirmVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::resetConfirm) ;
     }
 
     /* TODO: Written by - Han Yongding 2024/02/27 重置密码 */
-    @PutMapping("/reset-password")
+    @PutMapping("reset-password")
     public RestBean<Void> resetPassword(@RequestBody @Valid RestEmailResetVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::resetPassword) ;
     }
 
     /** TODO: Written by - Han Yongding 2023/10/27 token过期，提供给前端刷新 */
-    @GetMapping("/refresh-token/{refreshToken}")
+    @GetMapping("refresh-token/{refreshToken}")
     public RestBean<Object> refreshToken(@PathVariable("refreshToken") @Valid String refreshToken) {
         try {
             return RestBean.success(accountService.refreshToken(refreshToken)) ;
