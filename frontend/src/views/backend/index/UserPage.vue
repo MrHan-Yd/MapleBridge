@@ -1,8 +1,8 @@
 <script setup>
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
-import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
-import {post, get, put, delete_} from "@/net/NetWork";
+import {CirclePlus, EditPen, Message, Search} from "@element-plus/icons-vue";
+import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
@@ -110,7 +110,8 @@ const form = reactive({
   id: '',
   account: '',
   email: '',
-  roleId: ''
+  roleId: '',
+  createId: ''
 });
 
 /* 表单判断 */
@@ -175,6 +176,7 @@ function clearStatusRoleForm() {
   form.account = '';
   form.email = '';
   form.roleId = '';
+  form.createId = getUserId();
 }
 
 /* 修改，为表单内容赋值 */
@@ -544,10 +546,10 @@ function getShowAndHideResetPassword(id) {
       <div>
         <el-form :model="form" :rules="rule" ref="formRef">
           <el-form-item prop="account">
-            <el-input :prefix-icon="TurnOff" minlength="6" maxlength="10" show-word-limit v-model="form.account" placeholder="用户账号" clearable/>
+            <el-input :prefix-icon="EditPen" minlength="6" maxlength="10" show-word-limit v-model="form.account" placeholder="用户账号" clearable/>
           </el-form-item>
           <el-form-item prop="email">
-            <el-input :prefix-icon="TurnOff" minlength="6" maxlength="30" show-word-limit v-model="form.email" placeholder="用户邮箱" clearable/>
+            <el-input :prefix-icon="Message" minlength="6" maxlength="30" show-word-limit v-model="form.email" placeholder="用户邮箱" clearable/>
           </el-form-item>
           <el-form-item prop="roleId" >
             <el-select

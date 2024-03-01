@@ -39,8 +39,8 @@ public class StatusUserServiceImpl implements StatusUserService {
         if (vo == null) {
             return "数据不能为空，请重试";
         }
+        /* TODO: Written by - Han Yongding 2024/03/01 初始化 */
         StatusUser statusUser = vo.asViewObject(StatusUser.class);
-        statusUser.setCreateId("null");
         statusUser.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         statusUser.setState(StatusEnum.NORMAL.STATE);
         if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(statusUser))) {

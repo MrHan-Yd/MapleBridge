@@ -105,7 +105,6 @@ public class RoleServiceImpl implements RoleService {
             try {
                 /* TODO: Written by - Han Yongding 2024/01/31 新增角色，状态默认正常 */
                 role.setStatusId("1749402591433838593");
-                role.setCreateId("null");
                 role.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
                 mapper.insert(role);
                 /* TODO: Written by - Han Yongding 2024/01/31 返回新增的角色ID */

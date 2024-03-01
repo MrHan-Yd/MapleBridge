@@ -13,4 +13,6 @@ import priv.backend.domain.BaseData;
 @Data
 public class RestStatusPermissionVO implements BaseData {
     private String statusName ;
+
+    private String createId ;
 }

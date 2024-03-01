@@ -23,13 +23,6 @@ public class UserController {
     private StatusRoleServiceImpl statusRoleService;
 
 
-    /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
-    @PostMapping("role-status")
-    public RestBean<Void> addStatusRole(@RequestBody RestStatusRoleVO vo) {
-        return ReturnUtils
-                .messageHandle(vo, statusRoleService::insertStatusRole);
-    }
-
     /* TODO: Written by - Han Yongding 2024/01/23 获取所有角色状态 */
     @GetMapping("role-status")
     public RestBean<Object> getAllStatusRoles(
@@ -38,6 +31,14 @@ public class UserController {
         return ReturnUtils
                 .messageHandleData(
                         () -> statusRoleService.getAllStatusRoles(pageNum, pageSize));
+    }
+
+
+    /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
+    @PostMapping("role-status")
+    public RestBean<Void> addStatusRole(@RequestBody RestStatusRoleVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, statusRoleService::insertStatusRole);
     }
 
 //    /* TODO: Written by - Han Yongding 2024/01/23 根据ID查询特定状态 */
@@ -57,13 +58,6 @@ public class UserController {
     @Resource
     private StatusPermissionServiceImpl statusPermissionService;
 
-    /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
-    @PostMapping("permission-status")
-    public RestBean<Void> addStatusPermission(@RequestBody RestStatusPermissionVO vo) {
-        return ReturnUtils
-                .messageHandle(vo, statusPermissionService::insertStatusPermission);
-    }
-
     /* TODO: Written by - Han Yongding 2024/01/23 获取所有角色状态 */
     @GetMapping("permission-status")
     public RestBean<Object> getAllStatusPermission(
@@ -72,6 +66,13 @@ public class UserController {
         return ReturnUtils
                 .messageHandleData(
                         () -> statusPermissionService.getAllStatusRoles(pageNum, pageSize));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/01/23 用户状态新增 */
+    @PostMapping("permission-status")
+    public RestBean<Void> addStatusPermission(@RequestBody RestStatusPermissionVO vo) {
+        return ReturnUtils
+                .messageHandle(vo, statusPermissionService::insertStatusPermission);
     }
 
     /* TODO: Written by - Han Yongding 2024/01/26 更新角色状态信息 */

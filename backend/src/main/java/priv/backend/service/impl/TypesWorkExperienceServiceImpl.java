@@ -58,7 +58,6 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
         /* TODO: Written by - Han Yongding 2024/02/28 拷贝对象 */
         TypesWorkExperience typesWorkExperience = vo.asViewObject(TypesWorkExperience.class) ;
         /* TODO: Written by - Han Yongding 2024/02/28 初始化 */
-        typesWorkExperience.setCreateId("null") ;
         /* TODO: Written by - Han Yongding 2024/02/28 获取系统当前时间 */
         typesWorkExperience.setCreateTime(CurrentUtils.getTheCurrentSystemTime()) ;
 

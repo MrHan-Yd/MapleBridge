@@ -54,8 +54,6 @@ public class PermissionServiceImpl implements PermissionService {
 
         /* TODO: Written by - Han Yongding 2024/01/27 拷贝对象属性 */
         Permission permission = vo.asViewObject(Permission.class);
-        /* TODO: Written by - Han Yongding 2024/01/27 初始化 */
-        permission.setCreateId("null");
         /* TODO: Written by - Han Yongding 2024/01/27 获取系统当前时间 */
         permission.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         /* TODO: Written by - Han Yongding 2024/01/27 状态为在用 */

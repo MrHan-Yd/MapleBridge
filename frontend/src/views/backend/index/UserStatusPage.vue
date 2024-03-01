@@ -2,7 +2,7 @@
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
 import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
-import {post, get, put, delete_} from "@/net/NetWork";
+import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
@@ -71,7 +71,8 @@ const drawer = ref(false);
 const formRef = ref();
 const form = reactive({
   statusId: '',
-  statusName: ''
+  statusName: '',
+  createId: ''
 });
 
 /* 表单判断 */
@@ -104,6 +105,7 @@ function openDrawer(data) {
 /* 新增，清空表单内容 */
 function clearStatusRoleForm() {
   form.statusName = '';
+  form.createId = getUserId();
 }
 
 /* 修改，为表单内容赋值 */

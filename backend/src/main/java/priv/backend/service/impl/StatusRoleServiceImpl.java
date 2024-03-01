@@ -35,7 +35,6 @@ public class StatusRoleServiceImpl implements StatusRoleService {
             return "数据不能为空，请重试";
         }
         StatusRole statusRole = vo.asViewObject(StatusRole.class);
-        statusRole.setCreateId("null");
         statusRole.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         statusRole.setState(StatusEnum.NORMAL.STATE);
         if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(statusRole))) {

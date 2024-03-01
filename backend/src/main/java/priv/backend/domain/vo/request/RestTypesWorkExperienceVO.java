@@ -15,4 +15,5 @@ public class RestTypesWorkExperienceVO implements BaseData {
     private String typeId ;
     private String typeName ;
     private String description ;
+    private String createId ;
 }

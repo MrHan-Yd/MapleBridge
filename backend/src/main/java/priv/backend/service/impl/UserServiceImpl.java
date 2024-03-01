@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             v.setRegisterTime(CurrentUtils.getTheCurrentSystemTime());
             /* TODO: Written by - Han Yongding 2024/02/08 在用 */
             v.setStatusId("1755492769986392066");
-            v.setCreateId("null");
+            /* TODO: Written by - Han Yongding 2024/03/01 获取当前系统时间 */
             v.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         });
 

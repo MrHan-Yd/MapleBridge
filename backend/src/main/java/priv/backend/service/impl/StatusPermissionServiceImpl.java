@@ -34,7 +34,6 @@ public class StatusPermissionServiceImpl implements StatusPermissionService {
             return "数据不能为空，请重试";
         }
         StatusPermission statusPermission = vo.asViewObject(StatusPermission.class);
-        statusPermission.setCreateId("null");
         statusPermission.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         statusPermission.setState(StatusEnum.NORMAL.STATE);
         if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(statusPermission))) {

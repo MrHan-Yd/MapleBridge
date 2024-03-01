@@ -2,7 +2,7 @@
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
 import {CirclePlus, Connection, Link, Search} from "@element-plus/icons-vue";
-import {post, get, put, delete_} from "@/net/NetWork";
+import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
@@ -76,7 +76,8 @@ const formRef = ref();
 const form = reactive({
   permissionId: '',
   permissionName: '',
-  permissionUrl: ''
+  permissionUrl: '',
+  createId: ''
 });
 
 /* 表单判断 */
@@ -116,6 +117,7 @@ function clearStatusRoleForm() {
   form.permissionId = '';
   form.permissionName = '';
   form.permissionUrl = '';
+  form.createId = getUserId() ;
 }
 
 /* 修改，为表单内容赋值 */
