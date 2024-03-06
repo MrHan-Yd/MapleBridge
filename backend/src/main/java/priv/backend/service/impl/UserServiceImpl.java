@@ -92,7 +92,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public String updateUser(RestUserVO vo) {
         if (vo == null) {
             return "数据为空，请填写后重试";
-        } ;
+        }
 
         User user = vo.asViewObject(User.class) ;
 
@@ -126,7 +126,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public String deleteUserById(String id) {
         if (id == null) {
             return "唯一表示为空，请填写后重试";
-        } ;
+        }
 
         User user = new User() ;
         user.setId(id) ;

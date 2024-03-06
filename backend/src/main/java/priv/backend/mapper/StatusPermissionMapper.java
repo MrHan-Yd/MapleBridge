@@ -2,9 +2,7 @@ package priv.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Select;
 import priv.backend.domain.dto.StatusPermission;
-import priv.backend.domain.dto.StatusRole;
 
 /**
  * Created by IntelliJ IDEA.

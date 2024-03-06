@@ -57,7 +57,7 @@ public class RabbitMqProducerServiceImpl implements RabbitMqProducerService {
             amqpTemplate.convertAndSend("mail", data) ;
             /* TODO: Written by - Han Yongding 2023/09/18 用于校验使用，将验证码放入redis中, 过期时间3分钟 */
             stringRedisTemplate.opsForValue()
-                    .set(Const.VERIFY_EMAIL_DATA + email, String.valueOf(code), 3, TimeUnit.MINUTES) ;
+                    .set(Const.VERIFY_EMAIL_DATA + email, code, 3, TimeUnit.MINUTES) ;
             /* TODO: Written by - Han Yongding 2023/09/18 redis简单的限流 */
             return null ;
         }

@@ -1,8 +1,5 @@
 package priv.backend.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import priv.backend.domain.BaseData;
 import priv.backend.domain.vo.response.RespTypesAnnouncementSelectVO;

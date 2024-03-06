@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import priv.backend.domain.BaseData;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**

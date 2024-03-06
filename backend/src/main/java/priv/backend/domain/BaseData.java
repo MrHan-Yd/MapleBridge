@@ -1,11 +1,10 @@
 package priv.backend.domain;
 
-import priv.backend.domain.dto.StatusRole;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -31,7 +30,7 @@ public interface BaseData {
         return v ;
     }
 
-    /** TODO: Written by - Han Yongding 2023/08/12 对象转换 */
+    /* TODO: Written by - Han Yongding 2023/08/12 对象转换 */
     /**
      *  对象转换
      * @param clazz 转换前的类class文件

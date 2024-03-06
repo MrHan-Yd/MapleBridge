@@ -1,11 +1,6 @@
 package priv.backend.domain.vo.response;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import priv.backend.domain.dto.TypesAnnouncement;
 
 import java.sql.Timestamp;
 

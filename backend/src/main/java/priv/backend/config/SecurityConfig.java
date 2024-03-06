@@ -152,7 +152,7 @@ public class SecurityConfig {
         RespAuthorizeVO vo = account.asViewObject(RespAuthorizeVO.class, v -> {
             v.setRole(roleService.getRoleById(account.getRoleId()));
             v.setAccessToken(token) ;
-            v.setAccessTokenExpire(accessTokenExpire); ;
+            v.setAccessTokenExpire(accessTokenExpire) ;
             v.setRefreshToken(refreshToken) ;
             v.setRefreshTokenExpire(refreshTokenExpire);
         }) ;

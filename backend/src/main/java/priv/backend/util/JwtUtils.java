@@ -14,8 +14,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import priv.backend.domain.dto.AccessToken;
-import priv.backend.domain.dto.RefreshToken;
 import priv.backend.domain.vo.response.RespCreateJwtVO;
 import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import org.springframework.security.core.GrantedAuthority;
