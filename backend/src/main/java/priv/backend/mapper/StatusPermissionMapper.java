@@ -14,6 +14,6 @@ import priv.backend.domain.dto.StatusRole;
  * @CreateDate :  2024-01-26 16:07
  */
 public interface StatusPermissionMapper extends BaseMapper<StatusPermission> {
-    /* TODO: Written by - Han Yongding 2024/01/26 分页查询所有权限状态 */
+    /** TODO: Written by - Han Yongding 2024/01/26 分页查询所有权限状态 */
     Page<StatusPermission> getAllStatusPermission(Page<StatusPermission> page);
 }

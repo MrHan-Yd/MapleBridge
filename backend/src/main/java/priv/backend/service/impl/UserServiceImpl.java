@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private RoleServiceImpl roleService ;
 
-    /* TODO: Written by - Han Yongding 2024/02/06 根据等级ID查询用户等级是否被使用 */
+    /** TODO: Written by - Han Yongding 2024/02/06 根据等级ID查询用户等级是否被使用 */
     @Override
     public boolean isUsingLevelId(String levelId) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return count > 0;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/08 新增用户 */
+    /** TODO: Written by - Han Yongding 2024/02/08 新增用户 */
 
     @Override
     public String insertUser(RestUserVO vo) {
@@ -87,8 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/11 修改用户信息 */
-
+    /** TODO: Written by - Han Yongding 2024/02/11 修改用户信息 */
     @Override
     public String updateUser(RestUserVO vo) {
         if (vo == null) {
@@ -113,16 +112,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/12 分页查询所有用户 */
+    /** TODO: Written by - Han Yongding 2024/02/12 分页查询所有用户 */
     @Override
     public Page<RespUserVO> getAllUser(int pageNum, int pageSize) {
-        Page<User> page = new Page<>(pageNum, pageSize);
+        Page<RespUserVO> page = new Page<>(pageNum, pageSize);
         /* TODO: Written by - Han Yongding 2024/02/12 查询所有用户 */
         return mapper.getAllUser(page);
     }
 
 
-    /* TODO: Written by - Han Yongding 2024/02/13 根据ID删除用户， 伪删除 */
+    /** TODO: Written by - Han Yongding 2024/02/13 根据ID删除用户， 伪删除 */
     @Override
     public String deleteUserById(String id) {
         if (id == null) {
@@ -141,7 +140,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/16 根据用户名或邮箱查询账号 */
+    /** TODO: Written by - Han Yongding 2024/02/16 根据用户名或邮箱查询账号 */
     public User findAccountByNameOrEmail(String nameOrEmail) {
         return this.query()
                 .eq("account", nameOrEmail)
@@ -150,7 +149,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .one() ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/27 重写Security登录验证 */
+    /** TODO: Written by - Han Yongding 2024/02/27 重写Security登录验证 */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User account = this.findAccountByNameOrEmail(username) ;

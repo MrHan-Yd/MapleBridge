@@ -28,11 +28,11 @@ public class RoleServiceImpl implements RoleService {
     @Resource
     private RoleMapper mapper;
 
-    /* TODO: Written by - Han Yongding 2024/01/30 注入角色对应权限中间表业务层 */
+    /** TODO: Written by - Han Yongding 2024/01/30 注入角色对应权限中间表业务层 */
     @Resource
     private RolePermissionServiceImpl rolePermissionService;
 
-    /* TODO: Written by - Han Yongding 2024/01/28 获取所有角色 */
+    /** TODO: Written by - Han Yongding 2024/01/28 获取所有角色 */
     @Override
     public Object getRoles(int pageNum, int pageSize, boolean isItPaginated) {
         /* TODO: Written by - Han Yongding 2024/02/15 数据展示，分页 */
@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
         return mapper.getRoleSelect();
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/31 编程式事务：新增角色事务，确保新增角色和中间表为原子操作 */
+    /** TODO: Written by - Han Yongding 2024/01/31 编程式事务：新增角色事务，确保新增角色和中间表为原子操作 */
     @Resource
     private TransactionTemplate insertRolePermissionTemplate;
 
@@ -117,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
         });
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/17 编程式事务：修改删除角色中间表权限 */
+    /** TODO: Written by - Han Yongding 2024/02/17 编程式事务：修改删除角色中间表权限 */
     @Resource
     private TransactionTemplate deleteRolePermissionTemplate;
 
@@ -149,7 +149,7 @@ public class RoleServiceImpl implements RoleService {
         });
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/17 插入中间表 */
+    /** TODO: Written by - Han Yongding 2024/02/17 插入中间表 */
     @Override
     public boolean insertRoleOfPermissionByRoleId(String roleId, List<String> permissionList) {
         /* TODO: Written by - Han Yongding 2024/02/17 插入数据 */
@@ -180,7 +180,7 @@ public class RoleServiceImpl implements RoleService {
         }));
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/17 删除角色中间表权限 */
+    /** TODO: Written by - Han Yongding 2024/02/17 删除角色中间表权限 */
     @Override
     public boolean deleteRoleOfPermissionByRoleId(String roleId) {
         /* TODO: Written by - Han Yongding 2024/02/16 删除中间表数据 */
@@ -204,6 +204,11 @@ public class RoleServiceImpl implements RoleService {
     @Resource
     private TransactionTemplate deleteRoleTemplate;
 
+    /**
+     * 根据角色ID删除角色
+     * @param roleId 角色唯一标识
+     * @return 删除结果
+     */
     @Override
     public String deleteRoleById(String roleId) {
         return deleteRoleTemplate.execute(status -> {
@@ -236,7 +241,7 @@ public class RoleServiceImpl implements RoleService {
         });
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/16 删除中间表数据 */
+    /** TODO: Written by - Han Yongding 2024/02/16 删除中间表数据 */
     @Override
     public boolean deleteRolePermissionByRoleId(String roleId) {
         Boolean execute = deleteRoleTemplate.execute(status -> {
@@ -253,7 +258,7 @@ public class RoleServiceImpl implements RoleService {
         return Boolean.TRUE.equals(execute);
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/16 根据ID获取对应角色 */
+    /** TODO: Written by - Han Yongding 2024/02/16 根据ID获取对应角色 */
     @Override
     public RespUserRoleNoIdVO getRoleById(String roleId) {
         return mapper.getRoleById(roleId).asViewObject(RespUserRoleNoIdVO.class);

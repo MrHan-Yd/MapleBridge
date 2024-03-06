@@ -109,18 +109,18 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增用户等级";
-    clearStatusRoleForm();
+    clearUserLevelForm();
   } else {
     drawerTitle = "编辑用户等级";
     /*修改*/
-    updateStatusRole(data.levelId, data.levelName, data.level, data.requiredExperience, data.privilegeDescription);
+    updateUserLevel(data.levelId, data.levelName, data.level, data.requiredExperience, data.privilegeDescription);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearUserLevelForm() {
   form.levelId = '';
   form.levelName = '';
   form.level = '';
@@ -129,7 +129,7 @@ function clearStatusRoleForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(levelId, levelName, level, requiredExperience, privilegeDescription) {
+function updateUserLevel(levelId, levelName, level, requiredExperience, privilegeDescription) {
   form.levelId = levelId;
   form.levelName = levelName;
   form.level = level;

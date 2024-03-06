@@ -24,10 +24,11 @@ import java.util.List;
  */
 @Service
 public class StatusPermissionServiceImpl implements StatusPermissionService {
+    /* TODO: Written by - Han Yongding 2024/03/04 注入权限状态DAO */
     @Resource
     private StatusPermissionMapper mapper ;
 
-    /* TODO: Written by - Han Yongding 2024/01/22 新增权限状态 */
+    /** TODO: Written by - Han Yongding 2024/01/22 新增权限状态 */
     @Override
     public String insertStatusPermission(RestStatusPermissionVO vo) {
         if (vo == null) {
@@ -42,7 +43,7 @@ public class StatusPermissionServiceImpl implements StatusPermissionService {
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/26 查询所有权限状态 */
+    /** TODO: Written by - Han Yongding 2024/01/26 查询所有权限状态 */
     @Override
     public Page<RespStatusPermissionVO> getAllStatusRoles(int pageNum, int pageSize) {
         Page<StatusPermission> page = new Page<>(pageNum, pageSize);
@@ -58,7 +59,7 @@ public class StatusPermissionServiceImpl implements StatusPermissionService {
         return PageUtils.convertToPage(statusPermissionPage, list);
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/26 根据ID修改权限状态 */
+    /** TODO: Written by - Han Yongding 2024/01/26 根据ID修改权限状态 */
     @Override
     public String updatePermissionStateById(RestPermissionStateVO vo) {
 

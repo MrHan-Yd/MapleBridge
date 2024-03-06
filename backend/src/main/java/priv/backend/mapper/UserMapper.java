@@ -16,6 +16,6 @@ import priv.backend.domain.vo.response.RespUserVO;
 
 public interface UserMapper extends BaseMapper<User> {
 
-    /* TODO: Written by - Han Yongding 2024/02/12 分页查询所有用户信息 */
-    Page<RespUserVO> getAllUser(@Param("page") Page<User> page) ;
+    /** TODO: Written by - Han Yongding 2024/02/12 分页查询所有用户信息 */
+    Page<RespUserVO> getAllUser(@Param("page") Page<RespUserVO> page) ;
 }

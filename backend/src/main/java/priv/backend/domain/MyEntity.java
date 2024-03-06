@@ -1,5 +1,6 @@
 package priv.backend.domain;
 
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
  * @Description : 作用
  * @CreateDate :  2024-01-09 21:59
  */
+@Getter
 @Document(collection = "mycollection")
 public class MyEntity {
     @Id
@@ -26,11 +28,4 @@ public class MyEntity {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

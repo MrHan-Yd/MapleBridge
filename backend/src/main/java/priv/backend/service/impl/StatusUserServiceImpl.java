@@ -33,7 +33,7 @@ public class StatusUserServiceImpl implements StatusUserService {
     @Resource
     private StatusUserMapper mapper;
 
-    /* TODO: Written by - Han Yongding 2024/02/08 新增用户状态 */
+    /** TODO: Written by - Han Yongding 2024/02/08 新增用户状态 */
     @Override
     public String insertStatusUser(RestStatusUserVO vo) {
         if (vo == null) {
@@ -49,7 +49,7 @@ public class StatusUserServiceImpl implements StatusUserService {
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/08 查询所有用户状态 */
+    /** TODO: Written by - Han Yongding 2024/02/08 查询所有用户状态 */
     @Override
     public Page<RespStatusUserVO> getAllStatusUsers(int pageNum, int pageSize) {
         Page<StatusUser> page = new Page<>(pageNum, pageSize);
@@ -66,7 +66,7 @@ public class StatusUserServiceImpl implements StatusUserService {
         return PageUtils.convertToPage(statusUserPage, list);
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/08 根据ID修改用户状态 */
+    /** TODO: Written by - Han Yongding 2024/02/08 根据ID修改用户状态 */
     @Override
     public String updateStatusUserStateById(RestUserStateVO vo) {
 
@@ -83,7 +83,7 @@ public class StatusUserServiceImpl implements StatusUserService {
         return null ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/08 删除用户状态，伪删除 */
+    /** TODO: Written by - Han Yongding 2024/02/08 删除用户状态，伪删除 */
     @Override
     public String deleteStatusUserByStatusId(String statusId) {
         /* TODO: Written by - Han Yongding 2024/02/08 数据为空 */

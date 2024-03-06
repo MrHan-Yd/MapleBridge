@@ -28,7 +28,7 @@ public class StatusRoleServiceImpl implements StatusRoleService {
     @Resource
     private StatusRoleMapper mapper;
 
-    /* TODO: Written by - Han Yongding 2024/01/22 新增角色状态 */
+    /** TODO: Written by - Han Yongding 2024/01/22 新增角色状态 */
     @Override
     public String insertStatusRole(RestStatusRoleVO vo) {
         if (vo == null) {
@@ -43,7 +43,7 @@ public class StatusRoleServiceImpl implements StatusRoleService {
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/23 查询所有角色状态 */
+    /** TODO: Written by - Han Yongding 2024/01/23 查询所有角色状态 */
     @Override
     public Page<RespStatusRoleVO> getAllStatusRoles(int pageNum, int pageSize) {
         Page<StatusRole> page = new Page<>(pageNum, pageSize);
@@ -59,7 +59,7 @@ public class StatusRoleServiceImpl implements StatusRoleService {
         return PageUtils.convertToPage(statusRolePage, list);
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/24 根据ID修改角色状态 */
+    /** TODO: Written by - Han Yongding 2024/01/24 根据ID修改角色状态 */
     @Override
     public String updateStatusRoleStateById(RestRoleStateVO vo) {
 

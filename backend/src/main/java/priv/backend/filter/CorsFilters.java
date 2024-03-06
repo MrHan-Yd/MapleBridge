@@ -19,7 +19,7 @@ import java.io.IOException;
  * @CreateDate :  2024-01-09 22:26
  */
 @Component
-/** TODO: Written by - Han Yongding 2023/09/17 SpringSecurity优先级，SpringSecurity优先级默认是-100，我们要比他提前处理，此处设置为-102 */
+/* TODO: Written by - Han Yongding 2023/09/17 SpringSecurity优先级，SpringSecurity优先级默认是-100，我们要比他提前处理，此处设置为-102 */
 @Order(Const.ORDER_CORS)
 public class CorsFilters extends HttpFilter {
     @Override

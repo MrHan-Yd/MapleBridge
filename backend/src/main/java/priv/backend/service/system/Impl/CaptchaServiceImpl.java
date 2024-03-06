@@ -38,10 +38,15 @@ public class CaptchaServiceImpl implements CaptchaService {
     /* TODO: Written by - Han Yongding 2024/02/18 算数验证码注入 */
     private final DefaultKaptcha captchaProducerMath;
 
-    /* TODO: Written by - Han Yongding 2024/02/18 注入Redis */
+    /** TODO: Written by - Han Yongding 2024/02/18 注入Redis */
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 获取验证码
+     * @param captchaProducer 英文验证码Bean
+     * @param captchaProducerMath 算数验证码Bean
+     */
     @Autowired
     public CaptchaServiceImpl(@Qualifier("captchaProducer") DefaultKaptcha captchaProducer,
                               @Qualifier("captchaProducerMath") DefaultKaptcha captchaProducerMath) {
@@ -49,7 +54,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         this.captchaProducerMath = captchaProducerMath;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/18 获取字符验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/18 获取字符验证码 */
     @Override
     public ServletOutputStream getCaptchaImage(String codeId, HttpServletResponse response) {
         // 获取英文验证码文本
@@ -105,7 +110,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         }
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/18 获取算数验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/18 获取算数验证码 */
     @Override
     public ServletOutputStream getCaptchaMath(String codeId, HttpServletResponse response) {
 
@@ -167,7 +172,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         }
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/26 验证字符验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/26 验证字符验证码 */
     @Override
     public String validateCaptchaImage(String codeId) {
         String[] split = codeId.split("-_-");

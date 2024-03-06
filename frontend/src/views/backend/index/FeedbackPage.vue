@@ -92,25 +92,25 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增平台反馈";
-    clearStatusRoleForm();
+    clearFeedbackForm();
   } else {
     drawerTitle = "编辑平台反馈";
     /*修改*/
-    updateStatusRole(data.feedbackId, data.userId, data.feedbackText);
+    updateFeedback(data.feedbackId, data.userId, data.feedbackText);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearFeedbackForm() {
   form.feedbackId = '';
   form.userId = getUserId();
   form.feedbackText = '';
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(feedbackId, userId, feedbackText) {
+function updateFeedback(feedbackId, userId, feedbackText) {
   form.feedbackId = feedbackId;
   form.userId = userId;
   form.feedbackText = feedbackText;

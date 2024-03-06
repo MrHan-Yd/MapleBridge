@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.AnnouncementMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+        <!--公告Map-->
+            <resultMap id="getPageAnnouncementMap" type="AnnouncementDto" >
+                <id property="id" column="id" />
+                <result property="title" column="title" />
+                <result property="content" column="content" />
+                <result property="publishTime" column="publish_time" />
+                <result property="publisherId" column="publisher_id" />
+                <result property="deadline" column="deadline" />
+                <result property="statusId" column="status_id" />
+                <result property="createId" column="create_id" />
+                <result property="createTime" column="create_time" />
+                <result property="updateId" column="update_id" />
+                <result property="updateTime" column="update_time" />
+                <association property="type" column="type_id"
+                             select="priv.backend.mapper.TypesAnnouncementMapper.getTypesAnnouncementById" />
+            </resultMap>
+        <!--公告Map-->
+    <!--Map-->
+
+    <!--Select-->
+        <!--分页查询公告-->
+            <select id="getPageAnnouncement" resultMap="getPageAnnouncementMap" >
+                select
+                    id,
+                    title,
+                    content,
+                    publish_time,
+                    publisher_id,
+                    deadline,
+                    type_id,
+                    status_id,
+                    create_id,
+                    create_time,
+                    update_id,
+                    update_time
+                from
+                    announcement
+                where status_id != '1764526553247481858'
+            </select>
+        <!--分页查询公告-->
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitConfig {
-    /* TODO: Written by - Han Yongding 2024/02/28 配置RabbitMq队列 */
+    /** TODO: Written by - Han Yongding 2024/02/28 配置RabbitMq队列 */
     @Bean("emailQueue")
     public Queue emailQueue() {
         return QueueBuilder
@@ -24,7 +24,7 @@ public class RabbitConfig {
                 .build() ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/28 消息转换器 */
+    /** TODO: Written by - Han Yongding 2024/02/28 消息转换器 */
     @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();

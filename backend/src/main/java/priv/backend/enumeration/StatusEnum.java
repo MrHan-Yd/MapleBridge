@@ -1,5 +1,7 @@
 package priv.backend.enumeration;
 
+import lombok.Getter;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -7,6 +9,7 @@ package priv.backend.enumeration;
  * @Description : 状态枚举
  * @CreateDate :  2024-01-26 15:52
  */
+@Getter
 public enum StatusEnum {
     NORMAL("0"),
     DISABLED("1"),
@@ -19,7 +22,4 @@ public enum StatusEnum {
         this.STATE = STATE;
     }
 
-    public String getSTATE() {
-        return STATE;
-    }
 }

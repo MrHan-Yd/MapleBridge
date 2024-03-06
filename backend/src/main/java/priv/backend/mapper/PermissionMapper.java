@@ -17,9 +17,9 @@ import java.util.List;
 
 public interface PermissionMapper extends BaseMapper<Permission> {
 
-    /* TODO: Written by - Han Yongding 2024/01/30 分页查询权限 */
+    /** TODO: Written by - Han Yongding 2024/01/30 分页查询权限 */
     Page<Permission> getPagePermission(Page<Permission> page) ;
 
-    /* TODO: Written by - Han Yongding 2024/01/30 查询所有权限，用于新增角色 */
+    /** TODO: Written by - Han Yongding 2024/01/30 查询所有权限，用于新增角色 */
     List<RespPermissionSelectVO> getAllPermission() ;
 }

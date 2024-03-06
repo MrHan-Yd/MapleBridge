@@ -26,7 +26,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Resource
     private PermissionMapper mapper;
 
-    /* TODO: Written by - Han Yongding 2024/01/27 查询权限表 */
+    /** TODO: Written by - Han Yongding 2024/01/27 查询权限表 */
     @Override
     public Object getAllPermission(int pageNum, int pageSize, boolean isItPaginated) {
         if (isItPaginated) {
@@ -45,7 +45,7 @@ public class PermissionServiceImpl implements PermissionService {
         return mapper.getAllPermission() ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/27 新增权限 */
+    /** TODO: Written by - Han Yongding 2024/01/27 新增权限 */
     @Override
     public String insertPermission(RestPermissionVO vo) {
         if (vo == null) {
@@ -68,7 +68,7 @@ public class PermissionServiceImpl implements PermissionService {
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/27 修改权限 */
+    /** TODO: Written by - Han Yongding 2024/01/27 修改权限 */
     @Override
     public String updatePermission(RestPermissionVO vo) {
         if (vo == null) {
@@ -82,7 +82,7 @@ public class PermissionServiceImpl implements PermissionService {
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/27 删除权限(伪删除) */
+    /** TODO: Written by - Han Yongding 2024/01/27 删除权限(伪删除) */
     @Override
     public String deletePermission(String permissionId) {
         if (permissionId == null) {

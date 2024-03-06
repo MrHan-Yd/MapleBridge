@@ -102,18 +102,18 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增权限";
-    clearStatusRoleForm();
+    clearPermissionForm();
   } else {
     drawerTitle = "编辑权限";
     /*修改*/
-    updateStatusRole(data.permissionId, data.permissionName, data.permissionUrl);
+    updatePermission(data.permissionId, data.permissionName, data.permissionUrl);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearPermissionForm() {
   form.permissionId = '';
   form.permissionName = '';
   form.permissionUrl = '';
@@ -121,7 +121,7 @@ function clearStatusRoleForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(permissionId, permissionName, permissionUrl) {
+function updatePermission(permissionId, permissionName, permissionUrl) {
   form.permissionId = permissionId;
   form.permissionName = permissionName;
   form.permissionUrl = permissionUrl;

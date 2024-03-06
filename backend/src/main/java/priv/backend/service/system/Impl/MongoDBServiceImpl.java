@@ -18,6 +18,7 @@ import java.util.List;
  */
 @Service
 public class MongoDBServiceImpl implements MongoDBService {
+    /* TODO: Written by - Han Yongding 2024/03/04 注入MongoDB模板 */
     private final MongoTemplate mongoTemplate;
 
     @Autowired

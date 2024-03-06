@@ -70,6 +70,18 @@ const router = createRouter({
                     path: '/backend-index-feedback',
                     name: 'backend-index-feedback',
                     component: () => import('@/views/backend/index/FeedbackPage.vue')
+                } , {
+                    path: '/backend-index-announcement',
+                    name: 'backend-index-announcement',
+                    component: () => import('@/views/backend/index/AnnouncementPage.vue')
+                } , {
+                    path: '/backend-index-announcement-status',
+                    name: 'backend-index-announcement-status',
+                    component: () => import('@/views/backend/index/AnnouncementStatusPage.vue')
+                } , {
+                    path: '/backend-index-announcement-types',
+                    name: 'backend-index-announcement-types',
+                    component: () => import('@/views/backend/index/AnnouncementTypePage.vue')
                 }
             ]
         } , {
@@ -117,7 +129,8 @@ const router = createRouter({
 
 /* 配置路由守卫，防止用户不登录能访问需要登录的页面 */
 router.beforeEach((to, from, next) => {
-    const userRole = getUserRole() // 从本地存储获取用户角色信息
+    /* 从本地存储获取用户角色信息 */
+    const userRole = getUserRole() ;
 
     /* 判断是否登录 */
     const isUnauthorized = unauthorized() ;

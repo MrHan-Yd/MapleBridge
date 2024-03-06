@@ -144,11 +144,11 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增平台用户";
-    clearStatusRoleForm();
+    clearUserForm();
   } else {
     drawerTitle = "编辑平台用户";
     /*修改*/
-    updateStatusRole(data.id, data.account, data.email, data.roleId);
+    updateUser(data.id, data.account, data.email, data.roleId);
   }
 
   drawer.value = true;
@@ -171,7 +171,7 @@ const cities = ref([{
 }]);
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearUserForm() {
   form.id = '' ;
   form.account = '';
   form.email = '';
@@ -180,7 +180,7 @@ function clearStatusRoleForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(id, account, email, roleId) {
+function updateUser(id, account, email, roleId) {
   form.id = id ;
   form.account = account;
   form.email = email;

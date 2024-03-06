@@ -17,7 +17,7 @@ import java.util.Properties;
 @Configuration
 public class KaptchaConfig {
 
-    /* TODO: Written by - Han Yongding 2024/02/18 英文验证码Bean配置 */
+    /** TODO: Written by - Han Yongding 2024/02/18 英文验证码Bean配置 */
     @Bean(name = "captchaProducer")
     public DefaultKaptcha getKaptchaBean(){
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha() ;
@@ -38,7 +38,7 @@ public class KaptchaConfig {
         return defaultKaptcha ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/18 算数验证码Bean配置 */
+    /** TODO: Written by - Han Yongding 2024/02/18 算数验证码Bean配置 */
     @Bean(name = "captchaProducerMath")
     public DefaultKaptcha getKaptchaBeanMath(){
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha() ;
@@ -61,7 +61,7 @@ public class KaptchaConfig {
         defaultKaptcha.setConfig(config) ;
         return defaultKaptcha ;
     }
-
+    
     @Bean("defaultKaptcha")
     public DefaultKaptcha getDefaultKaptcha(){
         return new DefaultKaptcha();

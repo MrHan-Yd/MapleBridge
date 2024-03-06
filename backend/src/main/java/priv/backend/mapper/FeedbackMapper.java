@@ -16,9 +16,9 @@ import java.util.List;
 
 public interface FeedbackMapper extends BaseMapper<Feedback> {
 
-    /* TODO: Written by - Han Yongding 2024/02/29 分页查询反馈信息 */
+    /** TODO: Written by - Han Yongding 2024/02/29 分页查询反馈信息 */
     Page<Feedback> getPageFeedback(Page<Feedback> page) ;
 
-    /* TODO: Written by - Han Yongding 2024/02/29 查询所有反馈信息 */
+    /** TODO: Written by - Han Yongding 2024/02/29 查询所有反馈信息 */
     List<Feedback> getAllFeedback() ;
 }

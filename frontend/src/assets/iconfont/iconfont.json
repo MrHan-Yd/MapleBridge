@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3703037",
+      "name": "公告管理",
+      "font_class": "navicon-gggl",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "12820169",
+      "name": "公告管理",
+      "font_class": "gonggaoguanli",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "37992509",
+      "name": "公告类型管理",
+      "font_class": "gonggaoleixingguanli",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "6446779",
       "name": "反馈管理",
       "font_class": "fankuiguanli",

@@ -27,11 +27,11 @@ import priv.backend.util.ReturnUtils;
 @RequestMapping("/api/auth/")
 public class AuthorizeController {
 
-    /* TODO: Written by - Han Yongding 2024/02/16 注入账户相关业务层 */
+    /** TODO: Written by - Han Yongding 2024/02/16 注入账户相关业务层 */
     @Resource
     private AccountServiceImpl accountService ;
 
-    /* TODO: Written by - Han Yongding 2024/02/16 获取邮箱验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/16 获取邮箱验证码 */
     @GetMapping("ask-code")
     public RestBean<Void> askVerifyCode(@RequestParam("email") @Email String email,
                                         @RequestParam("type") @Pattern(regexp = "register|reset") String type,
@@ -51,7 +51,7 @@ public class AuthorizeController {
         return ReturnUtils.messageHandle(vo, accountService::resetConfirm) ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/27 重置密码 */
+    /** TODO: Written by - Han Yongding 2024/02/27 重置密码 */
     @PutMapping("reset-password")
     public RestBean<Void> resetPassword(@RequestBody @Valid RestEmailResetVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::resetPassword) ;

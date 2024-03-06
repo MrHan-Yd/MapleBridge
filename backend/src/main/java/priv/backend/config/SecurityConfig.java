@@ -66,15 +66,15 @@ public class SecurityConfig {
     @Resource
     private JwtAuthorizeFilter jwtAuthorizeFilter;
 
-    /* TODO: Written by - Han Yongding 2024/02/03 注入角色权限配置业务层实现类 */
+    /** TODO: Written by - Han Yongding 2024/02/03 注入角色权限配置业务层实现类 */
     @Resource
     private PathConfigServiceImpl pathConfigService;
 
-    /* TODO: Written by - Han Yongding 2024/02/16 注入角色业务层 */
+    /** TODO: Written by - Han Yongding 2024/02/16 注入角色业务层 */
     @Resource
     private RoleServiceImpl roleService;
 
-    /* TODO: Written by - Han Yongding 2024/02/17 注入Redis */
+    /** TODO: Written by - Han Yongding 2024/02/17 注入Redis */
     @Resource
     private RedisTemplate<String, Object> redisTemplate ;
 
@@ -119,7 +119,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(this::onUnauthorized)
                         .accessDeniedHandler(this::onAccessDeny)
                 )
-                .csrf(AbstractHttpConfigurer::disable) /* 禁用 CSRF 保护 */
+                .csrf(AbstractHttpConfigurer::disable) // 禁用 CSRF 保护
                 .sessionManagement(conf -> conf
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 使用无状态的会话管理策略,这行代码配置了无状态的会话管理策略，不保存用户会话状态。
                 )
@@ -165,11 +165,8 @@ public class SecurityConfig {
 
         redisTemplate.opsForValue().set(Const.USER_INFORMATION_DATA + account.getId(), accountRedis, 30, TimeUnit.MINUTES) ;
 
-        /** TODO: Written by - Han Yongding 2024/02/17 待解决
+        /* TODO: Written by - Han Yongding 2024/02/17 待解决
          * 1、解决重复登录问题
-         * 2、修改JwtUtils中的刷新Token方法，
-         *      逻辑为：用户token过期，提示前台，前台携带刷新Token刷新token
-         *      从刷新token种获取用户信息，重新生成token后缓存到Redis中并返回
          * 3、实现用户强制下线
          */
         response.getWriter().write(RestBean.success(vo).asJsonString());

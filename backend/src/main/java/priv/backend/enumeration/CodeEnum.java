@@ -44,9 +44,15 @@ public enum CodeEnum {
     HTTP_403_PROHIBIT_ACCESS(403, "禁止访问") ,
     /* 404(找不到资源)： 找不到客户端请求的资源 */
     HTTP_404_RESOURCE_NOT_FOUND(404, "找不到资源") ,
+    /* 405(方法未允许)：请求中指定的方法不被允许 */
+    HTTP_405_METHOD_NOT_ALLOWED(405, "请求中指定的方法不被允许") ,
+    /* 406(不支持的MediaType) */
+    HTTP_406_UNSUPPORTED_MEDIA_TYPE(406, "不支持的MediaType") ,
+    /* 407(需要代理授权) */
+    HTTP_407_PROXY_AUTHENTICATION_REQUIRED(407, "需要代理授权") ,
     /* TODO: Written by - Han Yongding 2023/11/02 5xx服务器内部错误 */
     /* 500(服务器错误) */
-    HTTP_500_INTERNAL_SERVER_ERROR(500, "服务器内部错误，请联系管理员")
+    HTTP_500_INTERNAL_SERVER_ERROR(500, "服务器内部错误，请联系稍后再试")
     ;
 
     public Integer CODE;

@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface RolePermissionMapper extends MyBaseMapper<RolePermission> {
 
-    /* TODO: Written by - Han Yongding 2024/01/31 根据角色ID查询对应权限 */
+    /** TODO: Written by - Han Yongding 2024/01/31 根据角色ID查询对应权限 */
     List<Permission> findRolePermissionByRoleId(String roleId) ;
 }

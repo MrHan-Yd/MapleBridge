@@ -23,6 +23,7 @@
         <jwt.version>4.3.0</jwt.version>
         <pagehelper.version>5.3.3</pagehelper.version>
         <commons.version>3.12.0</commons.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
     <!--依赖版本管理-->
 
@@ -124,19 +125,19 @@
             <version>${mybatisplus.version}</version>
         </dependency>
         <!--MyBatisPlus-->
+        <!-- Apache Commons Lang 生成随机字符依赖 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.version}</version> <!-- 请根据最新版本调整 -->
+        </dependency>
+        <!-- Apache Commons Lang 生成随机字符依赖 -->
         <!--Kafka-->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
         <!--Kafka-->
-        <!-- Apache Commons Lang 验证码依赖 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.version}</version> <!-- 请根据最新版本调整 -->
-        </dependency>
-        <!-- Apache Commons Lang 验证码依赖 -->
         <!--Redis实体序列化-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -147,7 +148,7 @@
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>2.3.2</version>
+            <version>${kaptcha.version}</version>
         </dependency>
         <!--验证码-->
     </dependencies>

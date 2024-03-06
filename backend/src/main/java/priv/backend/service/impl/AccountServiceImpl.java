@@ -36,21 +36,15 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
     @Resource
     private UserServiceImpl userService;
 
-    /**
-     * TODO: Written by - Han Yongding 2024/02/16 注入限流工具类
-     */
+    /* TODO: Written by - Han Yongding 2024/03/04 注入限流工具类 */
     @Resource
     private FlowUtils flowUtils;
 
-    /**
-     * TODO: Written by - Han Yongding 2024/02/16 注入RabbitMQ消息队列
-     */
+    /* TODO: Written by - Han Yongding 2024/03/04 注入RabbitMQ消息队列 */
     @Resource
     AmqpTemplate amqpTemplate;
 
-    /**
-     * TODO: Written by - Han Yongding 2024/02/16 注入redisString
-     */
+    /* TODO: Written by - Han Yongding 2024/03/04 注入redisString */
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -217,16 +211,18 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
+    /** TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
     @Override
     public RespRefreshTokenVO refreshToken(String refreshToken) throws ProgramCustomException {
         /* TODO: Written by - Han Yongding 2024/02/17 令牌不能为空 */
         if (refreshToken == null) {
             throw new ProgramCustomException("刷新令牌为空，无法颁发新令牌") ;
         }
+        /* TODO: Written by - Han Yongding 2024/03/03 截取刷新Token */
+        String refreshTokens = jwtUtils.convertToken(refreshToken) ;
 
-        /* TODO: Written by - Han Yongding 2023/11/02 令牌不合法 */
-        if (jwtUtils.convertToken(refreshToken) == null) {
+        /* TODO: Written by - Han Yongding 2023/11/02 为截取到令牌，表示令牌不合法 */
+        if (refreshTokens == null) {
             throw new ProgramCustomException("刷新令牌不存在或不合法");
         }
 
@@ -237,15 +233,20 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
          * 此方法中第二次使用是判断令牌没有过期，所以直接使用，不需要取反
          * */
         /* TODO: Written by - Han Yongding 2023/11/09 刷新token已过期，请重新登录 */
-        if (!jwtUtils.refreshTokenExpiredOrNot(refreshToken)) {
+        if (!jwtUtils.refreshTokenExpiredOrNot(refreshTokens)) {
             throw new ProgramCustomException("刷新令牌已过期");
         }
 
         log.info("正在为用户颁发新令牌");
         /* TODO: Written by - Han Yongding 2023/10/27 颁发新令牌 */
-        return jwtUtils.issueANewTokenByRefreshToken(refreshToken) ;
+        return jwtUtils.issueANewTokenByRefreshToken(refreshTokens) ;
     }
 
+    /**
+     * 重置密码
+     * @param vo 用户邮箱密码实体类
+     * @return 重置结果
+     */
     @Override
     public String resetPassword(RestEmailResetVO vo) {
         String email = vo.getEmail() ;

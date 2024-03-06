@@ -101,18 +101,18 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增工作类型";
-    clearStatusRoleForm();
+    clearWorkTypeForm();
   } else {
     drawerTitle = "编辑工作类型";
     /*修改*/
-    updateStatusRole(data.typeId, data.typeName, data.description);
+    updateWorkType(data.typeId, data.typeName, data.description);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearWorkTypeForm() {
   form.typeId = '';
   form.typeName = '';
   form.description = '';
@@ -120,7 +120,7 @@ function clearStatusRoleForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(typeId, typeName, description) {
+function updateWorkType(typeId, typeName, description) {
   form.typeId = typeId ;
   form.typeName = typeName ;
   form.description = description ;

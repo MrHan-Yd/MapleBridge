@@ -34,6 +34,14 @@ public class RabbitMqProducerServiceImpl implements RabbitMqProducerService {
     @Resource
     private FlowUtils flowUtils ;
 
+    /**
+     * 发送邮箱验证码
+     * @param type 邮件类型
+     * @param email 邮箱
+     * @param ip ip
+     * @return 发送结果
+     */
+    @Override
     public String sendEmailVerifyCode(String type, String email, String ip) {
         /* TODO: Written by - Han Yongding 2023/09/18 加锁，防止同一时间被多次调用(会排队), 用intern做锁是因为可以提升性能 */
         synchronized (ip.intern()) {

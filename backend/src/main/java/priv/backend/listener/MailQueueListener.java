@@ -26,7 +26,7 @@ public class MailQueueListener {
     @Value("${spring.mail.username}")
     String userName ;
 
-    /* TODO: Written by - Han Yongding 2023/08/13 发送邮件 */
+    /** TODO: Written by - Han Yongding 2023/08/13 发送邮件 */
     @RabbitHandler
     public void sendMailMessage(Map<String, Object> data) {
         String email = (String)data.get("email") ;
@@ -49,7 +49,7 @@ public class MailQueueListener {
         sender.send(message) ;
     }
 
-    /* TODO: Written by - Han Yongding 2023/08/13 根据邮件类型生成对应的邮件结构 */
+    /** TODO: Written by - Han Yongding 2023/08/13 根据邮件类型生成对应的邮件结构 */
     private SimpleMailMessage createMessage(String title, String content, String email) {
         SimpleMailMessage message = new SimpleMailMessage() ;
         /* TODO: Written by - Han Yongding 2023/08/13 邮件的主题 */

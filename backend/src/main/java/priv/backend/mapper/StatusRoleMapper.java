@@ -16,6 +16,6 @@ import priv.backend.domain.vo.request.RestStatusRoleVO;
  */
 public interface StatusRoleMapper extends BaseMapper<StatusRole> {
 
-    /* TODO: Written by - Han Yongding 2024/01/23 分页查询所有角色状态 */
+    /** TODO: Written by - Han Yongding 2024/01/23 分页查询所有角色状态 */
     Page<StatusRole> getAllStatusRoles(Page<StatusRole> page);
 }

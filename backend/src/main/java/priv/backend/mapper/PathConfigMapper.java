@@ -12,6 +12,6 @@ import java.util.List;
  * @CreateDate :  2024-02-04 15:16
  */
 public interface PathConfigMapper {
-    /* TODO: Written by - Han Yongding 2024/02/04 从数据库中查询角色名称以及对应权限 */
+    /** TODO: Written by - Han Yongding 2024/02/04 从数据库中查询角色名称以及对应权限 */
     List<PathConfig> getAllPathConfigs() ;
 }

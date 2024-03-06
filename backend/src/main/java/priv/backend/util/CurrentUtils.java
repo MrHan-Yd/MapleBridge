@@ -52,17 +52,17 @@ public class CurrentUtils {
         return (System.currentTimeMillis() - time)  / 1000 > 0 ? (System.currentTimeMillis() - time) / 1000 + "秒" : System.currentTimeMillis() - time + "毫秒" ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/22 获取系统当前时间 */
+    /** TODO: Written by - Han Yongding 2024/01/22 获取系统当前时间 */
     public static Timestamp getTheCurrentSystemTime() {
         return new Timestamp(System.currentTimeMillis()) ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/22 判断数据库插入和更新操作是否成功 */
+    /** TODO: Written by - Han Yongding 2024/01/22 判断数据库插入和更新操作是否成功 */
     public static boolean isEmptyByDtoInsertOrUpdate(int result) {
         return result < 1 ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/11 判断字符串是否为空 */
+    /** TODO: Written by - Han Yongding 2024/02/11 判断字符串是否为空 */
     public static boolean isEmpty(String str) {
         return str == null ;
     }

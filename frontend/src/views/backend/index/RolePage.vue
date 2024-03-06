@@ -127,7 +127,7 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增角色";
-    clearStatusRoleForm();
+    clearRoleForm();
   } else {
     drawerTitle = "编辑角色";
 
@@ -137,14 +137,14 @@ function openDrawer(data) {
       permissionIdList[i] = data.permissionList[i].permissionId ;
     }
     /*修改*/
-    updateStatusRole(data.roleId, data.roleName, data.roleNameCn, permissionIdList);
+    updateRole(data.roleId, data.roleName, data.roleNameCn, permissionIdList);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearRoleForm() {
   form.roleId = '';
   form.roleName = '';
   form.roleNameCn = '';
@@ -153,7 +153,7 @@ function clearStatusRoleForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(roleId, roleName, roleNameCn, permissionIdList) {
+function updateRole(roleId, roleName, roleNameCn, permissionIdList) {
   form.roleId = roleId;
   form.roleName = roleName;
   form.roleNameCn = roleNameCn;
@@ -313,11 +313,11 @@ function isTableDataEmpty() {
 const popoverVisible = ref({}); // 存储弹窗显示状态的对象
 
 /* 确认删除 */
-function deleteStatusData(permissionId) {
-  if (!(permissionId === "") || !(permissionId === undefined)) {
+function deleteRoleData(roleId) {
+  if (!(roleId === "") || !(roleId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/role/" + permissionId,
+        "/api/auth/role/" + roleId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -331,26 +331,26 @@ function deleteStatusData(permissionId) {
     );
   }
   // 关闭 popover
-  popoverVisible.value[permissionId] = false;
+  popoverVisible.value[roleId] = false;
 }
 
 /* 删除弹窗取消按钮事件 */
-function closeDeletePopover(permissionId) {
+function closeDeletePopover(roleId) {
   // 关闭 popover
-  popoverVisible.value[permissionId] = false;
+  popoverVisible.value[roleId] = false;
 }
 
 /* 显示删除弹窗按钮事件 */
-function showDeletePopover(permissionId) {
+function showDeletePopover(roleId) {
   if (popoverVisible.value === undefined) {
-    popoverVisible.value[permissionId] = true;
+    popoverVisible.value[roleId] = true;
   }
-  popoverVisible.value[permissionId] = true;
+  popoverVisible.value[roleId] = true;
 }
 
 /* 获取删除的对应数据弹窗状态，根据数据ID获取 */
-function getShowAndHide(permissionId) {
-  return popoverVisible.value[permissionId];
+function getShowAndHide(roleId) {
+  return popoverVisible.value[roleId];
 }
 
 </script>
@@ -428,7 +428,7 @@ function getShowAndHide(permissionId) {
                   <p>确定要删除此条数据?</p>
                   <div style="text-align: right; margin: 0">
                     <el-button size="small" text @click="closeDeletePopover(scope.row.roleId)">取消</el-button>
-                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.roleId)">确定
+                    <el-button size="small" type="primary" @click="deleteRoleData(scope.row.roleId)">确定
                     </el-button>
                   </div>
                   <template #reference>

@@ -29,7 +29,7 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
-    /* TODO: Written by - Han Yongding 2024/01/31 配置SQL注入器，批量插入 */
+    /** TODO: Written by - Han Yongding 2024/01/31 配置SQL注入器，批量插入 */
     @Bean
     public InsertBatchSqlInjector insertBatchSqlInjector() {
         return new InsertBatchSqlInjector() ;

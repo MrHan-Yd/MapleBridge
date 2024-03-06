@@ -26,7 +26,7 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
     @Resource
     private TypesWorkExperienceMapper mapper ;
 
-    /* TODO: Written by - Han Yongding 2024/02/28 获取所有工作类型 */
+    /** TODO: Written by - Han Yongding 2024/02/28 获取所有工作类型 */
     @Override
     public Object getAllTypesWorkExperience(int pageNum, int pageSize, boolean isItPaginated) {
         /* TODO: Written by - Han Yongding 2024/02/28 判断是否需要分页 */
@@ -47,7 +47,7 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
         return mapper.getAllTypesWorkExperience() ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/28 新增工作类型 */
+    /** TODO: Written by - Han Yongding 2024/02/28 新增工作类型 */
 
     @Override
     public String insertTypesWorkExperience(RestTypesWorkExperienceVO vo) {
@@ -70,7 +70,7 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/28 修改工作类型 */
+    /** TODO: Written by - Han Yongding 2024/02/28 修改工作类型 */
 
     @Override
     public String updateTypesWorkExperience(RestTypesWorkExperienceVO vo) {
@@ -87,7 +87,7 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
         return null;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/28 根据ID删除工作类型 */
+    /** TODO: Written by - Han Yongding 2024/02/28 根据ID删除工作类型 */
 
     @Override
     public String deleteTypesWorkExperience(String typeId) {

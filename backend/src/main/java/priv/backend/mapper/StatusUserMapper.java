@@ -13,6 +13,6 @@ import priv.backend.domain.dto.StatusUser;
  * @CreateDate :  2024-02-08 11:27
  */
 public interface StatusUserMapper extends BaseMapper<StatusUser> {
-    /* TODO: Written by - Han Yongding 2024/02/08 分页查询所有用户状态 */
+    /** TODO: Written by - Han Yongding 2024/02/08 分页查询所有用户状态 */
     Page<StatusUser> getAllStatusUsers(Page<StatusUser> page);
 }

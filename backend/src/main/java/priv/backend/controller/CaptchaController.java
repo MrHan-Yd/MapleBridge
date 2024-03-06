@@ -26,7 +26,7 @@ public class CaptchaController {
     @Resource
     private CaptchaServiceImpl captchaService ;
 
-    /* TODO: Written by - Han Yongding 2024/02/18 获取英文验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/18 获取英文验证码 */
     @GetMapping("captcha-image/{codeId}")
     public void getCaptchaImage(@PathVariable("codeId") String codeId , HttpServletResponse response) {
         try {
@@ -44,7 +44,7 @@ public class CaptchaController {
     }
 
 
-    /* TODO: Written by - Han Yongding 2024/02/18 获取算数验证码 */
+    /** TODO: Written by - Han Yongding 2024/02/18 获取算数验证码 */
     @GetMapping("captcha-math/{codeId}")
     public void getCaptchaMath(@PathVariable("codeId") String codeId , HttpServletResponse response) {
         try {

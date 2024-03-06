@@ -39,7 +39,7 @@ public class JwtUtils {
     /** TODO: Written by - Han Yongding 2023/09/11 Token加密Key */
     @Value("${spring.security.jwt.token_key}")
     private String tokenKey ;
-    /* TODO: Written by - Han Yongding 2024/02/16 刷新Token加密Key */
+    /** TODO: Written by - Han Yongding 2024/02/16 刷新Token加密Key */
     @Value("${spring.security.jwt.refresh_token}")
     private String refreshTokenKey ;
 
@@ -55,7 +55,7 @@ public class JwtUtils {
     @Resource
     private StringRedisTemplate template ;
 
-    /* TODO: Written by - Han Yongding 2024/02/17 注入RedisEntity */
+    /** TODO: Written by - Han Yongding 2024/02/17 注入RedisEntity */
     @Resource
     private RedisTemplate<String, Object> redisTemplate ;
 
@@ -119,7 +119,7 @@ public class JwtUtils {
         return instance.getTime() ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/02/16 判断Token类型 */
+    /** TODO: Written by - Han Yongding 2024/02/16 判断Token类型 */
     private boolean judgeTokenType(String tokenType) {
         return "token".equals(tokenType) ;
     }
@@ -338,11 +338,8 @@ public class JwtUtils {
 
     /** TODO: Written by - Han Yongding 2023/11/02 刷新令牌是否过期 */
     public boolean refreshTokenExpiredOrNot(String refreshToken) {
-        /* TODO: Written by - Han Yongding 2023/11/02 token合法，通过截取获取token */
-        String tokens = convertToken(refreshToken) ;
-
         /* TODO: Written by - Han Yongding 2023/11/02 获取jwt对象 */
-        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(tokens);
+        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(refreshToken);
 
         /* TODO: Written by - Han Yongding 2023/11/09
          * 当前时间是否超过了规定时间 == new Date.after(jwt.getExpiresAt()) ;
@@ -356,10 +353,8 @@ public class JwtUtils {
 
     /** TODO: Written by - Han Yongding 2023/11/02 通过刷新token颁发新token */
     public RespRefreshTokenVO issueANewTokenByRefreshToken(String refreshToken) {
-        /* TODO: Written by - Han Yongding 2023/11/02 截取刷新令牌 */
-        String refreshTokens = this.convertToken(refreshToken) ;
         /* TODO: Written by - Han Yongding 2023/11/02 获取令牌的jwt对象 */
-        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(refreshTokens) ;
+        DecodedJWT jwt = this.getDecodedJWTByRefreshToken(refreshToken) ;
         /* TODO: Written by - Han Yongding 2023/11/02 解析权限 */
         List<String> authorities = this.toAuthorities(jwt) ;
         /* TODO: Written by - Han Yongding 2023/11/02 解析id */

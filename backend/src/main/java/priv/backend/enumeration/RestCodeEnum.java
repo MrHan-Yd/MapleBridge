@@ -1,5 +1,7 @@
 package priv.backend.enumeration;
 
+import lombok.Getter;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -7,6 +9,7 @@ package priv.backend.enumeration;
  * @Description : 响应前端Code
  * @CreateDate :  2023-09-14 15:06
  */
+@Getter
 public enum RestCodeEnum {
     /* TODO: Written by - Han Yongding 2023/09/14
         1、LOGIN_FAILURE：登录失败
@@ -25,7 +28,4 @@ public enum RestCodeEnum {
         this.code = code;
     }
 
-    public int getCode() {
-        return code;
-    }
 }

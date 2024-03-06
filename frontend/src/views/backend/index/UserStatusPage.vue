@@ -92,24 +92,24 @@ function openDrawer(data) {
   /*新增*/
   if (data.type === 1) {
     drawerTitle = "新增用户状态";
-    clearStatusRoleForm();
+    clearStatusUserForm();
   } else {
     drawerTitle = "编辑用户状态";
     /*修改*/
-    updateStatusRole(data.statusId, data.statusName);
+    updateStatusUser(data.statusId, data.statusName);
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearStatusRoleForm() {
+function clearStatusUserForm() {
   form.statusName = '';
   form.createId = getUserId();
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusRole(statusId, statusName) {
+function updateStatusUser(statusId, statusName) {
   form.statusId = statusId;
   form.statusName = statusName;
 }
