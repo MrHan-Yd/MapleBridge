@@ -2,15 +2,10 @@ package priv.backend.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
-import priv.backend.domain.vo.request.RestAnnouncementVO;
-import priv.backend.domain.vo.request.RestStatusAnnouncementVO;
-import priv.backend.domain.vo.request.RestFeedbackVO;
-import priv.backend.domain.vo.request.RestTypesAnnouncementVO;
-import priv.backend.service.impl.AnnouncementServiceImpl;
-import priv.backend.service.impl.FeedbackServiceImpl;
-import priv.backend.service.impl.StatusAnnouncementServiceImpl;
-import priv.backend.service.impl.TypesAnnouncementServiceImpl;
+import priv.backend.domain.vo.request.*;
+import priv.backend.service.impl.*;
 import priv.backend.util.ReturnUtils;
 
 /**
@@ -21,7 +16,7 @@ import priv.backend.util.ReturnUtils;
  * @CreateDate :  2024-03-04 12:34
  */
 @RestController
-@RequestMapping("/api/auth/")
+@RequestMapping("/api/backend-admin/")
 public class PlatformController {
     /** TODO: Written by - Han Yongding 2024/02/29 注入用户反馈业务层 */
     @Resource
@@ -144,4 +139,64 @@ public class PlatformController {
     public RestBean<Void> deleteAnnouncementById(@PathVariable("id") String id) {
         return ReturnUtils.messageHandle(() -> announcementService.deleteAnnouncementById(id)) ;
     }
+
+
+    /* TODO: Written by - Han Yongding 2024/03/08 注入帖子业务层 */
+    @Resource
+    private TypesPostServiceImpl postService ;
+
+    /** TODO: Written by - Han Yongding 2024/03/08 查询所有帖子类型 */
+    @GetMapping("post-types")
+    public RestBean<Object> getTypesPost(@RequestParam(defaultValue = "1") int pageNum,
+                                                 @RequestParam(defaultValue = "10") int pageSize,
+                                                 @RequestParam(required = false, defaultValue = "true") boolean isItPaginated) {
+        return ReturnUtils.messageHandleData(() -> postService.getPostTypes(pageNum, pageSize, isItPaginated));
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/08 新增帖子类型 */
+    @PostMapping("post-types")
+    public RestBean<Void> insertTypesPost(@RequestBody RestTypesPostVO vo) {
+        return ReturnUtils.messageHandle(vo, postService::insertTypesPost);
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/08 修改帖子类型 */
+    @PutMapping("post-types")
+    public RestBean<Void> updateTypesPost(@RequestBody RestTypesPostVO vo) {
+        return ReturnUtils.messageHandle(vo, postService::updateTypesPostByTypeId);
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/08 删除帖子类型 */
+    @DeleteMapping("post-types/{typeId}")
+    public RestBean<Void> deleteTypesPost(@PathVariable("typeId") String typeId) {
+        return ReturnUtils.messageHandle(() -> postService.deleteTypesPostByTypeId(typeId)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/03/09 注入帖子业务层 */
+    @Resource
+    private PostServiceImpl postServiceImpl;
+
+    /** TODO: Written by - Han Yongding 2024/03/09 分页查询帖子 */
+    @GetMapping("post")
+    public RestBean<Object> getPost(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(() -> postServiceImpl.getPagePost(pageBean)) ;
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/10 新增帖子 */
+    @PostMapping("post")
+    public RestBean<Void> insertPost(@RequestBody RestPostVO vo) {
+        return ReturnUtils.messageHandle(vo, postServiceImpl::insertPost) ;
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/10 修改帖子 */
+    @PutMapping("post")
+    public RestBean<Void> updatePost(@RequestBody RestPostVO vo) {
+        return ReturnUtils.messageHandle(vo, postServiceImpl::updatePost) ;
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/10 删除帖子 */
+    @DeleteMapping("post/{postId}")
+    public RestBean<Void> deletePost(@PathVariable("postId") String postId) {
+        return ReturnUtils.messageHandle(() -> postServiceImpl.deletePost(postId)) ;
+    }
+
 }

@@ -12,6 +12,7 @@ const formInline = reactive({
   user: '',
   region: '',
   date: '',
+  stata: ''
 });
 
 /* 表格数据 */
@@ -116,7 +117,7 @@ const rule = {
 
 /* 获取所有公告类型 */
 function getAnnouncementTypes() {
-  get("/api/auth/announcement-types?isItPaginated=false",
+  get("api/backend-admin/announcement-types?isItPaginated=false",
       (rs) => {
         cities.value = rs.data;
       }
@@ -192,7 +193,7 @@ function cancelClick() {
       /* 新增 */
       if (form.id === "") {
         post(
-            "/api/auth/announcement",
+            "api/backend-admin/announcement",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -202,7 +203,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/announcement",
+            "api/backend-admin/announcement",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -227,7 +228,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/announcement?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/announcement?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -314,7 +315,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("/api/auth/announcement", data,
+    put("api/backend-admin/announcement", data,
         () => {
           ElSuccess(data.statusId === '1764526473467625473' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -340,7 +341,7 @@ function deleteStatusData(id) {
   if (!(id === "") || !(id === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/announcement/" + id,
+        "api/backend-admin/announcement/" + id,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -511,6 +512,7 @@ function dateChange() {
           <el-form-item prop="typeId">
             <el-select
                 v-model="form.typeId"
+                :value="String(form.typeId)"
                 placeholder="选择公告类型"
             >
               <el-option

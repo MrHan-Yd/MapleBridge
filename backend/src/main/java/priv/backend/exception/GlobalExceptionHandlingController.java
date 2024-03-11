@@ -3,11 +3,14 @@ package priv.backend.exception;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.util.validation.ValidationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import priv.backend.domain.RestBean;
 import priv.backend.enumeration.CodeEnum;
+
+import java.nio.file.AccessDeniedException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,13 +21,29 @@ import priv.backend.enumeration.CodeEnum;
  */
 @Slf4j
 @RestControllerAdvice
-public class ValidationController {
+public class GlobalExceptionHandlingController {
+
+    /* TODO: Written by - Han Yongding 2024/03/05 处理未授权异常 */
+    @ExceptionHandler(AccessDeniedException.class)
+    public RestBean<Void> handleUnauthorizedException(AccessDeniedException exception) {
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_401_UNAUTHORIZED.CODE, "未授权访问");
+    }
+
     /** TODO: Written by - Han Yongding 2023/08/14 处理接口参数校验器异常 */
     @ExceptionHandler(ValidationException.class)
     public RestBean<Void> validateException(ValidationException exception) {
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
-        return RestBean.failure(CodeEnum.HTTP_401_UNAUTHORIZED.CODE, "请求参数有误") ;
+        return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, "请求参数有误") ;
     }
+
+    /** TODO: Written by - Han Yongding 2024/03/09  */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public RestBean<Void> MethodArgumentNotValid(MethodArgumentNotValidException exception){
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, CodeEnum.HTTP_400_ERROR_REQUEST.MESSAGE);
+    }
+
 
     /** TODO: Written by - Han Yongding 2024/03/05 请求方法不支持 */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

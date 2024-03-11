@@ -15,7 +15,7 @@ import priv.backend.util.ReturnUtils;
  * @CreateDate :  2024-01-22 16:02
  */
 @RestController
-@RequestMapping("/api/auth/")
+@RequestMapping("/api/backend-admin/")
 public class UserController {
 
     /** TODO: Written by - Han Yongding 2024/01/23 注入角色状态业务层 */

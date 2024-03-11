@@ -147,7 +147,7 @@ function cancelClick() {
       /* 新增 */
       if (form.levelId === "") {
         post(
-            "/api/auth/user-level",
+            "api/backend-admin/user-level",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -157,7 +157,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/user-level",
+            "api/backend-admin/user-level",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -182,7 +182,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/user-level?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/user-level?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -254,7 +254,7 @@ function deleteStatusData(levelId) {
   if (!(levelId === "") || !(levelId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/user-level/" + levelId,
+        "api/backend-admin/user-level/" + levelId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

@@ -211,7 +211,7 @@ public class SecurityConfig {
                                AuthenticationException exception) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(RestBean.unauthorized(exception.getMessage()).asJsonString());
+        response.getWriter().write(RestBean.unauthorized("访问此资源需要完全身份验证").asJsonString());
     }
 
     /**
@@ -222,7 +222,7 @@ public class SecurityConfig {
                              AccessDeniedException exception) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(RestBean.forbidden(exception.getMessage()).asJsonString());
+        response.getWriter().write(RestBean.forbidden("拒绝访问").asJsonString());
     }
 
 }

@@ -2,6 +2,7 @@ package priv.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import priv.backend.domain.PageBean;
 import priv.backend.enumeration.StatusEnum;
 
 import java.security.SecureRandom;
@@ -35,6 +36,13 @@ class BackendApplicationTests {
         }
 
         return sb.toString();
+    }
+
+    /* TODO: Written by - Han Yongding 2024/03/09 分页实体测试 */
+    @Test
+    void PageTest() {
+        PageBean pageBean = new PageBean() ;
+        System.out.println(pageBean);
     }
 
 

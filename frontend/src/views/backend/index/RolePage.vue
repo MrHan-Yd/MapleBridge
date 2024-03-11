@@ -107,7 +107,7 @@ const rule = {
 
 /* 获取所有权限 */
 function getPermission() {
-  get("/api/auth/permission?isItPaginated=false",
+  get("api/backend-admin/permission?isItPaginated=false",
       (rs) => {
         cities.value = rs.data;
       }
@@ -170,7 +170,7 @@ function cancelClick() {
       /* 新增 */
       if (form.roleId === "") {
         post(
-            "/api/auth/role",
+            "api/backend-admin/role",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -180,7 +180,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/role",
+            "api/backend-admin/role",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -205,7 +205,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/role?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/role?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -291,7 +291,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("/api/auth/role", data,
+    put("api/backend-admin/role", data,
         () => {
           ElSuccess(data.statusId === '1749402591433838593' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -317,7 +317,7 @@ function deleteRoleData(roleId) {
   if (!(roleId === "") || !(roleId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/role/" + roleId,
+        "api/backend-admin/role/" + roleId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

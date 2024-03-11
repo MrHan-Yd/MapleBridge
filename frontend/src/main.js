@@ -16,7 +16,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css' ;
 import '@/assets/css/global.css';
 
 /* 配置后端服务器接口 */
-axios.defaults.baseURL = 'http://localhost:9999' ;
+axios.defaults.baseURL = 'http://localhost:9999/' ;
 
 const app = createApp(App) ;
 

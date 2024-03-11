@@ -4,7 +4,7 @@ import {ElMessageBox} from "element-plus";
 import {CirclePlus, EditPen, Search} from "@element-plus/icons-vue";
 import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
-import {formatDate} from "@/util/FromatDate" ;
+import {formatDate, formatTime} from "@/util/FromatDate" ;
 import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
@@ -12,16 +12,20 @@ const formInline = reactive({
   user: '',
   region: '',
   date: '',
+  stata: ''
 });
 
 /* 表格数据 */
 const tableData = ref([{
-  "feedbackId": '',
+  "postId": '',
   "userId": '',
-  "feedbackText": '',
+  "topic": '',
+  "content": '',
   "timestamp": '',
+  "types": '',
+  "likeCount": '',
+  "commentCount": '',
 }]);
-
 /* 分页参数 */
 const pageData = reactive([{
   "total": '',
@@ -47,9 +51,11 @@ const onReset = () => {
 const handleClick = (row) => {
   const data = {
     type: 2,
-    feedbackId: row.feedbackId,
+    postId: row.postId,
     userId: row.userId,
-    feedbackText: row.feedbackText
+    topic: row.topic,
+    content: row.content,
+    typeId: row.types.typeId,
   }
   openDrawer(data);
 }
@@ -70,53 +76,90 @@ const drawer = ref(false);
 /* 表单校验 */
 const formRef = ref();
 const form = reactive({
-  feedbackId: '',
+  postId: '',
   userId: '',
-  feedbackText: ''
+  topic: '',
+  content: '',
+  typeId: '',
 });
 
 /* 表单判断 */
 const rule = {
-  feedbackText: [
+  topic: [
     {
-      required: true, message: '请输入反馈内容'
+      required: true, message: '请输入帖子标题'
     }
-  ]
+  ],
+  content: [
+    {
+      required: true, message: '请输入帖子内容'
+    }
+  ],
+  typeId: [
+    {
+      required: true, message: '请选择帖子类型'
+    }
+  ],
 }
+
+/* 获取所有公告类型 */
+function getPostTypes() {
+  get("api/backend-admin/post-types?isItPaginated=false",
+      (rs) => {
+        cities.value = rs.data;
+      }
+  );
+}
+
+/* 新增角色权限选择器 */
+const cities = ref([{}]);
 
 /* 新增或修改的抽屉标题 */
 let drawerTitle = "";
 
 /* 打开抽屉 */
 function openDrawer(data) {
+  /* 获取帖子类型 */
+  getPostTypes();
   /*新增*/
   if (data.type === 1) {
-    drawerTitle = "新增平台反馈";
-    clearFeedbackForm();
+    drawerTitle = "新增平台帖子";
+    clearPostForm();
   } else {
-    drawerTitle = "编辑平台反馈";
+    drawerTitle = "编辑平台帖子";
+
     /*修改*/
-    updateFeedback(data.feedbackId, data.userId, data.feedbackText);
+    updatePost(
+        data.postId,
+        data.userId,
+        data.topic,
+        data.content,
+        data.typeId,
+    );
   }
 
   drawer.value = true;
 }
 
 /* 新增，清空表单内容 */
-function clearFeedbackForm() {
-  form.feedbackId = '';
+function clearPostForm() {
+  form.postId = '';
   form.userId = getUserId();
-  form.feedbackText = '';
+  form.topic = '';
+  form.content = '';
+  form.typeId = '';
 }
 
 /* 修改，为表单内容赋值 */
-function updateFeedback(feedbackId, userId, feedbackText) {
-  form.feedbackId = feedbackId;
+function updatePost(postId, userId, topic, content, typeId) {
+  form.postId = postId;
   form.userId = userId;
-  form.feedbackText = feedbackText;
+  form.topic = topic;
+  form.content = content;
+  form.typeId = typeId ;
 }
 
-/* 添加状态 */
+/* 添加帖子 */
 function cancelClick() {
   formRef.value.validate((valid) => {
     /* 验证有效 */
@@ -124,9 +167,9 @@ function cancelClick() {
       /* 关闭抽屉后提交 */
       drawer.value = false;
       /* 新增 */
-      if (form.feedbackId === "") {
+      if (form.postId === "") {
         post(
-            "api/backend-admin/feedback",
+            "api/backend-admin/post",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -136,7 +179,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/feedback",
+            "api/backend-admin/post",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -161,11 +204,11 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/feedback?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/post?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
-          reject(rs) ;
+          reject(rs);
         }
       }, (message, code) => {
         /* 状态码400时，如果只是本页没有数据，但是有上一页(有数据)的同时当前页-1需要大雨等于1时，表示当前页无数据，需要查询上一页，会重新请求上一页 */
@@ -175,8 +218,8 @@ const getData = async (num, size) => {
 
         /* 请求状态码400时，标识没有数据，并且当前页-1小于1表示已删除最后一条数据 */
         if (code === 400 && pageData.pages - 1 < 1) {
-          tableData.value = "" ;
-          ElWarning(message) ;
+          tableData.value = "";
+          ElWarning(message);
         }
       });
     });
@@ -185,6 +228,7 @@ const getData = async (num, size) => {
     if (response.data.total > 0) {
       /* 数据 */
       tableData.value = response.data.records;
+
       /* 分页数据 */
       pageData.total = response.data.total;
       pageData.size = response.data.size;
@@ -220,7 +264,6 @@ function confirmClick() {
         // catch error
       });
 }
-
 /* 判断表格是否有数据 */
 function isTableDataEmpty() {
   return tableData.value.length > 0 && !tableData.value.every(obj => Object.values(obj).every(value => value === ''));
@@ -230,11 +273,11 @@ function isTableDataEmpty() {
 const popoverVisible = ref({}); // 存储弹窗显示状态的对象
 
 /* 确认删除 */
-function deleteStatusData(feedbackId) {
-  if (!(feedbackId === "") || !(feedbackId === undefined)) {
+function deleteStatusData(postId) {
+  if (!(postId === "") || !(postId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/feedback/" + feedbackId,
+        "api/backend-admin/post/" + postId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -248,47 +291,48 @@ function deleteStatusData(feedbackId) {
     );
   }
   // 关闭 popover
-  popoverVisible.value[feedbackId] = false;
+  popoverVisible.value[postId] = false;
 }
 
 /* 删除弹窗取消按钮事件 */
-function closeDeletePopover(feedbackId) {
+function closeDeletePopover(postId) {
   // 关闭 popover
-  popoverVisible.value[feedbackId] = false;
+  popoverVisible.value[postId] = false;
 }
 
 /* 显示删除弹窗按钮事件 */
-function showDeletePopover(feedbackId) {
+function showDeletePopover(postId) {
   if (popoverVisible.value === undefined) {
-    popoverVisible.value[feedbackId] = true;
+    popoverVisible.value[postId] = true;
   }
-  popoverVisible.value[feedbackId] = true;
+  popoverVisible.value[postId] = true;
 }
 
 /* 获取删除的对应数据弹窗状态，根据数据ID获取 */
-function getShowAndHide(feedbackId) {
-  return popoverVisible.value[feedbackId];
+function getShowAndHide(postId) {
+  return popoverVisible.value[postId];
 }
+
 
 </script>
 
 <template>
-  <div id="feedback">
+  <div id="announcement">
     <div id="top">
       <el-text class="title">
-        平台反馈管理
+        平台帖子管理
       </el-text>
       <el-form :inline="true" :model="formInline" class="form-inline form-top">
         <el-form-item label="唯一标识">
           <el-input v-model="formInline.id" :size="'default'" placeholder="唯一标识" clearable/>
         </el-form-item>
-        <el-form-item label="反馈用户">
-          <el-input v-model="formInline.name" placeholder="反馈用户" clearable/>
+        <el-form-item label="帖子标题">
+          <el-input v-model="formInline.name" placeholder="帖子标题" clearable/>
         </el-form-item>
-        <el-form-item label="反馈内容">
+        <el-form-item label="帖子状态">
           <el-select
               v-model="formInline.state"
-              placeholder="反馈内容"
+              placeholder="帖子状态"
               clearable
           >
             <el-option label="在用" value="0"/>
@@ -310,12 +354,16 @@ function getShowAndHide(feedbackId) {
         <el-button :icon="CirclePlus" type="primary" @click="openDrawer({type:1})">新增</el-button>
       </div>
       <div id="tables" v-if="isTableDataEmpty()">
-        <el-table :data="tableData" :row-key="'feedbackId'" :height="'53vh'"
+        <el-table :data="tableData" :row-key="'postId'" :height="'53vh'"
                   :header-cell-style="{'background':'#E6E8EB',}" style="width: 100%;">
-          <el-table-column fixed prop="feedbackId" label="唯一标识" width="200"/>
-          <el-table-column prop="userId" label="反馈人" width="200"/>
-          <el-table-column prop="feedbackText" label="反馈内容" width="550"/>
-          <el-table-column prop="timestamp" label="反馈时间" :formatter="formatDate" width="220"/>
+          <el-table-column fixed prop="postId" label="唯一标识" width="200"/>
+          <el-table-column prop="topic" label="帖子标题" width="200"/>
+          <el-table-column prop="types.typeName" label="类型" width="200" />
+          <el-table-column prop="userId" label="发布人唯一标识" width="200" />
+          <el-table-column prop="content" label="帖子内容" width="1000"/>
+          <el-table-column prop="timestamp" label="发布时间" :formatter="formatDate" width="220"/>
+          <el-table-column prop="likeCount" label="点赞数量" width="200"/>
+          <el-table-column prop="commentCount" label="评论数量" width="200"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <div>
@@ -325,17 +373,18 @@ function getShowAndHide(feedbackId) {
                 <el-popover
                     placement="top"
                     trigger="click"
-                    :visible="getShowAndHide(scope.row.feedbackId)"
+                    :visible="getShowAndHide(scope.row.postId)"
                     :width="160"
                 >
                   <p>确定要删除此条数据?</p>
                   <div style="text-align: right; margin: 0">
-                    <el-button size="small" text @click="closeDeletePopover(scope.row.feedbackId)">取消</el-button>
-                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.feedbackId)">确定
+                    <el-button size="small" text @click="closeDeletePopover(scope.row.postId)">取消</el-button>
+                    <el-button size="small" type="primary" @click="deleteStatusData(scope.row.postId)">确定
                     </el-button>
                   </div>
                   <template #reference>
-                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.feedbackId)">删除
+                    <el-button link type="primary" size="small" @click="showDeletePopover(scope.row.postId)">
+                      删除
                     </el-button>
                   </template>
                 </el-popover>
@@ -374,8 +423,25 @@ function getShowAndHide(feedbackId) {
     <template #default>
       <div>
         <el-form :model="form" :rules="rule" ref="formRef">
-          <el-form-item prop="feedText">
-            <el-input :prefix-icon="EditPen" v-model="form.feedbackText" placeholder="反馈内容" clearable/>
+          <el-form-item prop="topic">
+            <el-input :prefix-icon="EditPen" v-model="form.topic" placeholder="帖子标题" clearable/>
+          </el-form-item>
+          <el-form-item prop="content">
+            <el-input v-model="form.content" placeholder="帖子内容" type="textarea" clearable/>
+          </el-form-item>
+          <el-form-item prop="typeId">
+            <el-select
+                v-model="form.typeId"
+                :value="String(form.typeId)"
+                placeholder="选择公告类型"
+            >
+              <el-option
+                  v-for="item in cities"
+                  :key="item.typeId"
+                  :label="item.typeName"
+                  :value="item.typeId"
+              />
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -390,44 +456,44 @@ function getShowAndHide(feedbackId) {
 </template>
 
 <style scoped>
-#feedback {
+#announcement {
   margin-left: 7px;
   margin-right: 7px;
   margin-bottom: 10px;
   background-color: white;
 }
 
-#feedback >>> #top {
+#announcement >>> #top {
   padding-left: 10px;
   padding-right: 10px;
   //margin: 10px ;
 }
 
-#feedback >>> #bottom {
+#announcement >>> #bottom {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
 }
 
-#feedback >>> #buttons {
+#announcement >>> #buttons {
 
 }
 
-#feedback >>> #tables {
+#announcement >>> #tables {
   margin-top: 20px;
 }
 
-#feedback >>> .title {
+#announcement >>> .title {
   display: block;
   padding-top: 10px;
   font-size: 18px;
 }
 
-#feedback >>> .form-top {
+#announcement >>> .form-top {
   margin-top: 25px;
 }
 
-#feedback >>> .pagination {
+#announcement >>> .pagination {
   margin-top: 12px;
   display: flex;
   justify-content: right;
@@ -441,4 +507,10 @@ function getShowAndHide(feedbackId) {
 .form-inline .el-select {
   --el-select-width: 220px;
 }
+
+.demo-datetime-picker .block {
+  padding: 30px 0;
+  text-align: center;
+}
+
 </style>

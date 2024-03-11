@@ -124,7 +124,7 @@ function cancelClick() {
       /* 新增 */
       if (form.statusId === "") {
         post(
-            "/api/auth/user-status",
+            "api/backend-admin/user-status",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -134,7 +134,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/user-status",
+            "api/backend-admin/user-status",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -159,7 +159,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/user-status?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/user-status?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -243,7 +243,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("/api/auth/user-status", data,
+    put("api/backend-admin/user-status", data,
         () => {
           ElSuccess(data.state === '0' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -268,7 +268,7 @@ function deleteStatusData(statusId) {
   if (!(statusId === "") || !(statusId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/user-status/" + statusId,
+        "api/backend-admin/user-status/" + statusId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

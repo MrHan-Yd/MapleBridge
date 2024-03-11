@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "975388",
+      "name": "类型",
+      "font_class": "type",
+      "unicode": "e6c0",
+      "unicode_decimal": 59072
+    },
+    {
+      "icon_id": "2506205",
+      "name": "帖子管理",
+      "font_class": "tieziguanli",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "3139633",
+      "name": "帖子管理",
+      "font_class": "tieziguanli1",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
       "icon_id": "3703037",
       "name": "公告管理",
       "font_class": "navicon-gggl",

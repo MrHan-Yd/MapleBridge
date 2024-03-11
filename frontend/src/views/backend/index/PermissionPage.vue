@@ -137,7 +137,7 @@ function cancelClick() {
       /* 新增 */
       if (form.permissionId === "") {
         post(
-            "/api/auth/permission",
+            "api/backend-admin/permission",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -147,7 +147,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/permission",
+            "api/backend-admin/permission",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -172,7 +172,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/permission?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/permission?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -258,7 +258,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("/api/auth/permission", data,
+    put("api/backend-admin/permission", data,
         () => {
           ElSuccess(data.statusId === '1750807828107321346' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -284,7 +284,7 @@ function deleteStatusData(permissionId) {
   if (!(permissionId === "") || !(permissionId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/permission/" + permissionId,
+        "api/backend-admin/permission/" + permissionId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

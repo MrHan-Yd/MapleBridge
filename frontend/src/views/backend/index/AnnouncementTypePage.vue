@@ -52,7 +52,8 @@ const handleClick = (row) => {
     type: 2,
     typeId: row.typeId,
     typeName: row.typeName,
-    description: row.description
+    description: row.description,
+    createId: row.createId
   }
   openDrawer(data);
 }
@@ -106,7 +107,7 @@ function openDrawer(data) {
   } else {
     drawerTitle = "编辑公告类型";
     /*修改*/
-    updateTypesAnnouncement(data.typeId, data.typeName, data.description);
+    updateTypesAnnouncement(data.typeId, data.typeName, data.description, data.createId);
   }
 
   drawer.value = true;
@@ -122,10 +123,11 @@ function clearTypesAnnouncementForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateTypesAnnouncement(typeId, typeName, description) {
+function updateTypesAnnouncement(typeId, typeName, description, createId) {
   form.typeId = typeId ;
   form.typeName = typeName ;
   form.description = description ;
+  form.createId = createId ;
   form.updateId = getUserId();
 }
 
@@ -139,7 +141,7 @@ function cancelClick() {
       /* 新增 */
       if (form.typeId === "") {
         post(
-            "/api/auth/announcement-types",
+            "api/backend-admin/announcement-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -149,7 +151,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/announcement-types",
+            "api/backend-admin/announcement-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -174,7 +176,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/announcement-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/announcement-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -247,7 +249,7 @@ function deleteStatusData(typeId) {
   if (!(typeId === "") || !(typeId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/announcement-types/" + typeId,
+        "api/backend-admin/announcement-types/" + typeId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

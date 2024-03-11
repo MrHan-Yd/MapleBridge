@@ -82,6 +82,14 @@ const router = createRouter({
                     path: '/backend-index-announcement-types',
                     name: 'backend-index-announcement-types',
                     component: () => import('@/views/backend/index/AnnouncementTypePage.vue')
+                } , {
+                    path: '/backend-index-post-types',
+                    name: 'backend-index-post-types',
+                    component: () => import('@/views/backend/index/PostTypePage.vue')
+                } , {
+                    path: '/backend-index-post',
+                    name: 'backend-index-post',
+                    component: () => import('@/views/backend/index/PostPage.vue')
                 }
             ]
         } , {
@@ -115,6 +123,10 @@ const router = createRouter({
                 }
             ]
         } , {
+            path: '/unauthorized',
+            name: 'unauthorized',
+            component: () => import('@/views/backend/system/UnauthorizedPage.vue')
+        } , {
             /*404*/
             path: '/404',
             name: 'not-found',
@@ -130,25 +142,35 @@ const router = createRouter({
 /* 配置路由守卫，防止用户不登录能访问需要登录的页面 */
 router.beforeEach((to, from, next) => {
     /* 从本地存储获取用户角色信息 */
-    const userRole = getUserRole() ;
+    const userRole = getUserRole();
 
     /* 判断是否登录 */
-    const isUnauthorized = unauthorized() ;
+    const isUnauthorized = unauthorized();
+
     /* 如果用户已经登录了，还要访问登录页面*/
-    if((to.name.startsWith("backend-welcome-") || to.name.startsWith("frontend-welcome-")) && !isUnauthorized) {
+    if ((to.name.startsWith("backend-welcome-") || to.name.startsWith("frontend-welcome-")) && !isUnauthorized) {
         if (userRole === "ADMIN") {
-            next("/backend-index") ;
+            next("/backend-index");
         } else {
-            next("/frontend-index") ;
+            next("/frontend-index");
         }
-        /*用户没有登录，但是去访问主页*/
-    } else if(to.fullPath.startsWith("/frontend-index-") && isUnauthorized) {
-        next("/frontend-welcome-login") ;
-    } else if(to.fullPath.startsWith("/backend-index-") && isUnauthorized){
-        next("/backend-welcome-login") ;
-    } else {
-        next() ;
     }
-}) ;
+    /* 用户没有登录，但是去访问主页 */
+    else if (to.fullPath.startsWith("/frontend-index-") && isUnauthorized) {
+        next("/frontend-welcome-login");
+    } else if (to.fullPath.startsWith("/backend-index-") && isUnauthorized) {
+        next("/backend-welcome-login");
+    }
+    /* 针对管理员和普通用户的权限判断 */
+    else if (to.fullPath.startsWith("/backend-index-") && userRole !== "ADMIN") {
+        // 如果是普通用户访问后台页面，可以跳转到没有权限的提示页面
+        next("/unauthorized");
+    } else if (to.fullPath.startsWith("/frontend-index-") && userRole !== "USER") {
+        // 如果是管理员访问前台页面，可以跳转到没有权限的提示页面
+        next("/unauthorized");
+    } else {
+        next();
+    }
+});
 
 export default router

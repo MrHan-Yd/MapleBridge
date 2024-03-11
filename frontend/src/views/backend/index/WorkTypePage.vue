@@ -136,7 +136,7 @@ function cancelClick() {
       /* 新增 */
       if (form.typeId === "") {
         post(
-            "/api/auth/work-types",
+            "api/backend-admin/work-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -146,7 +146,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "/api/auth/work-types",
+            "api/backend-admin/work-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -171,7 +171,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/auth/work-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend-admin/work-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -244,7 +244,7 @@ function deleteStatusData(typeId) {
   if (!(typeId === "") || !(typeId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "/api/auth/work-types/" + typeId,
+        "api/backend-admin/work-types/" + typeId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

@@ -191,11 +191,25 @@ const handleClose = (key, keyPath) => {
                 <span @click="router.push('/backend-index-feedback')">平台反馈管理</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="9" disabled>
+            <el-sub-menu index="9">
+              <template #title>
+                <my-icon name="icon-tieziguanli"/>
+                <span>帖子管理</span>
+              </template>
+              <el-menu-item index="9-1">
+                <my-icon name="icon-tieziguanli1"/>
+                <span @click="router.push('/backend-index-post')">平台帖子管理</span>
+              </el-menu-item>
+              <el-menu-item index="9-2">
+                <my-icon name="icon-type" />
+                <span @click="router.push('/backend-index-post-types')">帖子类型管理</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="10" disabled>
               <el-icon><document /></el-icon>
               <span>Navigator Three</span>
             </el-menu-item>
-            <el-menu-item index="10">
+            <el-menu-item index="11">
               <el-icon><setting /></el-icon>
               <span>Navigator Four</span>
             </el-menu-item>
