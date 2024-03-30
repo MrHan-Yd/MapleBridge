@@ -1,5 +1,5 @@
 import axios from 'axios' ;
-import {ElWarning, ElSuccess} from "@/util/MessageUtil" ;
+import {ElWarning, ElSuccess, ElError} from "@/util/MessageUtil" ;
 
 const accessAuthItem = "access_token";
 /* 默认错误方法 */
@@ -226,6 +226,8 @@ function internalGet(url, header, success = defaultSuccess, failure = defaultFai
             failure(data.message, data.code, url);
         }
     }).catch(err => {
+        // console.log(err)
+        ElError(err.response.data.message)
         // console.log(err.response)
         // if (err.response.data.code === 403) {
         //     success(err.response) ;

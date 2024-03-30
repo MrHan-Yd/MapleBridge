@@ -111,7 +111,8 @@ const form = reactive({
   account: '',
   email: '',
   roleId: '',
-  createId: ''
+  createId: '',
+  updateId: ''
 });
 
 /* 表单判断 */
@@ -148,7 +149,7 @@ function openDrawer(data) {
   } else {
     drawerTitle = "编辑平台用户";
     /*修改*/
-    updateUser(data.id, data.account, data.email, data.roleId);
+    updateUser(data.id, data.account, data.email, data.roleId, data.createId);
   }
 
   drawer.value = true;
@@ -180,11 +181,13 @@ function clearUserForm() {
 }
 
 /* 修改，为表单内容赋值 */
-function updateUser(id, account, email, roleId) {
+function updateUser(id, account, email, roleId, createId) {
   form.id = id ;
   form.account = account;
   form.email = email;
   form.roleId = roleId ;
+  form.createId = createId ;
+  form.updateId = getUserId() ;
 }
 
 /* 添加用户 */
@@ -345,10 +348,7 @@ function deleteStatusData(id) {
   if (!(id === "") || !(id === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/user",
-        {
-          id: id
-        },
+        `api/backend-admin/user/${id}`,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -468,7 +468,7 @@ function getShowAndHideResetPassword(id) {
           <el-table-column prop="registerTime" label="注册时间" :formatter="formatDate" width="220"/>
           <el-table-column prop="createId" label="创建人" width="200"/>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatDate" width="220"/>
-          <el-table-column prop="updateId" label="更新人" width="120"/>
+          <el-table-column prop="updateId" label="更新人" width="200"/>
           <el-table-column prop="updateTime" label="更新时间" :formatter="formatDate" width="220"/>
           <el-table-column fixed="right" label="操作" width="165">
             <template #default="scope">

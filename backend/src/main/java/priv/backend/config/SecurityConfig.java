@@ -133,6 +133,7 @@ public class SecurityConfig {
                                                Authentication authentication) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
         /* TODO: Written by - Han Yongding 2023/09/06 获取登录信息 */
         User user = (User) authentication.getPrincipal();
         priv.backend.domain.dto.User userInformation = service.findAccountByNameOrEmail(user.getUsername()) ;

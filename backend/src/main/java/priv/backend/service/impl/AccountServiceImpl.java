@@ -1,5 +1,6 @@
 package priv.backend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +8,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.User;
-import priv.backend.domain.vo.request.RestConfirmVO;
-import priv.backend.domain.vo.request.RestEmailRegisterVO;
-import priv.backend.domain.vo.request.RestEmailResetVO;
-import priv.backend.domain.vo.request.RestUserVO;
+import priv.backend.domain.vo.request.*;
 import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import priv.backend.exception.custom.ProgramCustomException;
 import priv.backend.mapper.UserMapper;
@@ -31,6 +29,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements AccountService {
+
+    /* TODO: Written by - Han Yongding 2024/03/26 注入用户Mapper */
+    @Resource
+    private UserMapper mapper ;
 
     /* TODO: Written by - Han Yongding 2024/02/16 注入用户业务层实现类 */
     @Resource
@@ -73,7 +75,24 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
             if (!this.verifyLimit(ip)) {
                 return "请求频繁，请稍后再试!";
             }
-            /** TODO: Written by - Han Yongding 2024/01/10 获取随机的六位数字字符串 */
+
+            /* TODO: Written by - Han Yongding 2024/03/26  */
+            String emailKey = email ;
+
+            /* TODO: Written by - Han Yongding 2024/03/28 怕redis缓存中有该用户的验证码，所以先清空，确保一个邮箱只有一条验证码 */
+            stringRedisTemplate.delete(Const.VERIFY_EMAIL_DATA + emailKey) ;
+
+            /* TODO: Written by - Han Yongding 2024/03/26 判断用户是邮箱还是账号，用户登录可能使用的是账号，需要从数据库中获取用户的邮箱 */
+            if (!email.contains("@")) {
+                String dataEmail = mapper.getEmailByAccount(email) ;
+                if (CurrentUtils.isEmpty(dataEmail)) {
+                    return "账号有误" ;
+                }
+                email = dataEmail ;
+            }
+
+
+            /* TODO: Written by - Han Yongding 2024/01/10 获取随机的六位数字字符串 */
             String code = RandomStringUtil.getRandomSixDigitCode();
 
             /* TODO: Written by - Han Yongding 2023/09/18 存储创建好的随机验证码 */
@@ -84,7 +103,7 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
 
             /* TODO: Written by - Han Yongding 2023/09/18 用于校验使用，将验证码放入redis中, 过期时间3分钟 */
             stringRedisTemplate.opsForValue()
-                    .set(Const.VERIFY_EMAIL_DATA + email, code, 3, TimeUnit.MINUTES);
+                    .set(Const.VERIFY_EMAIL_DATA + emailKey, code, 3, TimeUnit.MINUTES);
             /* TODO: Written by - Han Yongding 2023/09/18 redis简单的限流 */
             return null;
         }
@@ -137,15 +156,10 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
             return "用户名已被其他用户注册，请更换其他用户名";
         }
 
-        /* TODO: Written by - Han Yongding 2023/09/20 没有问题，注册用户，加密密码 */
-        String password = passwordEncoder.encode(vo.getPassword());
         /* TODO: Written by - Han Yongding 2023/09/20 封装好要注册的对象 */
         RestUserVO insertVO = new RestUserVO();
         insertVO.setAccount(account);
         insertVO.setEmail(email);
-        insertVO.setPassword(password);
-        insertVO.setRoleId("1758136100230930433");
-        insertVO.setStatusId("1749402591433838593");
 
 
         /* TODO: Written by - Han Yongding 2023/09/20 保存到数据库 */
@@ -166,11 +180,10 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
      * @param email 邮箱
      * @return 非null
      */
-    private boolean existsAccountByEmail(String email) {
-        return userService
-                .query()
-                .eq("email", email)
-                .isEmptyOfEntity();
+    public boolean existsAccountByEmail(String email) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>() ;
+        queryWrapper.eq("email", email) ;
+        return userService.getOne(queryWrapper) != null ;
     }
 
     /**
@@ -179,11 +192,10 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
      * @param account 用户名
      * @return 非null
      */
-    private boolean existsAccountByUserName(String account) {
-        return userService
-                .query()
-                .eq("account", account)
-                .isEmptyOfEntity();
+    public boolean existsAccountByUserName(String account) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>() ;
+        queryWrapper.eq("account", account) ;
+        return userService.getOne(queryWrapper) != null ;
     }
 
 
@@ -208,6 +220,34 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
             return "验证码错误，请重新输入";
         }
 
+        return null;
+    }
+
+    /**
+     * TODO: Written by - Han Yongding 2024/03/27 登录邮件确认
+     *
+     * @param vo 前端重置密码验证码请求实体类
+     * @return 结果
+     */
+    @Override
+    public String emailConfirm(LoginConfirmVO vo) {
+        String key = Const.VERIFY_EMAIL_DATA + vo.getAccountOrEmail() ;
+        /* TODO: Written by - Han Yongding 2024/03/27 缓存的验证码 */
+        String code = stringRedisTemplate.opsForValue().get(key) ;
+
+        /* TODO: Written by - Han Yongding 2024/03/27 没有获取验证码 */
+        if (code == null) {
+            return "请先获取验证码";
+        }
+
+        /* TODO: Written by - Han Yongding 2023/09/23 验证码不正确 */
+        if (!code.equals(vo.getCode())) {
+            return "验证码错误，请重新输入";
+        }
+
+        /* TODO: Written by - Han Yongding 2024/03/30 清除缓存验证码 */
+        stringRedisTemplate.delete(key) ;
+        /* TODO: Written by - Han Yongding 2024/03/27 验证成功 */
         return null;
     }
 

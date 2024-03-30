@@ -4,9 +4,8 @@ import {computed, reactive, ref} from "vue" ;
 import router from "@/router";
 import {ElMessage} from "element-plus";
 import {get, post} from "@/net/NetWork" ;
+import { askCodeAntiShake, coldTime, resetAskCodeAntiShake } from '@/util/CaptchaUtil' ;
 
-/* 验证码冷却时间校验 */
-const coldTime = ref(0) ;
 
 /* 注册表单校验 */
 const formRef = ref() ;
@@ -99,21 +98,18 @@ const rule = {
 /* 请求验证码 */
 function askCode() {
   if (isEmailValid) {
-    /* 可以发送验证码，冷却时间60秒 */
-    coldTime.value = 60 ;
+
+    /* 获取验证码 */
     get(`/api/auth/ask-code?email=${form.email}&type=register`, () => {
       ElMessage.success(`验证码已发送到邮箱:${form.email},请注意查收`) ;
-      /* 冷却时间做自减，一秒钟一次 */
-      const intervalId = setInterval(() => {coldTime.value --; /* 冷却时间小于0时，暂停 */
-        if(coldTime.value <= 0) {
-          // 暂停定时器的执行
-          clearInterval(intervalId) ;
-        }}, 1000) ;
+
+      /* 验证码防抖 */
+      askCodeAntiShake() ;
 
     } , (message) => {
       ElMessage.warning(message) ;
-      /* 如果获取验证码的途中出现了问题，直接清空冷却时间 */
-      coldTime.value = 0 ;
+      /* 防抖清除 */
+      resetAskCodeAntiShake() ;
     }) ;
   } else {
     ElMessage.warning("请输入正确的电子邮件") ;
@@ -164,7 +160,7 @@ function register() {
             </el-input>
           </el-form-item>
           <el-form-item prop="email">
-            <el-input v-model="form.email" type="email" placeholder="电子邮件地址">
+            <el-input v-model="form.email" type="text" placeholder="电子邮件地址">
               <template #prefix>
                 <el-icon><Message /></el-icon>
               </template>

@@ -117,7 +117,7 @@ function userLogin() {
           </el-input>
         </el-form-item>
         <el-form-item prop="code" style="padding: 10px;">
-          <el-input style="height: 50px;" v-model="form.code" maxlength="6" type="text" placeholder="请输入验证密码"
+          <el-input style="height: 50px;" v-model="form.code" maxlength="6" type="text" placeholder="请输入验证码"
                     clearable>
             <template #prefix>
               <el-icon><ChatDotRound /></el-icon>

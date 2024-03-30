@@ -55,6 +55,14 @@
             where status_id != '1755493103987208193'
         </select>
         <!--查询所有状态正常的用户-->
+        <!--根据账号查询邮箱-->
+        <select id="getEmailByAccount" resultType="String" parameterType="String">
+            select
+                email
+            from user
+            where account = #{value}
+        </select>
+        <!--根据账号查询邮箱-->
     <!--Select-->
 
     <!--Update-->

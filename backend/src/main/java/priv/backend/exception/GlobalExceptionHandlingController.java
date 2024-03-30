@@ -1,7 +1,11 @@
 package priv.backend.exception;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.util.validation.ValidationException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +25,7 @@ import java.nio.file.AccessDeniedException;
  */
 @Slf4j
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE) // 设置优先级最高
 public class GlobalExceptionHandlingController {
 
     /* TODO: Written by - Han Yongding 2024/03/05 处理未授权异常 */
@@ -59,10 +64,32 @@ public class GlobalExceptionHandlingController {
         return RestBean.failure(CodeEnum.HTTP_404_RESOURCE_NOT_FOUND.CODE, "请求资源未找到");
     }
 
+    /** TODO: Written by - Han Yongding 2024/03/11 令牌签名无效 */
+    @ExceptionHandler(SignatureVerificationException.class)
+    public RestBean<Void> signatureVerificationException(SignatureVerificationException exception){
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "签名验证异常");
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/11 令牌签名无效 */
+    @ExceptionHandler(JWTDecodeException.class)
+    public RestBean<Void> JWTDecodeException(JWTDecodeException exception){
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "解码异常");
+    }
+
+//    /* TODO: Written by - Han Yongding 2024/03/26 无法连接到redis */
+//    @ExceptionHandler({RedisConnectionFailureException.class, DataAccessResourceFailureException.class})
+//    public RestBean<Void> handleRedisAndDatabaseExceptions(Exception exception) {
+//        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+//        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "连接缓存服务器或数据库异常，请联系管理员");
+//    }
+
     /* TODO: Written by - Han Yongding 2024/03/05 处理通用异常 */
     @ExceptionHandler(Exception.class)
     public RestBean<Void> exception(Exception exception) {
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
         return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "服务器内部错误，请联系管理员");
     }
+
 }

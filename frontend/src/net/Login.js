@@ -38,6 +38,21 @@ function login(username, password, remember, success, failure = defaultFailure) 
         }, failure);
 }
 
+function loginFrontend(username, password, success, failure = defaultFailure) {
+    internalPost('/api/auth/login', {
+            username: username,
+            password: password
+        }, {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        (rs) => {
+            /* 存储Token, 前端登录，默认勾选记住我，也就是长时间保存用户令牌 */
+            storeAccessToken(rs.data.accessToken, true, rs.data.accessTokenExpire, rs.data.id, rs.data.account, rs.data.refreshToken, rs.data.refreshTokenExpire, rs.data.role);
+            ElMessage.success("登录成功");
+            success(rs);
+        }, failure);
+}
+
 /* 退出登录函数 */
 function logout(success, failure = defaultFailure) {
     /*退出登录*/
@@ -56,4 +71,4 @@ function unauthorized() {
 }
 
 /* 将定义好的函数暴露出去 */
-export {login, logout, unauthorized, validateCaptchaImage}
+export {login, logout, unauthorized, validateCaptchaImage, loginFrontend}

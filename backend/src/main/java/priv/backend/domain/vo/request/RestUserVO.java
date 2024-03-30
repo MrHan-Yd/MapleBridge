@@ -19,4 +19,5 @@ public class RestUserVO implements BaseData {
     private String roleId ;
     private String statusId ;
     private String createId ;
+    private String updateId ;
 }

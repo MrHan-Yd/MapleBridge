@@ -148,7 +148,7 @@ router.beforeEach((to, from, next) => {
     const isUnauthorized = unauthorized();
 
     /* 如果用户已经登录了，还要访问登录页面*/
-    if ((to.name.startsWith("backend-welcome-") || to.name.startsWith("frontend-welcome-")) && !isUnauthorized) {
+    if ((to.name.startsWith("backend-welcome") || to.name.startsWith("frontend-welcome")) && !isUnauthorized) {
         if (userRole === "ADMIN") {
             next("/backend-index");
         } else {
@@ -156,16 +156,16 @@ router.beforeEach((to, from, next) => {
         }
     }
     /* 用户没有登录，但是去访问主页 */
-    else if (to.fullPath.startsWith("/frontend-index-") && isUnauthorized) {
+    else if (to.fullPath.startsWith("/frontend-index") && isUnauthorized) {
         next("/frontend-welcome-login");
-    } else if (to.fullPath.startsWith("/backend-index-") && isUnauthorized) {
+    } else if (to.fullPath.startsWith("/backend-index") && isUnauthorized) {
         next("/backend-welcome-login");
     }
     /* 针对管理员和普通用户的权限判断 */
-    else if (to.fullPath.startsWith("/backend-index-") && userRole !== "ADMIN") {
+    else if (to.fullPath.startsWith("/backend-index") && userRole !== "ADMIN") {
         // 如果是普通用户访问后台页面，可以跳转到没有权限的提示页面
         next("/unauthorized");
-    } else if (to.fullPath.startsWith("/frontend-index-") && userRole !== "USER") {
+    } else if (to.fullPath.startsWith("/frontend-index") && userRole !== "USER") {
         // 如果是管理员访问前台页面，可以跳转到没有权限的提示页面
         next("/unauthorized");
     } else {

@@ -18,4 +18,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     /** TODO: Written by - Han Yongding 2024/02/12 分页查询所有用户信息 */
     Page<RespUserVO> getAllUser(@Param("page") Page<RespUserVO> page) ;
+
+    /* TODO: Written by - Han Yongding 2024/03/26 根据用户名获取邮箱 */
+    String getEmailByAccount(String value) ;
 }

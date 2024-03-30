@@ -24,6 +24,14 @@ public class RabbitConfig {
                 .build() ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/03/28 另一个发送通知邮件MQ */
+    @Bean("emailNoticeQueue")
+    public Queue emailNoticeQueue() {
+        return QueueBuilder
+                .durable("notice")
+                .build() ;
+    }
+
     /** TODO: Written by - Han Yongding 2024/02/28 消息转换器 */
     @Bean
     public MessageConverter messageConverter() {

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,10 +12,13 @@ import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.User;
 import priv.backend.domain.vo.request.RestUserVO;
 import priv.backend.domain.vo.response.RespUserVO;
+import priv.backend.enumeration.DataBaseEnum;
 import priv.backend.mapper.UserLevelMapper;
 import priv.backend.mapper.UserMapper;
 import priv.backend.service.UserService;
 import priv.backend.util.CurrentUtils;
+
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,6 +45,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private RoleServiceImpl roleService ;
 
+    /* TODO: Written by - Han Yongding 2024/03/28 注入RabbitMQ模板 */
+    @Resource
+    private AmqpTemplate amqpTemplate ;
+
     /** TODO: Written by - Han Yongding 2024/02/06 根据等级ID查询用户等级是否被使用 */
     @Override
     public boolean isUsingLevelId(String levelId) {
@@ -65,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             v.setLevelId(userLevelMapper.getLevelIdByExperience(0));
             /* TODO: Written by - Han Yongding 2024/02/11 密码为空初始化为xyh123456 */
             if (CurrentUtils.isEmpty(v.getPassword())) {
-                v.setPassword("xyh123456");
+                v.setPassword(DataBaseEnum.INITIAL_PASSWORD.contents);
             }
             /* TODO: Written by - Han Yongding 2024/02/14 加密 */
             String password = passwordEncoder.encode(v.getPassword()) ;
@@ -74,6 +82,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             v.setRegisterTime(CurrentUtils.getTheCurrentSystemTime());
             /* TODO: Written by - Han Yongding 2024/02/08 在用 */
             v.setStatusId("1755492769986392066");
+            /* TODO: Written by - Han Yongding 2024/03/27 后端管理员新增会选择角色，前端注册无法携带角色，默认普通用户 */
+            if (v.getRoleId() == null) {
+                v.setRoleId("1758482033179316225");
+            }
             /* TODO: Written by - Han Yongding 2024/03/01 获取当前系统时间 */
             v.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
         });
@@ -81,6 +93,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         /* TODO: Written by - Han Yongding 2024/02/16 插入失败 */
         if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(user))) {
             return "新增失败，请稍后重试";
+        }
+
+        /* TODO: Written by - Han Yongding 2024/03/28 注册成功，发送邮件通知 */
+        Map<String, Object> data = Map.of("type", "registerSuccess", "email", user.getEmail());
+
+        amqpTemplate.convertAndSend("notice", data) ;
+
+        /* TODO: Written by - Han Yongding 2024/03/28 插入创建人 */
+        if (user.getCreateId() == null) {
+            user.setCreateId(user.getId());
+            mapper.updateById(user) ;
         }
 
         /* TODO: Written by - Han Yongding 2024/02/08 新增成功 */
@@ -102,6 +125,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String password = passwordEncoder.encode(vo.getPassword()) ;
             user.setPassword(password) ;
         }
+
+        /* TODO: Written by - Han Yongding 2024/03/28 修改时间记录 */
+
+        user.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
 
         /* TODO: Written by - Han Yongding 2024/02/12 修改失败 */
         if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(user))) {
@@ -128,6 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return "唯一表示为空，请填写后重试";
         }
 
+        /* TODO: Written by - Han Yongding 2024/03/28 伪删除 */
         User user = new User() ;
         user.setId(id) ;
         user.setStatusId("1755493103987208193") ;

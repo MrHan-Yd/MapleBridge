@@ -3,10 +3,10 @@ package priv.backend.controller;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
+import priv.backend.domain.vo.request.LoginConfirmVO;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
@@ -33,8 +33,8 @@ public class AuthorizeController {
 
     /** TODO: Written by - Han Yongding 2024/02/16 获取邮箱验证码 */
     @GetMapping("ask-code")
-    public RestBean<Void> askVerifyCode(@RequestParam("email") @Email String email,
-                                        @RequestParam("type") @Pattern(regexp = "register|reset") String type,
+    public RestBean<Void> askVerifyCode(@RequestParam("email") String email,
+                                        @RequestParam("type") @Pattern(regexp = "register|reset|login") String type,
                                         HttpServletRequest request) {
         return ReturnUtils.messageHandle(() -> accountService.registerEmailVerifyCode(type, email, request.getRemoteAddr())) ;
     }
@@ -65,5 +65,11 @@ public class AuthorizeController {
         } catch (ProgramCustomException e) {
             return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, e.getExceptionMessage()) ;
         }
+    }
+
+    /** TODO: Written by - Han Yongding 2024/03/27 登录邮件确认 */
+    @GetMapping("email-confirm")
+    public RestBean<Void> loginConfirm(@Valid LoginConfirmVO vo) {
+        return ReturnUtils.messageHandle(vo, accountService::emailConfirm) ;
     }
 }
