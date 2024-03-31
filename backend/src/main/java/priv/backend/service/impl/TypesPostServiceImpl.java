@@ -76,6 +76,7 @@ public class TypesPostServiceImpl implements TypesPostService {
             return "数据为空，请稍后再试" ;
         }
 
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
         TypesPost typesPost = vo.asViewObject(TypesPost.class) ;
         typesPost.setUpdateTime(CurrentUtils.getTheCurrentSystemTime()) ;
         /* TODO: Written by - Han Yongding 2024/03/08 修改失败 */

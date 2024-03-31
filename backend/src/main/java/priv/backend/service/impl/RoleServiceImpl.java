@@ -130,8 +130,12 @@ public class RoleServiceImpl implements RoleService {
                     return "数据不能为空，请稍后重试";
                 }
                 if (this.insertRoleOfPermissionByRoleId(vo.getRoleId(), vo.getPermissionIdList())) {
+                    /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+                    Role viewObject = vo.asViewObject(Role.class);
+                    viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime()) ;
+
                     /* TODO: Written by - Han Yongding 2024/01/27 根据id修改 */
-                    if (mapper.updateById(vo.asViewObject(Role.class)) < 1) {
+                    if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(viewObject))) {
                         return "修改失败，请稍后重试";
                     }
                 } else {

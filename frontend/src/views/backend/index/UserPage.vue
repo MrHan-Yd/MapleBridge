@@ -62,6 +62,7 @@ const handleClick = (row) => {
     account: row.account,
     email: row.email,
     roleId: row.role.roleId,
+    createId: row.createId,
   }
   openDrawer(data);
 }
@@ -71,7 +72,7 @@ function resetPassword(id) {
   if (!(id === "") || !(id === undefined)) {
     /* 请求后台重置密码 */
     put(
-        "api/backend-admin/user",
+        "api/backend/user",
         {
           id: id,
           password: "xyh123456"
@@ -156,7 +157,7 @@ function openDrawer(data) {
 }
 /* 获取所有角色 */
 function getUserRole() {
-  get("api/backend-admin/role?isItPaginated=false",
+  get("api/backend/role?isItPaginated=false",
       (rs) => {
         cities.value = rs.data;
       }
@@ -178,6 +179,7 @@ function clearUserForm() {
   form.email = '';
   form.roleId = '';
   form.createId = getUserId();
+  form.updateId = '' ;
 }
 
 /* 修改，为表单内容赋值 */
@@ -200,7 +202,7 @@ function cancelClick() {
       /* 新增 */
       if (form.id === "") {
         post(
-            "api/backend-admin/user",
+            "api/backend/user",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -210,7 +212,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/user",
+            "api/backend/user",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -235,7 +237,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/user?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/user?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -319,7 +321,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("api/backend-admin/user", data,
+    put("api/backend/user", data,
         () => {
           ElSuccess(data.statusId === '1755492769986392066' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -348,7 +350,7 @@ function deleteStatusData(id) {
   if (!(id === "") || !(id === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        `api/backend-admin/user/${id}`,
+        `api/backend/user/${id}`,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

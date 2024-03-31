@@ -53,7 +53,8 @@ const handleClick = (row) => {
     type: 2,
     permissionId: row.permissionId,
     permissionName: row.permissionName,
-    permissionUrl: row.permissionUrl
+    permissionUrl: row.permissionUrl,
+    createId: row.createId,
   }
   openDrawer(data);
 }
@@ -77,7 +78,8 @@ const form = reactive({
   permissionId: '',
   permissionName: '',
   permissionUrl: '',
-  createId: ''
+  createId: '',
+  updateId: ''
 });
 
 /* 表单判断 */
@@ -106,7 +108,7 @@ function openDrawer(data) {
   } else {
     drawerTitle = "编辑权限";
     /*修改*/
-    updatePermission(data.permissionId, data.permissionName, data.permissionUrl);
+    updatePermission(data.permissionId, data.permissionName, data.permissionUrl, data.createId);
   }
 
   drawer.value = true;
@@ -118,13 +120,16 @@ function clearPermissionForm() {
   form.permissionName = '';
   form.permissionUrl = '';
   form.createId = getUserId() ;
+  form.updateId = '' ;
 }
 
 /* 修改，为表单内容赋值 */
-function updatePermission(permissionId, permissionName, permissionUrl) {
+function updatePermission(permissionId, permissionName, permissionUrl, createId) {
   form.permissionId = permissionId;
   form.permissionName = permissionName;
   form.permissionUrl = permissionUrl;
+  form.createId = createId;
+  form.updateId = getUserId();
 }
 
 /* 添加状态 */
@@ -137,7 +142,7 @@ function cancelClick() {
       /* 新增 */
       if (form.permissionId === "") {
         post(
-            "api/backend-admin/permission",
+            "api/backend/permission",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -147,7 +152,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/permission",
+            "api/backend/permission",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -172,7 +177,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/permission?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/permission?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -258,7 +263,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("api/backend-admin/permission", data,
+    put("api/backend/permission", data,
         () => {
           ElSuccess(data.statusId === '1750807828107321346' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -284,7 +289,7 @@ function deleteStatusData(permissionId) {
   if (!(permissionId === "") || !(permissionId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/permission/" + permissionId,
+        "api/backend/permission/" + permissionId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -363,7 +368,7 @@ function getShowAndHide(permissionId) {
         <el-table :data="tableData" :row-key="'permissionId'" :height="'53vh'"
                   :header-cell-style="{'background':'#E6E8EB',}" style="width: 100%;">
           <el-table-column fixed prop="permissionId" label="唯一标识" width="200"/>
-          <el-table-column prop="permissionName" label="权限名称" width="120"/>
+          <el-table-column prop="permissionName" label="权限名称" width="200"/>
           <el-table-column prop="permissionUrl" label="权限路径" width="200"/>
           <el-table-column prop="statusId" label="状态" width="120">
             <template #default="scope">
@@ -378,7 +383,7 @@ function getShowAndHide(permissionId) {
           </el-table-column>
           <el-table-column prop="createId" label="创建人" width="200"/>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatDate" width="220"/>
-          <el-table-column prop="updateId" label="更新人" width="120"/>
+          <el-table-column prop="updateId" label="更新人" width="200"/>
           <el-table-column prop="updateTime" label="更新时间" :formatter="formatDate" width="220"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">

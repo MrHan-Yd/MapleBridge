@@ -52,7 +52,8 @@ const handleClick = (row) => {
     type: 2,
     typeId: row.typeId,
     typeName: row.typeName,
-    description: row.description
+    description: row.description,
+    createId: row.createId
   }
   openDrawer(data);
 }
@@ -76,7 +77,8 @@ const form = reactive({
   typeId: '',
   typeName: '',
   description: '',
-  createId: ''
+  createId: '',
+  updateId: ''
 });
 
 /* 表单判断 */
@@ -105,7 +107,7 @@ function openDrawer(data) {
   } else {
     drawerTitle = "编辑工作类型";
     /*修改*/
-    updateWorkType(data.typeId, data.typeName, data.description);
+    updateWorkType(data.typeId, data.typeName, data.description, data.createId);
   }
 
   drawer.value = true;
@@ -117,13 +119,16 @@ function clearWorkTypeForm() {
   form.typeName = '';
   form.description = '';
   form.createId = getUserId();
+  form.updateId = '' ;
 }
 
 /* 修改，为表单内容赋值 */
-function updateWorkType(typeId, typeName, description) {
+function updateWorkType(typeId, typeName, description, createId) {
   form.typeId = typeId ;
   form.typeName = typeName ;
   form.description = description ;
+  form.createId = createId ;
+  form.updateId = getUserId() ;
 }
 
 /* 添加状态 */
@@ -136,7 +141,7 @@ function cancelClick() {
       /* 新增 */
       if (form.typeId === "") {
         post(
-            "api/backend-admin/work-types",
+            "api/backend/work-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -146,7 +151,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/work-types",
+            "api/backend/work-types",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -171,7 +176,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/work-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/work-types?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -244,7 +249,7 @@ function deleteStatusData(typeId) {
   if (!(typeId === "") || !(typeId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/work-types/" + typeId,
+        "api/backend/work-types/" + typeId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -327,7 +332,7 @@ function getShowAndHide(typeId) {
           <el-table-column prop="description" label="类型描述" width="550"/>
           <el-table-column prop="createId" label="创建人" width="200"/>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatDate" width="220"/>
-          <el-table-column prop="updateId" label="更新人" width="120"/>
+          <el-table-column prop="updateId" label="更新人" width="200"/>
           <el-table-column prop="updateTime" label="更新时间" :formatter="formatDate" width="220"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">

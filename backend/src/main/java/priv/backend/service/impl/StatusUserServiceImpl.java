@@ -71,8 +71,13 @@ public class StatusUserServiceImpl implements StatusUserService {
             return "数据错误，请重试" ;
         }
 
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+        StatusUser viewObject = vo.asViewObject(StatusUser.class);
+        viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
+
+
         /* TODO: Written by - Han Yongding 2024/02/08 修改失败 */
-        if(mapper.updateById(vo.asViewObject(StatusUser.class)) < 1) {
+        if(CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(viewObject))) {
             return "修改失败，请稍后重试" ;
         }
         /* TODO: Written by - Han Yongding 2024/02/08 修改成功 */

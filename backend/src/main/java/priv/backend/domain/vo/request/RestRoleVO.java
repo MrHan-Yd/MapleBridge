@@ -21,4 +21,5 @@ public class RestRoleVO implements BaseData {
     private String statusId ;
     private List<String> permissionIdList ;
     private String createId ;
+    private String updateId ;
 }

@@ -78,8 +78,12 @@ public class TypesWorkExperienceServiceImpl implements TypesWorkExperienceServic
             return "数据不能为空，请稍后重试";
         }
 
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+        TypesWorkExperience viewObject = vo.asViewObject(TypesWorkExperience.class);
+        viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
+
         /* TODO: Written by - Han Yongding 2024/02/28 根据id修改 */
-        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(vo.asViewObject(TypesWorkExperience.class)))) {
+        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(viewObject))) {
             return "修改失败，请稍后重试";
         }
 

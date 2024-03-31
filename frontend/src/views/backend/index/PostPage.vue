@@ -104,7 +104,7 @@ const rule = {
 
 /* 获取所有公告类型 */
 function getPostTypes() {
-  get("api/backend-admin/post-types?isItPaginated=false",
+  get("api/backend/post-types?isItPaginated=false",
       (rs) => {
         cities.value = rs.data;
       }
@@ -169,7 +169,7 @@ function cancelClick() {
       /* 新增 */
       if (form.postId === "") {
         post(
-            "api/backend-admin/post",
+            "api/backend/post",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -179,7 +179,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/post",
+            "api/backend/post",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -204,7 +204,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/post?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/post?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -277,7 +277,7 @@ function deleteStatusData(postId) {
   if (!(postId === "") || !(postId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/post/" + postId,
+        "api/backend/post/" + postId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

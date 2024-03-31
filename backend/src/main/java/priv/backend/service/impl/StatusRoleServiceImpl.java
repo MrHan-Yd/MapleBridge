@@ -67,7 +67,11 @@ public class StatusRoleServiceImpl implements StatusRoleService {
             return "数据错误，请重试" ;
         }
 
-        if(mapper.updateById(vo.asViewObject(StatusRole.class)) < 1) {
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+        StatusRole viewObject = vo.asViewObject(StatusRole.class);
+        viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
+
+        if(CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(viewObject))) {
             return "修改失败，请稍后重试" ;
         }
         return null ;

@@ -75,8 +75,12 @@ public class PermissionServiceImpl implements PermissionService {
             return "数据不能为空，请稍后重试";
         }
 
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+        Permission viewObject = vo.asViewObject(Permission.class);
+        viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
+
         /* TODO: Written by - Han Yongding 2024/01/27 根据id修改 */
-        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(vo.asViewObject(Permission.class)))) {
+        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.updateById(viewObject))) {
             return "修改失败，请稍后重试";
         }
         return null;

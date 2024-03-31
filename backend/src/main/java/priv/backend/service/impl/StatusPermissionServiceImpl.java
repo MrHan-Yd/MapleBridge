@@ -66,8 +66,11 @@ public class StatusPermissionServiceImpl implements StatusPermissionService {
         if (vo == null) {
             return "数据错误，请重试" ;
         }
+        /* TODO: Written by - Han Yongding 2024/03/30 修改时间 */
+        StatusPermission viewObject = vo.asViewObject(StatusPermission.class);
+        viewObject.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
 
-        if(mapper.updateById(vo.asViewObject(StatusPermission.class)) < 1) {
+        if(mapper.updateById(viewObject) < 1) {
             return "修改失败，请稍后重试" ;
         }
         return null ;

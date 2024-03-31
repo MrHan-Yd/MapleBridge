@@ -69,7 +69,7 @@ public class AuthorizeController {
 
     /** TODO: Written by - Han Yongding 2024/03/27 登录邮件确认 */
     @GetMapping("email-confirm")
-    public RestBean<Void> loginConfirm(@Valid LoginConfirmVO vo) {
+    public RestBean<Void> emailConfirm(@Valid LoginConfirmVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::emailConfirm) ;
     }
 }

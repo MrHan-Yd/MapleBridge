@@ -127,7 +127,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         /* TODO: Written by - Han Yongding 2024/03/28 修改时间记录 */
-
         user.setUpdateTime(CurrentUtils.getTheCurrentSystemTime());
 
         /* TODO: Written by - Han Yongding 2024/02/12 修改失败 */

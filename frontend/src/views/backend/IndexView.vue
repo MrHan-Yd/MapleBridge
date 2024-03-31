@@ -3,7 +3,6 @@ import {logout} from "@/net/Login";
 import router from "@/router" ;
 import {
   Document,
-  HomeFilled,
   Setting,
   DataLine,
   Odometer,
@@ -44,17 +43,17 @@ const handleClose = (key, keyPath) => {
 
         </el-col>
         <el-col :span="6" class="centered-content flex-end">
-          <el-tooltip
-              effect="light"
-              content="主页"
-              placement="bottom"
-          >
-            <el-link @click="router.push('/index')" :underline="false" id="home_link">
-              <el-icon :size="30">
-                <HomeFilled/>
-              </el-icon>
-            </el-link>
-          </el-tooltip>
+<!--          <el-tooltip-->
+<!--              effect="light"-->
+<!--              content="主页"-->
+<!--              placement="bottom"-->
+<!--          >-->
+<!--            <el-link @click="router.push('/index')" :underline="false" id="home_link">-->
+<!--              <el-icon :size="30">-->
+<!--                <HomeFilled/>-->
+<!--              </el-icon>-->
+<!--            </el-link>-->
+<!--          </el-tooltip>-->
           <div id="avatar-div" class="centered-content centered-content-center el-dropdown-link">
             <el-dropdown>
               <el-avatar :size="50" :src="'/images/touxiang.jpg'"/>

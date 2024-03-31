@@ -15,4 +15,7 @@ public class RestPermissionStateVO implements BaseData {
     private String statusId ;
     private String state ;
     private String statusName ;
+    private String createId ;
+    private String updateId ;
+
 }

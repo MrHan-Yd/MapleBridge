@@ -117,7 +117,7 @@ const rule = {
 
 /* 获取所有公告类型 */
 function getAnnouncementTypes() {
-  get("api/backend-admin/announcement-types?isItPaginated=false",
+  get("api/backend/announcement-types?isItPaginated=false",
       (rs) => {
         cities.value = rs.data;
       }
@@ -193,7 +193,7 @@ function cancelClick() {
       /* 新增 */
       if (form.id === "") {
         post(
-            "api/backend-admin/announcement",
+            "api/backend/announcement",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -203,7 +203,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/announcement",
+            "api/backend/announcement",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -228,7 +228,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/announcement?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/announcement?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -315,7 +315,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("api/backend-admin/announcement", data,
+    put("api/backend/announcement", data,
         () => {
           ElSuccess(data.statusId === '1764526473467625473' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -341,7 +341,7 @@ function deleteStatusData(id) {
   if (!(id === "") || !(id === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/announcement/" + id,
+        "api/backend/announcement/" + id,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);

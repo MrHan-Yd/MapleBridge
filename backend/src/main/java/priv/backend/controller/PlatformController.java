@@ -16,7 +16,7 @@ import priv.backend.util.ReturnUtils;
  * @CreateDate :  2024-03-04 12:34
  */
 @RestController
-@RequestMapping("/api/backend-admin/")
+@RequestMapping("/api/backend/")
 public class PlatformController {
     /** TODO: Written by - Han Yongding 2024/02/29 注入用户反馈业务层 */
     @Resource

@@ -51,7 +51,8 @@ const handleClick = (row) => {
   const data = {
     type: 2,
     statusId: row.statusId,
-    statusName: row.statusName
+    statusName: row.statusName,
+    createId: row.createId
   }
   openDrawer(data);
 }
@@ -72,7 +73,8 @@ const formRef = ref();
 const form = reactive({
   statusId: '',
   statusName: '',
-  createId: ''
+  createId: '',
+  updateId: ''
 });
 
 /* 表单判断 */
@@ -96,7 +98,7 @@ function openDrawer(data) {
   } else {
     drawerTitle = "编辑用户状态";
     /*修改*/
-    updateStatusUser(data.statusId, data.statusName);
+    updateStatusUser(data.statusId, data.statusName, data.createId);
   }
 
   drawer.value = true;
@@ -106,12 +108,15 @@ function openDrawer(data) {
 function clearStatusUserForm() {
   form.statusName = '';
   form.createId = getUserId();
+  form.updateId = '' ;
 }
 
 /* 修改，为表单内容赋值 */
-function updateStatusUser(statusId, statusName) {
+function updateStatusUser(statusId, statusName, createId) {
   form.statusId = statusId;
   form.statusName = statusName;
+  form.createId = createId ;
+  form.updateId = getUserId() ;
 }
 
 /* 添加状态 */
@@ -124,7 +129,7 @@ function cancelClick() {
       /* 新增 */
       if (form.statusId === "") {
         post(
-            "api/backend-admin/user-status",
+            "api/backend/user-status",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -134,7 +139,7 @@ function cancelClick() {
       } else {
         /* 修改 */
         put(
-            "api/backend-admin/user-status",
+            "api/backend/user-status",
             {...form},
             () => {
               ElSuccess("请求成功");
@@ -159,7 +164,7 @@ const getData = async (num, size) => {
   /* 页面加载后请求后台获取数据 */
   try {
     const response = await new Promise((resolve, reject) => {
-      get("api/backend-admin/user-status?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
+      get("api/backend/user-status?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs) => {
         if (rs.code === 200) {
           resolve(rs);
         } else {
@@ -243,7 +248,7 @@ const editStatus = async (row) => {
 /* 修改状态 */
 const putState = (data) => {
   return new Promise((resolve, reject) => {
-    put("api/backend-admin/user-status", data,
+    put("api/backend/user-status", data,
         () => {
           ElSuccess(data.state === '0' ? "开启成功" : "禁用成功");
           resolve(); // 成功时 resolve
@@ -268,7 +273,7 @@ function deleteStatusData(statusId) {
   if (!(statusId === "") || !(statusId === undefined)) {
     /* 请求后台删除数据 */
     delete_(
-        "api/backend-admin/user-status/" + statusId,
+        "api/backend/user-status/" + statusId,
         async (rs) => {
           if (rs.code === 200) {
             ElSuccess(rs.message);
@@ -360,7 +365,7 @@ function getShowAndHide(statusId) {
           </el-table-column>
           <el-table-column prop="createId" label="创建人" width="200"/>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatDate" width="220"/>
-          <el-table-column prop="updateId" label="更新人" width="120"/>
+          <el-table-column prop="updateId" label="更新人" width="200"/>
           <el-table-column prop="updateTime" label="更新时间" :formatter="formatDate" width="220"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
