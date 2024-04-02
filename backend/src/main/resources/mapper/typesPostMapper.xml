@@ -46,6 +46,16 @@
             where type_id = #{typeId}
         </select>
         <!--根据ID查询对应的类型ID和名称-->
+        <!--根据ID查询对应的类型ID和名称-->
+        <select id="getESPostTypeByTypeId" resultType="ESPostType" >
+            select
+                type_id,
+                type_name
+            from
+                types_post
+            where type_id = #{typeId}
+        </select>
+        <!--根据ID查询对应的类型ID和名称-->
     <!--Select-->
 
     <!--Update-->

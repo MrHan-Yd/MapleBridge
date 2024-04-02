@@ -5,12 +5,12 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.dto.Post;
+import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.vo.request.RestPostVO;
 import priv.backend.domain.vo.response.RespPostVO;
 import priv.backend.mapper.PostMapper;
 import priv.backend.service.PostService;
 import priv.backend.util.CurrentUtils;
-import priv.backend.util.PageUtils;
 
 import java.util.List;
 
@@ -89,5 +89,11 @@ public class PostServiceImpl implements PostService {
 
         /* TODO: Written by - Han Yongding 2024/03/10 删除成功 */
         return null ;
+    }
+
+    /** TODO: Written by - Han Yongding 2024/04/01 查询所有帖子同步ES使用 */
+    @Override
+    public List<ESPost> getAllPostSynchronizationES() {
+        return mapper.getAllPostSynchronizationES() ;
     }
 }

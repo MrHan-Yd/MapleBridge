@@ -60,8 +60,17 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
-
+  #elasicSearch
+  elasticsearch:
+    # 地址
+    uris: https://127.0.0.1:9200
+    # 用户名
+    username: elastic
+    # 密码
+    password: 7ImyfkwV_ZBmXPgE-67c
+    # 证书密码：elastic
+    # 超时时间
+    socket-timeout: 10s
 
   data:
     # redis 配置

@@ -20,6 +20,18 @@
         <association property="types" column="type_id"
                      select="priv.backend.mapper.TypesPostMapper.getTypesPostById" />
     </resultMap>
+    <resultMap id="getAllPostSynchronizationESMap" type="ESPost" >
+        <id property="postId" column="post_id" />
+        <result property="userId" column="user_id" />
+        <result property="nickname" column="nickname" />
+        <result property="topic" column="topic" />
+        <result property="content" column="content" />
+        <result property="timestamp" column="timestamp" />
+        <result property="likeCount" column="like_count" />
+        <result property="commentCount" column="comment_count" />
+        <association property="type" column="type_id"
+                     select="priv.backend.mapper.TypesPostMapper.getESPostTypeByTypeId" />
+    </resultMap>
     <!--Map-->
 
     <!--Select-->
@@ -37,6 +49,22 @@
             from post
         </select>
         <!--获取所有帖子-->
+        <!-- 查询 所有帖子，用于同步到ES-->
+        <select id="getAllPostSynchronizationES" resultMap="getAllPostSynchronizationESMap" >
+            SELECT
+                p.post_id as post_id,
+                p.user_id as user_id,
+                u.nickname as nickname,
+                p.topic as topic,
+                p.type_id as type_id,
+                p.content as content,
+                p.`timestamp` as `timestamp`,
+                p.like_count as like_count,
+                p.comment_count as comment_count
+            FROM `post` p
+                     left join `user` u
+                               on p.user_id = u.id
+        </select>
     <!--Select-->
 
     <!--Update-->

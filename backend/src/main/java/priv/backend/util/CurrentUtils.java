@@ -66,5 +66,9 @@ public class CurrentUtils {
         return str == null ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/04/01 长度比较 */
+    public static boolean sizeWhetherUnequal(long sizeA, long sizeB) {
+        return sizeA != sizeB ;
+    }
 
 }

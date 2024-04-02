@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.LikeMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+
+    <!--Map-->
+
+    <!--Select-->
+        <!--根据帖子唯一标识获取帖子点赞情况-->
+        <select id="getPostLikeByPostId" resultType="ESLike" >
+            SELECT
+                like_id,
+                user_id,
+                post_id,
+                comment_id,
+                `timestamp`
+            FROM `like`
+            WHERE post_id = #{postId}
+            AND comment_id IS NULL
+        </select>
+        <!--根据帖子唯一标识获取帖子点赞情况-->
+        <!--根据评论唯一标识获取点赞情况-->
+        <select id="getESCommentLikeByCommentId" resultType="ESLike" >
+            SELECT
+                like_id,
+                user_id,
+                post_id,
+                comment_id,
+                `timestamp`
+            FROM `like`
+            WHERE comment_id = #{commentId}
+        </select>
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

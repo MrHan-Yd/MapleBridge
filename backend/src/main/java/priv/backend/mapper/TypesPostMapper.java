@@ -3,7 +3,7 @@ package priv.backend.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import priv.backend.domain.dto.TypesPost;
-import priv.backend.domain.vo.response.RespTypesAnnouncementSelectVO;
+import priv.backend.domain.es.dto.ESPostType;
 import priv.backend.domain.vo.response.RespTypesPostSelectVO;
 
 import java.util.List;
@@ -25,4 +25,7 @@ public interface TypesPostMapper extends BaseMapper<TypesPost> {
 
     /** TODO: Written by - Han Yongding 2024/03/08 根据id查询对应的帖子类型 */
     RespTypesPostSelectVO getTypesPostById(String typeId) ;
+
+    /** TODO: Written by - Han Yongding 2024/03/08 根据id查询对应的帖子类型 */
+    ESPostType getESPostTypeByTypeId(String typeId) ;
 }
