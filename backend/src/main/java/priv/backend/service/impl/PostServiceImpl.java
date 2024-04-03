@@ -12,7 +12,6 @@ import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.vo.request.RestPostVO;
 import priv.backend.domain.vo.request.RestPostsVO;
 import priv.backend.domain.vo.response.RespPostVO;
-import priv.backend.mapper.FilePostMapper;
 import priv.backend.mapper.PostMapper;
 import priv.backend.service.PostService;
 import priv.backend.util.CurrentUtils;

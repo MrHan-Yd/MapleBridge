@@ -1,7 +1,6 @@
 package priv.backend.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.web.multipart.MultipartFile;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.vo.request.RestPostVO;

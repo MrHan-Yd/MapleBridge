@@ -1,12 +1,8 @@
 package priv.backend.service;
 
 import priv.backend.domain.PageBean;
-import priv.backend.domain.RestBean;
-import priv.backend.domain.vo.request.RestTypesAnnouncementVO;
 import priv.backend.domain.vo.request.RestTypesPostVO;
-import priv.backend.domain.vo.response.RespTypesPostSelectVO;
 
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
