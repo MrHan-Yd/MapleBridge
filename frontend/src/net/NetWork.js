@@ -178,6 +178,15 @@ function accessHeader() {
         'Authorization': `Bearer ${token}`
     } : {};
 }
+/* 上传请求头 */
+function accessHeaderFormData() {
+    const token = takeAccessToken();
+    /* 如果拿到token就返回获取到的token，否则返回空*/
+    return token ? {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+    } : {};
+}
 
 /* 内部使用Post请求 */
 function internalPost(url, data, header, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
@@ -259,6 +268,10 @@ function get(url, success = defaultSuccess, failure = defaultFailure) {
 function post(url, data, success, failure = defaultFailure) {
     internalPost(url, data, accessHeader(), success, failure);
 }
+/* 上传Post请求 */
+function postFormData(url, data, success, failure = defaultFailure) {
+    internalPost(url, data, accessHeaderFormData(), success, failure);
+}
 
 /* 普通put 暴露给外面使用 */
 function put(url, data, success = defaultSuccess, failure = defaultFailure) {
@@ -275,6 +288,7 @@ function delete_(url, success = defaultSuccess, failure = defaultFailure) {
 export {
     get,
     post,
+    postFormData,
     put,
     delete_,
     defaultFailure,

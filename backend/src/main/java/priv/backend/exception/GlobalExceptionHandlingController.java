@@ -10,7 +10,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import priv.backend.domain.RestBean;
 import priv.backend.enumeration.CodeEnum;
 
@@ -76,6 +78,13 @@ public class GlobalExceptionHandlingController {
     public RestBean<Void> JWTDecodeException(JWTDecodeException exception){
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
         return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "解码异常");
+    }
+
+    /** TODO: Written by - Han Yongding 2024/04/02 上传文件超出大小 */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public RestBean<Void> UploadFileGoBeyondSizeException(MaxUploadSizeExceededException exception) {
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "已超出最大上传文件大小");
     }
 
 //    /* TODO: Written by - Han Yongding 2024/03/26 无法连接到redis */

@@ -1,6 +1,6 @@
 package priv.backend.service;
 
-import priv.backend.domain.vo.request.LoginConfirmVO;
+import priv.backend.domain.vo.request.RestLoginConfirmVO;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
@@ -43,7 +43,7 @@ public interface AccountService {
      * @param vo 前端重置密码验证码请求实体类
      * @return 结果
      */
-    String emailConfirm(LoginConfirmVO vo) ;
+    String emailConfirm(RestLoginConfirmVO vo) ;
 
     /* TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
     RespRefreshTokenVO refreshToken(String refreshToken) throws ProgramCustomException ;

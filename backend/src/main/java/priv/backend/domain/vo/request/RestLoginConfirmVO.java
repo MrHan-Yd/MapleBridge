@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Data
 @AllArgsConstructor
-public class LoginConfirmVO {
+public class RestLoginConfirmVO {
     String accountOrEmail ;
     @Length(min = 6, max = 6)
     String code ;

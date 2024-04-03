@@ -147,10 +147,8 @@ public class PlatformController {
 
     /** TODO: Written by - Han Yongding 2024/03/08 查询所有帖子类型 */
     @GetMapping("post-types")
-    public RestBean<Object> getTypesPost(@RequestParam(defaultValue = "1") int pageNum,
-                                                 @RequestParam(defaultValue = "10") int pageSize,
-                                                 @RequestParam(required = false, defaultValue = "true") boolean isItPaginated) {
-        return ReturnUtils.messageHandleData(() -> postService.getPostTypes(pageNum, pageSize, isItPaginated));
+    public RestBean<Object> getTypesPost(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(() -> postService.getPostTypes(pageBean));
     }
 
     /** TODO: Written by - Han Yongding 2024/03/08 新增帖子类型 */

@@ -2,6 +2,12 @@ spring:
   application:
     name: MapleBridgeServer
 
+  # 上传文件配置
+  upload:
+    file_path: E:/Project/MapleBridge/backend/src/main/resources/static
+    file_visit_path: /upload/
+    file_host: localhost:9999
+  #静态资源访问
   # security安全框架配置
   security:
     # Security 过滤器优先级默认-100，此处可以不用设置，是为了方便学习
@@ -87,6 +93,9 @@ spring:
       authentication-database: admin
       username: mongo
       password: mongo
+  web:
+    resources:
+      static-locations: classpath:upload/
 
 # 服务器配置
 server:

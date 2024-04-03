@@ -3,8 +3,13 @@ package priv.backend.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import priv.backend.domain.PageBean;
+import priv.backend.domain.RestBean;
 import priv.backend.domain.dto.TypesPost;
+import priv.backend.domain.vo.request.RestPostVO;
 import priv.backend.domain.vo.request.RestTypesPostVO;
+import priv.backend.domain.vo.response.RespTypesPostSelectVO;
 import priv.backend.domain.vo.response.RespTypesPostVO;
 import priv.backend.mapper.TypesPostMapper;
 import priv.backend.service.TypesPostService;
@@ -28,11 +33,11 @@ public class TypesPostServiceImpl implements TypesPostService {
 
     /** TODO: Written by - Han Yongding 2024/03/08 查询帖子类型，分页或不分页 */
     @Override
-    public Object getPostTypes(int pageNum, int pageSize, boolean isItPaginated) {
+    public Object getPostTypes(PageBean pageBean) {
         /* TODO: Written by - Han Yongding 2024/03/08 分页 */
-        if (isItPaginated) {
+        if (pageBean.getIsItPaginated()) {
             /* TODO: Written by - Han Yongding 2024/03/08 配置分页 */
-            Page<TypesPost> page = new Page<>(pageNum, pageSize);
+            Page<TypesPost> page = new Page<>(pageBean.getPageNum(), pageBean.getPageSize());
             /* TODO: Written by - Han Yongding 2024/03/04 获取数据 */
             Page<TypesPost> resp = mapper.getPageTypesPost(page);
 
@@ -46,6 +51,11 @@ public class TypesPostServiceImpl implements TypesPostService {
             return PageUtils.convertToPage(resp, list) ;
         }
         /* TODO: Written by - Han Yongding 2024/03/08 不分页 */
+        return mapper.getAllTypesPost() ;
+    }
+    /* TODO: Written by - Han Yongding 2024/03/08 查询帖子类型，不分页 */
+    @Override
+    public Object getPostTypes() {
         return mapper.getAllTypesPost() ;
     }
 
@@ -68,6 +78,7 @@ public class TypesPostServiceImpl implements TypesPostService {
         /* TODO: Written by - Han Yongding 2024/03/04 新增成功 */
         return null;
     }
+
 
     /* TODO: Written by - Han Yongding 2024/03/08 修改帖子类型 */
     @Override

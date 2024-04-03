@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.RestBean;
-import priv.backend.domain.vo.request.LoginConfirmVO;
+import priv.backend.domain.vo.request.RestLoginConfirmVO;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
@@ -69,7 +69,7 @@ public class AuthorizeController {
 
     /** TODO: Written by - Han Yongding 2024/03/27 登录邮件确认 */
     @GetMapping("email-confirm")
-    public RestBean<Void> emailConfirm(@Valid LoginConfirmVO vo) {
+    public RestBean<Void> emailConfirm(@Valid RestLoginConfirmVO vo) {
         return ReturnUtils.messageHandle(vo, accountService::emailConfirm) ;
     }
 }

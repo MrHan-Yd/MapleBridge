@@ -1,9 +1,11 @@
 package priv.backend.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.multipart.MultipartFile;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.vo.request.RestPostVO;
+import priv.backend.domain.vo.request.RestPostsVO;
 import priv.backend.domain.vo.response.RespPostVO;
 
 import java.util.List;
@@ -22,6 +24,9 @@ public interface PostService {
 
     /** TODO: Written by - Han Yongding 2024/03/09 新增帖子 */
     String insertPost(RestPostVO vo);
+
+    /* TODO: Written by - Han Yongding 2024/04/03 前端发布帖子，可能会上传图片资源 */
+    String insertPost(RestPostsVO vo) ;
 
     /** TODO: Written by - Han Yongding 2024/03/10 修改帖子 */
     String updatePost(RestPostVO vo);

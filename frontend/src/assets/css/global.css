@@ -7,12 +7,12 @@ body {
 
 /* 调整纵向滚动条样式 */
 ::-webkit-scrollbar {
-    width: 6px; /* 调整滚动条宽度 */
+    width: 5px; /* 调整滚动条宽度 */
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #add8e6; /* 滚动条颜色 */
-    border-radius: 6px;
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-track {

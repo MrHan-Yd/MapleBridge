@@ -1,7 +1,12 @@
 package priv.backend.service;
 
+import priv.backend.domain.PageBean;
+import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.RestTypesAnnouncementVO;
 import priv.backend.domain.vo.request.RestTypesPostVO;
+import priv.backend.domain.vo.response.RespTypesPostSelectVO;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +17,10 @@ import priv.backend.domain.vo.request.RestTypesPostVO;
  */
 public interface TypesPostService {
     /* TODO: Written by - Han Yongding 2024/03/08 查询帖子类型，分页或不分页 */
-    Object getPostTypes(int pageNum, int pageSize, boolean isItPaginated);
+    Object getPostTypes(PageBean pageBean);
+
+    /* TODO: Written by - Han Yongding 2024/03/08 查询帖子类型，不分页 */
+    Object getPostTypes();
 
     /** TODO: Written by - Han Yongding 2024/03/08 新增帖子类型 */
     String insertTypesPost(RestTypesPostVO vo);

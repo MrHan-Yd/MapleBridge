@@ -230,7 +230,7 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
      * @return 结果
      */
     @Override
-    public String emailConfirm(LoginConfirmVO vo) {
+    public String emailConfirm(RestLoginConfirmVO vo) {
         String key = Const.VERIFY_EMAIL_DATA + vo.getAccountOrEmail() ;
         /* TODO: Written by - Han Yongding 2024/03/27 缓存的验证码 */
         String code = stringRedisTemplate.opsForValue().get(key) ;
