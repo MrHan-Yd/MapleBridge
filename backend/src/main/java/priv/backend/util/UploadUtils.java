@@ -43,6 +43,13 @@ public class UploadUtils {
                 userId + "/" + path + "/" ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/04/03 生成删除路径 */
+    public String generateDeletePath(String userId, String path) {
+        return upload.getFilePath() +
+                upload.getFileVisitPath() +
+                userId + "/" + path ;
+    }
+
     /** TODO: Written by - Han Yongding 2024/04/03 写出文件 */
     public Files saveFile(MultipartFile file, String path) {
         /* TODO: Written by - Han Yongding 2024/04/03 没有上传文件 */
@@ -136,6 +143,30 @@ public class UploadUtils {
             }
         }
         return file ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/03 删除文件及其文件夹 */
+    public boolean deleteFile(String path) {
+        File file = new File(path);
+        return deleteRecursive(file);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/03 删除文件夹及其文件 */
+    private static boolean deleteRecursive(File file) {
+        if (!file.exists()) {
+            return false;
+        }
+
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File subFile : files) {
+                    deleteRecursive(subFile);
+                }
+            }
+        }
+
+        return file.delete();
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.repository.ESPostRepository;
 import priv.backend.service.impl.CommentServiceImpl;
+import priv.backend.service.impl.FilePostServiceImpl;
 import priv.backend.service.impl.LikeServiceImpl;
 import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.util.CurrentUtils;
@@ -27,27 +28,32 @@ import java.util.stream.StreamSupport;
 @Component
 public class ElasticsearchInitializer implements CommandLineRunner {
 
-    /* TODO: Written by - Han Yongding 2024/04/01 帖子表业务层 */
+    /* TODO: Written by - Han Yongding 2024/04/01 注入帖子表业务层 */
     private final PostServiceImpl postService ;
     
-    /* TODO: Written by - Han Yongding 2024/04/01 评论表业务层 */
+    /* TODO: Written by - Han Yongding 2024/04/01 注入评论表业务层 */
     private final CommentServiceImpl commentService ;
 
-    /* TODO: Written by - Han Yongding 2024/04/01 点赞表业务层 */
+    /* TODO: Written by - Han Yongding 2024/04/01 注入点赞表业务层 */
     private final LikeServiceImpl likeService ;
 
-    /* TODO: Written by - Han Yongding 2024/04/01 帖子ES DAO */
+    /* TODO: Written by - Han Yongding 2024/04/01 注入帖子ES DAO */
     private final ESPostRepository postRepository;
+
+    /* TODO: Written by - Han Yongding 2024/04/03 注入帖子文件业务层 */
+    private final FilePostServiceImpl filePostService ;
 
     @Autowired
     public ElasticsearchInitializer(ESPostRepository postRepository,
                                     PostServiceImpl postService,
                                     CommentServiceImpl commentService,
-                                    LikeServiceImpl likeService) {
+                                    LikeServiceImpl likeService,
+                                    FilePostServiceImpl filePostService) {
         this.postRepository = postRepository;
         this.postService = postService ;
         this.commentService = commentService ;
         this.likeService = likeService ;
+        this.filePostService = filePostService ;
     }
 
     /* TODO: Written by - Han Yongding 2024/04/01 SpringBoot启动时此run方法会自动调用 */
@@ -61,7 +67,7 @@ public class ElasticsearchInitializer implements CommandLineRunner {
         LogUtils.info(this.getClass(),"正在获取数据");
 
         /* TODO: Written by - Han Yongding 2024/04/01 从数据库中获取所有post表数据 */
-        List<ESPost> esPost = postService.getAllPostSynchronizationES() ;
+        List<ESPost> esPost = postService.getAllPostSyncES() ;
 
         LogUtils.info(this.getClass(),"数据已成功获取");
 
@@ -69,8 +75,12 @@ public class ElasticsearchInitializer implements CommandLineRunner {
         /* TODO: Written by - Han Yongding 2024/04/01 数据处理，补充帖子的评论和点赞关联的数据 */
         List<ESPost> postList = esPost.stream()
                 .peek(l -> {
+                    /* TODO: Written by - Han Yongding 2024/04/03 帖子评论数据 */
                     l.setComment(commentService.getAllCommentByPostId(l.getPostId()));
+                    /* TODO: Written by - Han Yongding 2024/04/03 帖子点赞数据 */
                     l.setLike(likeService.getPostLikeByPostId(l.getPostId()));
+                    /* TODO: Written by - Han Yongding 2024/04/03 帖子文件数据 */
+                    l.setFilePost(filePostService.getFilePostByPostId(l.getPostId()));
                 }).toList() ;
 
         LogUtils.info(this.getClass(),"数据处理完成，正在同步");

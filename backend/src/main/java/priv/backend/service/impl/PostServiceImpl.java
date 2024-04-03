@@ -2,6 +2,7 @@ package priv.backend.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import priv.backend.domain.Files;
@@ -43,6 +44,10 @@ public class PostServiceImpl implements PostService {
     /* TODO: Written by - Han Yongding 2024/04/03 注入上载工具类 */
     @Resource
     private UploadUtils uploadUtils ;
+
+    /* TODO: Written by - Han Yongding 2024/04/03 注入RabbitMQ 模板 */
+    @Resource
+    private AmqpTemplate amqpTemplate ;
 
     /** TODO: Written by - Han Yongding 2024/03/09 分页查询所有帖子 */
     @Override
@@ -97,7 +102,7 @@ public class PostServiceImpl implements PostService {
 
             /* TODO: Written by - Han Yongding 2024/04/03 如果有图片则写出文件，最少有一张图片的意思 */
             if (vo.getList().get(0).isEmpty()) {
-                /* TODO: Written by - Han Yongding 2024/04/03 没有图片，不需要写出，业务结束 */
+                /* TODO: Written by - Han Yongding 2024/04/03 没有图片，不需要写出，业务结束(发布成功) */
                 return null ;
             }
 
@@ -106,11 +111,13 @@ public class PostServiceImpl implements PostService {
             String path = uploadUtils.generateSavePath(viewObject.getUserId(), "post/" +viewObject.getPostId());
             /* TODO: Written by - Han Yongding 2024/04/03 批量写出 */
             List<Files> filesList = new ArrayList<>();
+            /* TODO: Written by - Han Yongding 2024/04/03 写出文件 */
             try {
                 filesList = uploadUtils.batchSaveFile(vo.getList(), path);
             } catch (IOException e) {
                 LogUtils.warning(this.getClass(), "文件写出失败");
             }
+            /* TODO: Written by - Han Yongding 2024/04/03 写出失败，回滚已插入数据库中的数据 */
             if (filesList == null) {
                 /* TODO: Written by - Han Yongding 2024/04/03 回滚 */
                 status.setRollbackOnly();
@@ -124,12 +131,23 @@ public class PostServiceImpl implements PostService {
                         viewObject1.setPostId(viewObject.getPostId());
                         return viewObject1 ;
                     }).toList());
+
             /* TODO: Written by - Han Yongding 2024/04/03 影响行数 */
             if (rs == 0) {
+                /* TODO: Written by - Han Yongding 2024/04/03 数据会滚了，删除写出的数据 */
+                boolean post = uploadUtils.deleteFile(uploadUtils.generateDeletePath(viewObject.getUserId() + "/post", viewObject.getPostId()));
+                if (post) {
+                    LogUtils.info(this.getClass(), "PostFile表数据插入失败，已回滚。删除写出文件成功") ;
+                } else {
+                    LogUtils.info(this.getClass(), "PostFile表数据插入失败，已回滚。删除写出文件失败，请管理员手动清除，路径:" + viewObject.getUserId() + "/post/" + viewObject.getPostId()) ;
+                }
                 /* TODO: Written by - Han Yongding 2024/04/03 回滚 */
                 status.setRollbackOnly();
-                return "帖子文件表插入失败，回滚数据" ;
+                return "帖子文件表插入失败" ;
             }
+
+            /* TODO: Written by - Han Yongding 2024/04/03 将PostId传递给RabbitMq，由它去消费同步到ES中 */
+            amqpTemplate.convertAndSend("postSyncES", viewObject.getPostId()) ;
             /* TODO: Written by - Han Yongding 2024/04/03 插入成功，业务完成 */
             return null ;
         }) ;
@@ -186,7 +204,13 @@ public class PostServiceImpl implements PostService {
 
     /** TODO: Written by - Han Yongding 2024/04/01 查询所有帖子同步ES使用 */
     @Override
-    public List<ESPost> getAllPostSynchronizationES() {
-        return mapper.getAllPostSynchronizationES() ;
+    public List<ESPost> getAllPostSyncES() {
+        return mapper.getAllPostSyncES() ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/03 根据postId查询帖子数据，同步ES使用 */
+    @Override
+    public ESPost getPostByPostIdSyncES(String postId) {
+        return mapper.getPostByPostIdSyncES(postId) ;
     }
 }

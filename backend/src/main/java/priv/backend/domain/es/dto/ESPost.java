@@ -35,6 +35,8 @@ public class ESPost {
     private Date timestamp ;
     @Field(type = FieldType.Nested, includeInParent = true)
     private ESPostType type ;
+    @Field(type = FieldType.Nested, includeInParent = true)
+    private List<ESFilePost> filePost ;
     @Field(type = FieldType.Text)
     private String likeCount ;
     @Field(type = FieldType.Text)

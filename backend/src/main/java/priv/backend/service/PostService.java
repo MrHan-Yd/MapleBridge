@@ -34,5 +34,8 @@ public interface PostService {
     String deletePost(String postId);
 
     /* TODO: Written by - Han Yongding 2024/04/01 查询所有帖子，同步ES使用 */
-    List<ESPost> getAllPostSynchronizationES() ;
+    List<ESPost> getAllPostSyncES() ;
+
+    /* TODO: Written by - Han Yongding 2024/04/03 根据postId查询帖子数据，同步ES使用 */
+    ESPost getPostByPostIdSyncES(String postId) ;
 }

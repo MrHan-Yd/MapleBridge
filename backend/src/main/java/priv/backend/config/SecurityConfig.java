@@ -29,6 +29,7 @@ import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.service.system.Impl.PathConfigServiceImpl;
 import priv.backend.util.Const;
 import priv.backend.util.JwtUtils;
+import priv.backend.util.LogUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -83,12 +84,15 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(conf -> {
 
-                    // 先设置固定的、允许所有用户访问的路径,测试用，后续会关掉
+                    // 允许所有用户访问的路径
                     conf.requestMatchers("/api/auth/*", "/api/auth/*/*", "/error").permitAll() ;
 
+                    LogUtils.info(this.getClass(), "配置用户权限任务开始");
+                    LogUtils.info(this.getClass(), "正在从数据库中读取配置");
                     // 获取数据库中的路径配置，根据需要调整获取路径配置的方法
                     List<PathConfig> pathConfigs = pathConfigService.getAllPathConfigs();
-
+                    LogUtils.info(this.getClass(), "配置已获取");
+                    LogUtils.info(this.getClass(), "正在进行权限动态配置");
                     /* TODO: Written by - Han Yongding 2024/02/04 动态配置权限 */
                     pathConfigs.forEach(pathConfig -> {
                         try {
@@ -98,6 +102,8 @@ public class SecurityConfig {
 //                            e.printStackTrace();
                         }
                     });
+                    LogUtils.info(this.getClass(), "权限配置完成");
+                    LogUtils.info(this.getClass(), "配置用户权限任务结束");
 
                     conf
 //                            .requestMatchers("/api/auth/*", "/api/auth/*/*", "error").permitAll() // 允许访问 "/api/auth/*" 和 "/error" 路径的请求

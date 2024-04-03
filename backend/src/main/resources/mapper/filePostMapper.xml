@@ -13,7 +13,19 @@
     <!--Map-->
 
     <!--Select-->
-
+        <!--根据postId查询对应的文件数据-->
+        <select id="getFilePostByPostId" resultType="ESFilePost" >
+            select
+                file_id,
+                post_id,
+                file_type,
+                file_name,
+                file_suffix,
+                file_timestamp
+            from
+                file_post
+            where post_id = #{postId}
+        </select>
     <!--Select-->
 
     <!--Update-->

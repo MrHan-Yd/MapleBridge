@@ -32,6 +32,14 @@ public class RabbitConfig {
                 .build() ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/04/03 Post同步ES使用 */
+    @Bean("postSyncESQueue")
+    public Queue postSynchronizationESQueue() {
+        return QueueBuilder
+                .durable("postSyncES")
+                .build();
+    }
+
     /** TODO: Written by - Han Yongding 2024/02/28 消息转换器 */
     @Bean
     public MessageConverter messageConverter() {
