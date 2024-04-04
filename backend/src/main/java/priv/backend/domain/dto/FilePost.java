@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import priv.backend.domain.BaseData;
 
 import java.sql.Timestamp;
 
@@ -17,7 +18,7 @@ import java.sql.Timestamp;
  */
 @Data
 @TableName("file_post")
-public class FilePost {
+public class FilePost implements BaseData {
     @TableId(type = IdType.ASSIGN_ID)
     private String fileId ;
     @TableField("post_id")

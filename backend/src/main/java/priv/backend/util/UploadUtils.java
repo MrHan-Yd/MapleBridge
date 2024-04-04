@@ -51,7 +51,7 @@ public class UploadUtils {
     }
 
     /** TODO: Written by - Han Yongding 2024/04/03 写出文件 */
-    public Files saveFile(MultipartFile file, String path) {
+    public Files saveFile(MultipartFile file, String path) throws IOException {
         /* TODO: Written by - Han Yongding 2024/04/03 没有上传文件 */
         if (file.isEmpty()) {
             return null ;
@@ -80,13 +80,9 @@ public class UploadUtils {
         String fileName = randomName + suffix ;
 
         File sava = new File(path  + fileName) ;
-        try {
-            /* TODO: Written by - Han Yongding 2024/04/03 写入成功 */
-            file.transferTo(sava);
-        } catch (Exception e) {
-            /* TODO: Written by - Han Yongding 2024/04/03 写入失败 */
-            return null ;
-        }
+
+        /* TODO: Written by - Han Yongding 2024/04/03 写出成功 */
+        file.transferTo(sava);
 
         /* TODO: Written by - Han Yongding 2024/04/03 返回对象 */
 
@@ -94,7 +90,7 @@ public class UploadUtils {
     }
 
     /* TODO: Written by - Han Yongding 2024/04/03 批量写出文件 */
-    public List<Files> batchSaveFile(List<MultipartFile> list, String path) throws IOException{
+    public List<Files> batchSaveFile(List<MultipartFile> list, String path) throws IOException {
         /* TODO: Written by - Han Yongding 2024/04/03 没有上传文件 */
         if (list.isEmpty()) {
             return null ;
@@ -124,8 +120,9 @@ public class UploadUtils {
             String fileName = randomName + suffix ;
 
             File sava = new File(path + fileName) ;
-            /* TODO: Written by - Han Yongding 2024/04/03 写入成功 */
+            /* TODO: Written by - Han Yongding 2024/04/03 写出成功 */
             file.transferTo(sava);
+            /* TODO: Written by - Han Yongding 2024/04/03 添加文件信息 */
             filesList.add(new Files(randomName, suffix, file.getContentType(), CurrentUtils.getTheCurrentSystemTime())) ;
         }
 

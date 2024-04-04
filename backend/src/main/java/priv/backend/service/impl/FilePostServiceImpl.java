@@ -3,7 +3,7 @@ package priv.backend.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.FilePost;
-import priv.backend.domain.es.dto.ESFilePost;
+import priv.backend.domain.dto.FilePosts;
 import priv.backend.mapper.FilePostMapper;
 import priv.backend.service.FilePostService;
 
@@ -35,7 +35,7 @@ public class FilePostServiceImpl implements FilePostService {
 
     /* TODO: Written by - Han Yongding 2024/04/03 根据postID查询对应的文件信息 */
     @Override
-    public List<ESFilePost> getFilePostByPostId(String postId) {
+    public List<FilePosts> getFilePostByPostId(String postId) {
         return filePostMapper.getFilePostByPostId(postId) ;
     }
 }

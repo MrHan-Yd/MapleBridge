@@ -96,7 +96,7 @@ public class PostServiceImpl implements PostService {
             int insert = mapper.insert(viewObject);
             /* TODO: Written by - Han Yongding 2024/04/03 没有插入成功，也没有生成唯一标识 */
             if (insert == 0 && viewObject.getPostId() == null) {
-                /* TODO: Written by - Han Yongding 2024/04/03 回滚事务 */
+                /* TODO: Written by - Han Yongding 2024/04/03 插入失败，业务结束 */
                 return "帖子插入失败" ;
             }
 

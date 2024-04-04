@@ -2,7 +2,7 @@ package priv.backend.mapper;
 
 import priv.backend.config.mybatis.MyBaseMapper;
 import priv.backend.domain.dto.FilePost;
-import priv.backend.domain.es.dto.ESFilePost;
+import priv.backend.domain.dto.FilePosts;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ import java.util.List;
 public interface FilePostMapper extends MyBaseMapper<FilePost> {
 
     /* TODO: Written by - Han Yongding 2024/04/03 根据帖子ID查询对应的文件 */
-    List<ESFilePost> getFilePostByPostId(String postId) ;
+    List<FilePosts> getFilePostByPostId(String postId) ;
 }

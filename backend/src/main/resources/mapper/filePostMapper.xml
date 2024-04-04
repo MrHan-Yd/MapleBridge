@@ -14,18 +14,20 @@
 
     <!--Select-->
         <!--根据postId查询对应的文件数据-->
-        <select id="getFilePostByPostId" resultType="ESFilePost" >
+        <select id="getFilePostByPostId" resultType="FilePosts" >
             select
-                file_id,
-                post_id,
-                file_type,
-                file_name,
-                file_suffix,
-                file_timestamp
+                fp.file_id as file_id,
+                fp.post_id as post_id,
+                fp.file_type as file_type,
+                fp.file_name as file_name,
+                fp.file_suffix as file_suffix,
+                p.user_id as user_id
             from
-                file_post
-            where post_id = #{postId}
+                file_post fp
+                    left join post p on fp.post_id = p.post_id
+            where fp.post_id = #{postId}
         </select>
+        <!--根据postId查询对应的文件数据-->
     <!--Select-->
 
     <!--Update-->

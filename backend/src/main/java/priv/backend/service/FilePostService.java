@@ -1,7 +1,7 @@
 package priv.backend.service;
 
 import priv.backend.domain.dto.FilePost;
-import priv.backend.domain.es.dto.ESFilePost;
+import priv.backend.domain.dto.FilePosts;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface FilePostService {
     Integer batchInsertFilePost(List<FilePost> list) ;
 
     /* TODO: Written by - Han Yongding 2024/04/03 根据postID查询对应的文件信息 */
-    List<ESFilePost> getFilePostByPostId(String postId) ;
+    List<FilePosts> getFilePostByPostId(String postId) ;
 }
