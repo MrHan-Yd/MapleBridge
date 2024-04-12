@@ -16,7 +16,7 @@ import priv.backend.util.TimeUtils;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 作用
+ * @Description : 客户端发布帖子，同步ES队列监听器
  * @CreateDate :  2024-04-03 22:52
  */
 @Slf4j

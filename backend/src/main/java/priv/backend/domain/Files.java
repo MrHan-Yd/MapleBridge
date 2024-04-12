@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,5 +19,5 @@ public class Files implements BaseData {
     private String fileName ;
     private String fileSuffix ;
     private String fileType ;
-    private Timestamp fileTimestamp ;
+    private Date fileTimestamp ;
 }

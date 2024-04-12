@@ -6,7 +6,7 @@ spring:
   upload:
     file_path: E:/Project/MapleBridge/backend/src/main/resources/static
     file_visit_path: /upload/
-    file_host: localhost:9999
+    file_host: http://localhost:9999
   #静态资源访问
   # security安全框架配置
   security:
@@ -26,7 +26,7 @@ spring:
   #数据源
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/maple_bridge_db?characterEncoding=UTF-8
+    url: jdbc:mariadb://localhost:3307/maple_bridge_db?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
 
@@ -93,9 +93,18 @@ spring:
       authentication-database: admin
       username: mongo
       password: mongo
+  # 静态资源文件
   web:
     resources:
-      static-locations: classpath:upload/
+      static-locations: classpath:/static/
+
+  # 设置文件上传大小
+  servlet:
+    multipart:
+      # 单文件最大支持
+      max-file-size: 1MB
+      # 整个请求最大支持，前端多文件上传最多允许上传8张图片，这个配置够用
+      max-request-size: 10MB
 
 # 服务器配置
 server:

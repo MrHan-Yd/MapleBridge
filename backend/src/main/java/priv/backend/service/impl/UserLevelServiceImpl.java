@@ -48,6 +48,18 @@ public class UserLevelServiceImpl implements UserLevelService {
         return PageUtils.convertToPage(userLevel, list);
     }
 
+    /** TODO: Written by - Han Yongding 2024/02/06 分页查询用户等级表数据 */
+    @Override
+    public List<RespUserLevelVO> getAllUserLevel() {
+        List<UserLevel> userLevel = mapper.getAllUserLevels();
+
+        /* TODO: Written by - Han Yongding 2024/01/23 从数据库中查询后转为响应对象返回 */
+        return userLevel
+                .stream()
+                .map(p -> p.asViewObject(RespUserLevelVO.class))
+                .toList();
+    }
+
     /** TODO: Written by - Han Yongding 2024/02/06 新增用户等级 */
     @Override
     public String insertUserLevel(RestUserLevelVO vo) {

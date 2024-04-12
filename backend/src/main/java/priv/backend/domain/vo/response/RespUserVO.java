@@ -2,6 +2,7 @@ package priv.backend.domain.vo.response;
 
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -18,7 +19,7 @@ public class RespUserVO {
     private String email ;
     private String nickname ;
     private String gender ;
-    private Timestamp birthday ;
+    private Date birthday ;
     private Integer experience ;
     private Timestamp registerTime ;
     private String statusId ;

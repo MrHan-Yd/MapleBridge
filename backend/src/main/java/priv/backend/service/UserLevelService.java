@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import priv.backend.domain.vo.request.RestUserLevelVO;
 import priv.backend.domain.vo.response.RespUserLevelVO;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -15,6 +17,8 @@ public interface UserLevelService {
 
     /* TODO: Written by - Han Yongding 2024/02/06 查询所有等级表数据 */
     Page<RespUserLevelVO> getAllUserLevel(int pageNum, int pageSize) ;
+    /* TODO: Written by - Han Yongding 2024/02/06 查询所有等级表数据 */
+    List<RespUserLevelVO> getAllUserLevel() ;
 
     /* TODO: Written by - Han Yongding 2024/02/06 新增用户等级 */
     String insertUserLevel(RestUserLevelVO vo) ;

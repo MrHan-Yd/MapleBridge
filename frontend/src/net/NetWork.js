@@ -6,7 +6,9 @@ const accessAuthItem = "access_token";
 const defaultFailure = (message, code, url) => {
     // console.warn(`请求地址: ${url}, 状态码: ${code}, 错误信息: ${message}`) ;
     // ElMessage.warning(message) ;
-    ElWarning(message);
+    if (code !== 401) {
+        ElWarning(message);
+    }
 }
 /* 默认成功方法 */
 const defaultSuccess = (message) => {
@@ -16,8 +18,12 @@ const defaultSuccess = (message) => {
 /* 默认异常方法 */
 const defaultError = (err) => {
     // ElMessage.warning(err) ;
-    ElWarning(err);
+    ElWarning(err.message);
 }
+/* 用于保存刷新令牌的 Promise 对象 */
+let tokenRefreshPromise = null; //
+/* 用于保存等待的请求队列 */
+const requestQueue = [];
 
 /* 获取Token */
 function takeAccessToken() {
@@ -42,27 +48,32 @@ function takeAccessToken() {
             ElWarning("登录状态已过期，请重新登录!");
             return null;
         } else {
-            /* 使用刷新令牌刷新令牌 */
-            fetchAccessToken(authObj.refreshToken).then(rs => {
-                /* 刷新成功 */
-                if (rs.code === 200) {
-                    /* 新令牌替换掉原来的令牌 */
-                    authObj.accessToken = rs.data.token;
-                    authObj.accessTokenExpire = rs.data.tokenExpire;
-
-                    /* 判断有没有勾选记住我 */
-                    if (authObj.remember) {
-                        localStorage.setItem(accessAuthItem, JSON.stringify(authObj));
+            if (!tokenRefreshPromise) {
+                // 如果没有正在进行的刷新令牌请求，则发起刷新令牌的请求
+                tokenRefreshPromise = fetchAccessToken(authObj.refreshToken).then(rs => {
+                    if (rs.code === 200) {
+                        authObj.accessToken = rs.data.token;
+                        authObj.accessTokenExpire = rs.data.tokenExpire;
+                        /* 判断有没有勾选记住我 */
+                        if (authObj.remember) {
+                            localStorage.setItem(accessAuthItem, JSON.stringify(authObj));
+                        } else {
+                            sessionStorage.setItem(accessAuthItem, JSON.stringify(authObj));
+                        }
                     } else {
-                        sessionStorage.setItem(accessAuthItem, JSON.stringify(authObj));
+                        /* 刷新失败，删除本地用户信息并提示用户重新登录 */
+                        deleteAccessToken();
+                        ElWarning(rs.message + "，请重新登录!");
                     }
-
-                } else {
-                    /* 刷新失败，删除本地用户信息并提示用户重新登录 */
-                    deleteAccessToken();
-                    ElWarning(rs.message + "，请重新登录!");
-                }
-            })
+                    tokenRefreshPromise = null;
+                    // 刷新完成后处理等待的请求
+                    handleRequestQueue();
+                });
+            } else {
+                // 如果已经有刷新令牌的请求在进行，则将当前请求加入到等待队列中
+                requestQueue.push({ type: "accessToken", authObj });
+            }
+            return null; // 返回 null 表示等待刷新 token
         }
     }
     /* 如果都没有问题(有Token并且没有过期)，则返回Token */
@@ -70,31 +81,41 @@ function takeAccessToken() {
 }
 
 
-let fetchPromise = null;
+/*
+handleRequestQueue() 函数的作用是确保在刷新 token 完成后，处理等待队列中的请求 */
+function handleRequestQueue() {
+    if (requestQueue.length > 0) {
+        // 如果等待队列中有请求，则取出第一个请求并处理
+        const nextRequest = requestQueue.shift();
+        if (nextRequest.type === "accessToken") {
+            takeAccessToken(); // 继续处理等待的访问令牌请求
+        }
+    }
+}
 
 /* 刷新令牌 */
 function fetchAccessToken(refreshToken) {
-    /* 如果有请求正在进行，则不进入此项 */
-    if (!fetchPromise) {
-        /* 登录颁发的刷新令牌 */
+    if (!tokenRefreshPromise) {
+        // 如果没有正在进行的刷新令牌请求，则发起刷新令牌的请求
         const encodedRefreshToken = encodeURIComponent(refreshToken);
-        /* 发起请求 */
-        fetchPromise = axios.get(`/api/auth/refresh-token/Bearer ${encodedRefreshToken}`)
+        tokenRefreshPromise = axios.get(`/api/auth/refresh-token/Bearer ${encodedRefreshToken}`)
             .then(response => {
                 const data = response.data;
-                /* 置空表示当前请求完成，可以发起新的请求 */
-                fetchPromise = null;
-                /* 返回数据 */
+                /* 释放，才能让下一次刷新的人进来 */
+                tokenRefreshPromise = null;
+                /* 当前等级 */
+                handleRequestQueue();
                 return data;
             })
             .catch(error => {
-                fetchPromise = null;
-                console.warn('令牌刷新失败', error);
+                /* 释放，才能让下一次刷新的人进来 */
+                tokenRefreshPromise = null;
+
+                ElWarning("令牌刷新失败", error)
                 throw error;
             });
     }
-
-    return fetchPromise;
+    return tokenRefreshPromise;
 }
 
 /* 删除Token */
@@ -236,7 +257,13 @@ function internalGet(url, header, success = defaultSuccess, failure = defaultFai
         }
     }).catch(err => {
         // console.log(err)
-        ElError(err.response.data.message)
+        // ElError(err.response.data.message)
+        if (err.response !== undefined) {
+            error(err.response.data);
+        } else {
+            error(err) ;
+        }
+
         // console.log(err.response)
         // if (err.response.data.code === 403) {
         //     success(err.response) ;
@@ -262,6 +289,9 @@ function internalDelete(url, header, success = defaultSuccess, failure = default
 /* 普通get 暴露给外面使用 */
 function get(url, success = defaultSuccess, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure);
+}
+function getAllParameters(url, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
+    internalGet(url, accessHeader(), success, failure, error);
 }
 
 /* 普通post 暴露给外面使用 */
@@ -298,5 +328,6 @@ export {
     takeAccessToken,
     getUserRole,
     getUserId,
-    getUserName
+    getUserName,
+    getAllParameters
 }

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.util.validation.ValidationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,7 +44,7 @@ public class GlobalExceptionHandlingController {
         return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, "请求参数有误") ;
     }
 
-    /** TODO: Written by - Han Yongding 2024/03/09  */
+    /** TODO: Written by - Han Yongding 2024/03/09 无效请求，可能是参数不正确或请求语法错误，服务器无法理解 */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RestBean<Void> MethodArgumentNotValid(MethodArgumentNotValidException exception){
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
@@ -76,22 +77,22 @@ public class GlobalExceptionHandlingController {
     @ExceptionHandler(JWTDecodeException.class)
     public RestBean<Void> JWTDecodeException(JWTDecodeException exception){
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
-        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "解码异常");
+        return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, "解码异常");
     }
 
     /** TODO: Written by - Han Yongding 2024/04/02 上传文件超出大小 */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public RestBean<Void> UploadFileGoBeyondSizeException(MaxUploadSizeExceededException exception) {
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
-        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "已超出最大上传文件大小");
+        return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, "已超出最大上传文件大小");
     }
 
-//    /* TODO: Written by - Han Yongding 2024/03/26 无法连接到redis */
-//    @ExceptionHandler({RedisConnectionFailureException.class, DataAccessResourceFailureException.class})
-//    public RestBean<Void> handleRedisAndDatabaseExceptions(Exception exception) {
-//        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
-//        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "连接缓存服务器或数据库异常，请联系管理员");
-//    }
+    /* TODO: Written by - Han Yongding 2024/03/26 无法连接到redis */
+    @ExceptionHandler({RedisConnectionFailureException.class})
+    public RestBean<Void> handleRedisAndDatabaseExceptions(RedisConnectionFailureException exception) {
+        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "Redis服务无法连接，请联系管理员处理");
+    }
 
     /* TODO: Written by - Han Yongding 2024/03/05 处理通用异常 */
     @ExceptionHandler(Exception.class)
