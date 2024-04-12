@@ -9,60 +9,211 @@
     <!--SQL-->
 
     <!--Map-->
-        <!--用户Map-->
-        <resultMap id="getAllUserMap" type="RespUserVO">
-            <id property="id" column="id" />
-            <result property="account" column="account" />
-            <result property="email" column="email" />
-            <result property="nickname" column="nickname" />
-            <result property="gender" column="gender" />
-            <result property="birthday" column="birthday" />
-            <result property="experience" column="experience" />
-            <result property="registerTime" column="register_time" />
-            <result property="statusId" column="status_id" />
-            <result property="createId" column="create_id" />
-            <result property="createTime" column="create_time" />
-            <result property="updateId" column="update_id" />
-            <result property="updateTime" column="update_time" />
-            <association property="level" column="level_id"
-                         select="priv.backend.mapper.UserLevelMapper.getLevelNameById" />
-            <association property="role" column="role_id"
-                         select="priv.backend.mapper.RoleMapper.getRoleById" />
-        </resultMap>
-        <!--用户Map-->
+    <!--用户Map-->
+    <resultMap id="getAllUserMap" type="RespUserVO">
+        <id property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="email" column="email"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="birthday" column="birthday"/>
+        <result property="experience" column="experience"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="statusId" column="status_id"/>
+        <result property="createId" column="create_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="level" column="level_id"
+                     select="priv.backend.mapper.UserLevelMapper.getLevelNameById"/>
+        <association property="role" column="role_id"
+                     select="priv.backend.mapper.RoleMapper.getRoleById"/>
+    </resultMap>
+    <!--用户Map-->
+    <!--客户端查询用户信息Map-->
+    <resultMap id="getClientUserByUserIdMap" type="ESClientUser">
+        <id property="id" column="u_id"/>
+        <result property="nickname" column="u_nickname"/>
+        <result property="gender" column="u_gender"/>
+        <result property="birthday" column="u_birthday" />
+        <result property="updateTime" column="u_update_time"/>
+        <result property="experience" column="u_experience" />
+        <association property="avatars" resultMap="UserAvatarsMap" />
+        <association property="userProfile" resultMap="UserProfileMap" />
+        <association property="level" resultMap="UserLevelMap" />
+        <association property="profile" resultMap="profileMap" />
+    </resultMap>
+    <!--客户端查询用户信息Map-->
+    <!--客户端查询用户信息Map, 同步ES-->
+    <resultMap id="getClientUserByUserIdESMap" type="ESClientUser">
+        <id property="id" column="u_id"/>
+        <result property="nickname" column="u_nickname"/>
+        <result property="gender" column="u_gender"/>
+        <result property="birthday" column="u_birthday" />
+        <result property="updateTime" column="u_update_time"/>
+        <result property="experience" column="u_experience" />
+        <association property="avatars" resultMap="UserAvatarsMap" />
+        <association property="userProfile" resultMap="UserProfileMap" />
+        <association property="level" resultMap="UserLevelMap" />
+        <association property="profile" resultMap="profileMap" />
+    </resultMap>
+    <resultMap id="UserAvatarsMap" type="ESUserAvatars" >
+        <id property="avatarsId" column="u_a_avatars_id"/>
+        <result property="userId" column="u_a_user_id"/>
+        <result property="updateTime" column="u_a_update_time"/>
+        <result property="fileName" column="u_a_file_name"/>
+        <result property="fileSize" column="u_a_file_size"/>
+    </resultMap>
+    <resultMap id="UserProfileMap" type="ESUserProfile" >
+        <id property="profileId" column="u_p_profile_id"/>
+        <result property="bio" column="u_p_bio"/>
+        <result property="updateTime" column="u_p_update_time"/>
+    </resultMap>
+    <resultMap id="UserLevelMap" type="ESUserLevel" >
+        <id property="levelId" column="u_l_level_id"/>
+        <result property="level" column="u_l_level"/>
+        <result property="levelName" column="u_l_level_name"/>
+        <result property="requiredExperience" column="u_l_required_experience"/>
+        <result property="privilegeDescription" column="u_l_privilege_description"/>
+    </resultMap>
+    <resultMap id="profileMap" type="ESProfile" >
+        <id property="profileId" column="p_profile_id"/>
+        <result property="userId" column="p_user_id"/>
+        <result property="lastName" column="p_last_name"/>
+        <result property="firstName" column="p_first_name"/>
+        <result property="region" column="p_region"/>
+        <result property="location" column="p_location"/>
+        <result property="graduationDepartment" column="p_graduation_department"/>
+        <result property="major" column="p_major"/>
+        <result property="graduationYear" column="p_graduation_year"/>
+        <result property="updateTime" column="p_update_time" />
+    </resultMap>
+    <!--客户端查询用户信息Map, 同步ES-->
     <!--Map-->
 
     <!--Select-->
-        <!--查询所有状态正常的用户-->
-        <select id="getAllUser" resultMap="getAllUserMap">
-            select
-                id,
-                account,
-                email,
-                nickname,
-                gender,
-                birthday,
-                role_id,
-                level_id,
-                experience,
-                register_time,
-                status_id,
-                create_id,
-                create_time,
-                update_id,
-                update_time
-            from user
-            where status_id != '1755493103987208193'
-        </select>
-        <!--查询所有状态正常的用户-->
-        <!--根据账号查询邮箱-->
-        <select id="getEmailByAccount" resultType="String" parameterType="String">
-            select
-                email
-            from user
-            where account = #{value}
-        </select>
-        <!--根据账号查询邮箱-->
+    <!--查询所有状态正常的用户-->
+    <select id="getAllUser" resultMap="getAllUserMap">
+        select id,
+               account,
+               email,
+               nickname,
+               gender,
+               birthday,
+               role_id,
+               level_id,
+               experience,
+               register_time,
+               status_id,
+               create_id,
+               create_time,
+               update_id,
+               update_time
+        from user
+        where status_id != '1755493103987208193'
+    </select>
+    <!--查询所有状态正常的用户-->
+    <!--根据账号查询邮箱-->
+    <select id="getEmailByAccount" resultType="String" parameterType="String">
+        select email
+        from user
+        where account = #{value}
+    </select>
+    <!--根据账号查询邮箱-->
+    <!--客户端查询用户信息-->
+    <select id="getClientUserByUserId" resultMap="getClientUserByUserIdMap" parameterType="String">
+        SELECT u.id                     as u_id,
+               u.nickname               as u_nickname,
+               u.gender                 as u_gender,
+               u.birthday               as u_birthday,
+               u.update_time            as u_update_time,
+               u.experience             as u_experience,
+               ua.avatars_id            as u_a_avatars_id,
+               ua.user_id               as u_a_user_id,
+               ua.update_time           as u_a_update_time,
+               ua.file_name             as u_a_file_name,
+               ua.file_size             as u_a_file_size,
+               up.profile_id            as u_p_profile_id,
+               up.bio                   as u_p_bio,
+               up.update_time           as u_p_update_time,
+               ul.level_id              as u_l_level_id,
+               ul.`level`               as u_l_level,
+               ul.level_name            as u_l_level_name,
+               ul.required_experience   as u_l_required_experience,
+               ul.privilege_description as u_l_privilege_description,
+               p.profile_id             as p_profile_id,
+               p.user_id                as p_user_id,
+               p.last_name              as p_last_name,
+               p.first_name             as p_first_name,
+               p.region                 as p_region,
+               p.location               as p_location,
+               p.graduation_department  as p_graduation_department,
+               p.major                  as p_major,
+               p.graduation_year        as p_graduation_year,
+               p.update_time            as p_update_time
+        FROM user u
+                 LEFT JOIN user_avatars ua ON ua.avatars_id = u.avatars_id
+                 LEFT JOIN user_profile up ON up.profile_id = u.profile_id
+                 LEFT JOIN user_level ul ON ul.level_id = u.level_id
+                 LEFT JOIN (
+            SELECT
+                user_id,
+                profile_id,
+                update_time,
+                ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY update_time DESC) as rn
+            FROM `profile`
+        ) latest_profile ON latest_profile.user_id = u.id AND latest_profile.rn = 1
+                 LEFT JOIN `profile` p ON p.profile_id = latest_profile.profile_id
+        WHERE u.id = #{id};
+    </select>
+    <!--客户端查询用户信息-->
+    <!--客户端查询用户信息,同步ES使用-->
+    <select id="getClientUserES" resultMap="getClientUserByUserIdESMap">
+        SELECT u.id                     as u_id,
+               u.nickname               as u_nickname,
+               u.gender                 as u_gender,
+               u.birthday               as u_birthday,
+               u.update_time            as u_update_time,
+               u.experience             as u_experience,
+               ua.avatars_id            as u_a_avatars_id,
+               ua.user_id               as u_a_user_id,
+               ua.update_time           as u_a_update_time,
+               ua.file_name             as u_a_file_name,
+               ua.file_size             as u_a_file_size,
+               up.profile_id            as u_p_profile_id,
+               up.bio                   as u_p_bio,
+               up.update_time           as u_p_update_time,
+               ul.level_id              as u_l_level_id,
+               ul.`level`               as u_l_level,
+               ul.level_name            as u_l_level_name,
+               ul.required_experience   as u_l_required_experience,
+               ul.privilege_description as u_l_privilege_description,
+               p.profile_id             as p_profile_id,
+               p.user_id                as p_user_id,
+               p.last_name              as p_last_name,
+               p.first_name             as p_first_name,
+               p.region                 as p_region,
+               p.location               as p_location,
+               p.graduation_department  as p_graduation_department,
+               p.major                  as p_major,
+               p.graduation_year        as p_graduation_year,
+               p.update_time            as p_update_time
+        FROM user u
+                 LEFT JOIN user_avatars ua ON ua.avatars_id = u.avatars_id
+                 LEFT JOIN user_profile up ON up.profile_id = u.profile_id
+                 LEFT JOIN user_level ul ON ul.level_id = u.level_id
+                 LEFT JOIN (
+            SELECT
+                user_id,
+                profile_id,
+                update_time,
+                ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY update_time DESC) as rn
+            FROM `profile`
+        ) latest_profile ON latest_profile.user_id = u.id AND latest_profile.rn = 1
+                 LEFT JOIN `profile` p ON p.profile_id = latest_profile.profile_id;
+
+    </select>
+    <!--客户端查询用户信息,同步ES使用-->
     <!--Select-->
 
     <!--Update-->

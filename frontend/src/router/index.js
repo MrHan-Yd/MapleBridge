@@ -123,6 +123,9 @@ const router = createRouter({
                 }
             ]
         } , {
+            path: '/',
+            redirect: '/frontend-index' // 将匹配到的路径重定向到 /frontend-index,
+        } , {
             path: '/unauthorized',
             name: 'unauthorized',
             component: () => import('@/views/backend/system/UnauthorizedPage.vue')

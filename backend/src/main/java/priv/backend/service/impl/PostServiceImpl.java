@@ -101,7 +101,9 @@ public class PostServiceImpl implements PostService {
             }
 
             /* TODO: Written by - Han Yongding 2024/04/03 如果有图片则写出文件，最少有一张图片的意思 */
-            if (vo.getList().get(0).isEmpty()) {
+            if (vo.getList() == null) {
+                /* TODO: Written by - Han Yongding 2024/04/03 将PostId传递给RabbitMq，由它去消费同步到ES中 */
+                amqpTemplate.convertAndSend("postSyncES", viewObject.getPostId()) ;
                 /* TODO: Written by - Han Yongding 2024/04/03 没有图片，不需要写出，业务结束(发布成功) */
                 return null ;
             }

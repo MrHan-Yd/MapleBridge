@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.UserProfileMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+
+    <!--Map-->
+
+    <!--Select-->
+        <!--根据profileId查询对应简介-->
+        <select id="getUserProfileByProfileId" resultType="UserProfile" parameterType="String" >
+            select
+                profile_id,
+                bio,
+                update_time
+            from user_profile
+            where profile_id = #{profileId}
+        </select>
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

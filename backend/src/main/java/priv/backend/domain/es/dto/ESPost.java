@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import priv.backend.domain.BaseData;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 @Document(indexName = "maple_bridge_post")
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true) // Model中需要添加此行代码，否则检索时可能会报错
-public class ESPost {
+public class ESPost implements BaseData {
     @Id
     private String postId ;
     @Field(type = FieldType.Text)

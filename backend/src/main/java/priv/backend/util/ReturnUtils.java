@@ -40,6 +40,19 @@ public class ReturnUtils {
         return message == null ? RestBean.success() : RestBean.failure(400, message);
     }
 
+    /**
+     * 处理带有返回值的操作，根据操作结果生成 RestBean。
+     *
+     * @param vo       要处理的对象
+     * @param function 用于执行具体操作并返回消息的函数式接口
+     * @param <T>      输入对象的类型
+     * @param <K>      输出对象的类型
+     * @return 如果携带数据，则携带数据返回成功的 RestBean；否则返回包含错误消息的 RestBean。
+     */
+    public static <T, K> RestBean<K> messageHandleData(T vo, Function<T, K> function) {
+        return messageHandleData(() -> function.apply(vo));
+    }
+
 
     /**
      * 处理返回数据的工具方法，根据返回的对象类型判断是否为空，如果为空则返回未查询到数据的提示。

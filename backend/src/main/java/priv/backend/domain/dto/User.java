@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.NoArgsConstructor;
 import priv.backend.domain.BaseData;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
  */
 @Data
 @TableName("user")
+@NoArgsConstructor
 public class User implements BaseData {
     @TableId(type = IdType.ASSIGN_ID)
     private String id ;
@@ -33,7 +35,7 @@ public class User implements BaseData {
     @TableField("gender")
     private String gender ;
     @TableField("birthday")
-    private Timestamp birthday ;
+    private Date birthday ;
     @TableField("avatars_id")
     private String avatarsId ;
     @TableField("profile_id")
@@ -55,6 +57,24 @@ public class User implements BaseData {
     @TableField("update_id")
     private String updateId ;
     @TableField("update_time")
-    private Timestamp updateTime ;
+    private Date updateTime ;
+
+    public User(String id,
+                String nickname,
+                String gender,
+                Date birthday,
+                String avatarsId,
+                String profileId,
+                String updateId,
+                Date updateTime) {
+        this.id = id ;
+        this.nickname = nickname ;
+        this.gender = gender ;
+        this.birthday = birthday ;
+        this.avatarsId = avatarsId ;
+        this.profileId = profileId ;
+        this.updateId = updateId ;
+        this.updateTime = updateTime ;
+    }
 
 }
