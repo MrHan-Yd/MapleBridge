@@ -44,7 +44,7 @@ function dateFormat(date) {
 function momentFormatDate(dateString) {
     return moment(dateString).format('YYYY-MM-DD') ;
 }
-
+/* 显示日日期格式 */
 function showDateFormat(date) {
     const birthdayDate = new Date(date);
     // 获取年月日部分
@@ -55,6 +55,7 @@ function showDateFormat(date) {
     return `${year}-${month}-${day}`;
 }
 
+/* 显示的日期时间格式 */
 function showDateTimeFormat(isoDateTimeString) {
     const date = new Date(isoDateTimeString);
     const year = date.getFullYear();
@@ -65,11 +66,27 @@ function showDateTimeFormat(isoDateTimeString) {
     const seconds = String(date.getSeconds()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+/* 格式化数字 */
+function formatNumber(num, type) {
+    if (type === 'num') {
+        if (num < 10000) {
+            return num.toString();
+        } else {
+            return (num / 10000).toFixed(1) + 'w+';
+        }
+    } else {
+        return num.toString() + '%';
+    }
+
+}
+
 export {
     formatDate,
     formatTime,
     dateFormat,
     showDateFormat,
     showDateTimeFormat,
-    momentFormatDate
+    momentFormatDate,
+    formatNumber
 }

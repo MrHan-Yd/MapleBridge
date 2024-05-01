@@ -48,7 +48,13 @@
     <!--Insert-->
 
     <!--Delete-->
-
+        <!--根据postId和用户ID删除点赞记录-->
+        <delete id="deleteLikeByPostIdAndUserId" parameterType="String" >
+            DELETE FROM `like`
+            WHERE post_id = #{postId}
+            AND user_id = #{userId}
+        </delete>
+        <!--根据postId和用户ID删除点赞记录-->
     <!--Delete-->
 
 </mapper>

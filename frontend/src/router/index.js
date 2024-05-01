@@ -90,6 +90,18 @@ const router = createRouter({
                     path: '/backend-index-post',
                     name: 'backend-index-post',
                     component: () => import('@/views/backend/index/PostPage.vue')
+                } , {
+                    path: '/backend-index-data-analysis',
+                    name: 'backend-index-data-analysis',
+                    component: () => import('@/views/backend/index/DataAnalysisPage.vue')
+                } , {
+                    path: '/backend-index-alumni-map',
+                    name: 'backend-index-alumni-map',
+                    component: () => import('@/views/backend/index/AlumniMapPage.vue')
+                } , {
+                    path: '/backend-index-multidimensional-data-analysis',
+                    name: 'backend-index-multidimensional-data-analysis',
+                    component: () => import('@/views/backend/index/MultidimensionalDataAnalysisPage.vue')
                 }
             ]
         } , {
@@ -124,7 +136,7 @@ const router = createRouter({
             ]
         } , {
             path: '/',
-            redirect: '/frontend-index' // 将匹配到的路径重定向到 /frontend-index,
+            redirect: '/frontend-index-home' // 将匹配到的路径重定向到 /frontend-index,
         } , {
             path: '/unauthorized',
             name: 'unauthorized',
@@ -150,8 +162,10 @@ router.beforeEach((to, from, next) => {
     /* 判断是否登录 */
     const isUnauthorized = unauthorized();
 
+
+    // console.log(!isUnauthorized) ;
     /* 如果用户已经登录了，还要访问登录页面*/
-    if ((to.name.startsWith("backend-welcome") || to.name.startsWith("frontend-welcome")) && !isUnauthorized) {
+    if ((to.name.startsWith("backend-welcome") || to.fullPath.startsWith("/frontend-welcome")) && !isUnauthorized) {
         if (userRole === "ADMIN") {
             next("/backend-index");
         } else {
@@ -174,6 +188,7 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
+
 });
 
 export default router

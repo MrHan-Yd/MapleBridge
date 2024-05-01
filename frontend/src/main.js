@@ -15,6 +15,9 @@ import 'element-plus/theme-chalk/dark/css-vars.css' ;
 /* 滚动条样式 */
 import '@/assets/css/global.css';
 
+/* 引入echarts */
+import echarts from './util/echarts' ;
+
 /* 配置后端服务器接口 */
 axios.defaults.baseURL = 'http://localhost:9999/' ;
 
@@ -27,6 +30,17 @@ app.use(router) ;
 app.use(ElementPlus, {
     locale: zhCn
 }) ;
+
+/* echarts 挂在到Vue实例中 */
+/**
+ * 注意：app.config.globalProperties 和 app.provide('$echarts', echarts) 二选一即可
+ * Vue.prototype.$echarts = echarts; -> vue2的挂载方式
+ */
+
+/* vue3的挂载方式（一个用于注册能够被应用内所有组件实例访问到的全局属性的对象。） */
+app.config.globalProperties.$echarts = echarts;
+/* vue3采用provide, inject方式使用 */
+app.provide('$echarts', echarts);
 
 /* 使用自定义组件，ICON */
 app.component('MyIcon', MyIcon) ;

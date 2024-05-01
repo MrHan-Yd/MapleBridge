@@ -9,31 +9,98 @@
     <!--SQL-->
 
     <!--Map-->
-        <resultMap id="getAllCommentByPostIdMap" type="ESComment" >
-            <id property="commentId" column="comment_id" />
-            <result property="postId" column="post_id" />
-            <result property="userId" column="user_id" />
-            <result property="content" column="content" />
-            <result property="timestamp" column="timestamp" />
-            <result property="likeCount" column="like_count" />
-            <collection property="likes" ofType="ESLike" column="comment_id"
-                        select="priv.backend.mapper.LikeMapper.getESCommentLikeByCommentId" />
-        </resultMap>
+    <resultMap id="getAllCommentByPostIdMap" type="ESComment">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="content" column="content"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="replyId" column="reply_id"/>
+        <result property="version" column="version"/>
+        <association property="user" javaType="ESUser">
+            <id property="userId" column="user_id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="path" column="path"/>
+            <result property="fileName" column="file_name"/>
+            <result property="level" column="level"/>
+            <result property="levelName" column="level_name"/>
+        </association>
+        <collection property="likes" ofType="ESLike" column="comment_id"
+                    select="priv.backend.mapper.LikeMapper.getESCommentLikeByCommentId"/>
+        <collection property="subComments" column="id" ofType="ESComment"
+                    select="priv.backend.mapper.CommentMapper.getAllCommentByCommentId" />
+    </resultMap>
+    <resultMap id="getAllCommentByCommentIdMap" type="ESComment">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="content" column="content"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="replyId" column="reply_id"/>
+        <result property="version" column="version"/>
+        <association property="user" javaType="ESUser">
+            <id property="userId" column="user_id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="path" column="path"/>
+            <result property="fileName" column="file_name"/>
+            <result property="level" column="level"/>
+            <result property="levelName" column="level_name"/>
+        </association>
+        <collection property="likes" ofType="ESLike" column="comment_id"
+                    select="priv.backend.mapper.LikeMapper.getESCommentLikeByCommentId"/>
+    </resultMap>
     <!--Map-->
 
     <!--Select-->
-        <!--根据ID查询所有评论-->
-        <select id="getAllCommentByPostId" resultMap="getAllCommentByPostIdMap" >
-            SELECT
-                comment_id,
-                post_id,
-                user_id,
-                content,
-                `timestamp`,
-                like_count
-            FROM `comment`
-            WHERE post_id = #{postId}
-        </select>
+    <!--根据ID查询所有评论-->
+    <select id="getAllCommentByPostId" resultMap="getAllCommentByPostIdMap">
+        SELECT c.id           as id,
+               c.post_id      as post_id,
+               u.id           as user_id,
+               u.nickname     as nickname,
+               ua.avatar_path as path,
+               ua.file_name   as file_name,
+               ul.`level`     as `level`,
+               ul.level_name  as level_name,
+               c.content      as content,
+               c.`timestamp`  as `timestamp`,
+               c.like_count   as like_count,
+               c.comment_id   as comment_id,
+               c.reply_id     as reply_id,
+               c.version      as version
+        FROM `comment` C
+                 LEFT JOIN `user` u on u.id = c.user_id
+                 LEFT JOIN `user_avatars` ua on ua.avatars_id = u.avatars_id
+                 LEFT JOIN `user_level` ul on ul.level_id = u.level_id
+        WHERE post_id = #{postId}
+          AND comment_id = ''
+          AND reply_id = ''
+    </select>
+    <select id="getAllCommentByCommentId" resultMap="getAllCommentByCommentIdMap">
+    SELECT c.id           as id,
+    c.post_id      as post_id,
+    u.id           as user_id,
+    u.nickname     as nickname,
+    ua.avatar_path as path,
+    ua.file_name   as file_name,
+    ul.`level`     as `level`,
+    ul.level_name  as level_name,
+    c.content      as content,
+    c.`timestamp`  as `timestamp`,
+    c.like_count   as like_count,
+    c.comment_id   as comment_id,
+    c.reply_id     as reply_id,
+    c.version      as version
+    FROM `comment` C
+    LEFT JOIN `user` u on u.id = c.user_id
+    LEFT JOIN `user_avatars` ua on ua.avatars_id = u.avatars_id
+    LEFT JOIN `user_level` ul on ul.level_id = u.level_id
+    WHERE comment_id = #{commentId}
+    AND comment_id != ''
+    AND reply_id != ''
+</select>
     <!--Select-->
 
     <!--Update-->

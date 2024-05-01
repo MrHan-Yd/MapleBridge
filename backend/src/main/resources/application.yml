@@ -13,13 +13,19 @@ spring:
     # Security 过滤器优先级默认-100，此处可以不用设置，是为了方便学习
     filter:
       order: -100
+      # 3秒内访问不能操作50次，单位：秒
+      max-request-limit-time: 3
+      # 限制时间内请求不能超过50次
+      max-request-limit: 50
+      # 违规封禁时间，单位：秒
+      ban-time: 30
     jwt:
       # Token KEY
       token_key: WGjFZaFYUh1yQKZVwgSZA5Zr1nhBWi37
       # 刷新Token KEY
       refresh_token: mWJnDDQW5hWCMcn0vaENxeTdv2A4Ybm8
       # 分
-      expire: 5
+      expire: 120
       # 天
       refresh_expire: 7
 

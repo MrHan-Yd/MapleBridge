@@ -55,11 +55,11 @@ const rule = {
       required: true, message: '请输入登录密码'
     }
   ],
-  // code: [
-  //   {
-  //     required: 4strue, message: '请输入验证码'
-  //   }
-  // ]
+  code: [
+    {
+      required: true, message: '请输入验证码'
+    }
+  ]
 }
 
 /* 用户登录 */

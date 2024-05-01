@@ -20,10 +20,10 @@ import java.sql.Timestamp;
 @TableName("comment")
 public class Comment implements BaseData {
     @TableId(type = IdType.ASSIGN_ID)
-    private String commentId ;
+    private String id ;
     @TableField("post_id")
     private String postId ;
-    @TableField("post_id")
+    @TableField("user_id")
     private String userId ;
     @TableField("content")
     private String content ;
@@ -31,5 +31,11 @@ public class Comment implements BaseData {
     private Timestamp timestamp ;
     @TableField("like_count")
     private String likeCount ;
+    @TableField("comment_id")
+    private String commentId ;
+    @TableField("reply_id")
+    private String replyId ;
+    @TableField("version")
+    private double version ;
 
 }

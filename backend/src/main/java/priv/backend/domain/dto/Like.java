@@ -16,7 +16,7 @@ import java.util.Date;
  * @CreateDate :  2024-04-01 15:11
  */
 @Data
-@TableName("like")
+@TableName("`like`")
 public class Like {
     @TableId(type = IdType.ASSIGN_ID)
     private String likeId ;

@@ -4,7 +4,7 @@ import {ElMessageBox} from "element-plus";
 import {CirclePlus, Connection, Link, Search} from "@element-plus/icons-vue";
 import {post, get, put, delete_, getUserId} from "@/net/NetWork";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
-import {formatDate} from "@/util/FromatDate" ;
+import {formatDate} from "@/util/FormatData" ;
 import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 查询表单 */
@@ -461,7 +461,6 @@ function getShowAndHide(permissionId) {
 
 <style scoped>
 #permission {
-  margin-left: 7px;
   margin-right: 7px;
   margin-bottom: 10px;
   background-color: white;

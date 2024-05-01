@@ -35,4 +35,6 @@ public class Post implements BaseData {
     private String likeCount;
     @TableField("comment_count")
     private String commentCount;
+    @TableField("version")
+    private Double version;
 }

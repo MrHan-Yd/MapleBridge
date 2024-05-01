@@ -16,4 +16,7 @@ import java.util.List;
 public interface CommentMapper extends BaseMapper<Comment> {
     /* TODO: Written by - Han Yongding 2024/04/01 根据帖子ID查询所有评论 */
     List<ESComment> getAllCommentByPostId(String postId) ;
+
+    /* TODO: Written by - Han Yongding 2024/05/01 根据帖子ID和评论ID查询其子评论 */
+    List<ESComment>getAllCommentByCommentId(String commentId) ;
 }

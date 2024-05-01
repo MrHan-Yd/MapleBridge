@@ -1,6 +1,8 @@
 package priv.backend.service;
 
+import priv.backend.domain.dto.Comment;
 import priv.backend.domain.es.dto.ESComment;
+import priv.backend.domain.vo.request.RestCommentVO;
 
 import java.util.List;
 
@@ -14,4 +16,8 @@ import java.util.List;
 public interface CommentService {
     /* TODO: Written by - Han Yongding 2024/04/01 根据帖子Id查询所有评论 */
     List<ESComment> getAllCommentByPostId(String postId) ;
+
+    /* TODO: Written by - Han Yongding 2024/04/30 新增评论 */
+
+    String addComment(Comment vo) ;
 }

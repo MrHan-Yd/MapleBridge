@@ -2,8 +2,6 @@
 import {logout} from "@/net/Login";
 import router from "@/router" ;
 import {
-  Document,
-  Setting,
   DataLine,
   Odometer,
   TurnOff,
@@ -77,33 +75,31 @@ const handleClose = (key, keyPath) => {
       <el-row style="margin-top: 5px; height: 100%;">
         <el-col :span="3" style="background-color: white; height: 100%;  overflow-x: hidden; overflow-y: scroll;">
           <el-menu
-              default-active="1-1"
+              default-active="1"
               class="el-menu-vertical-demo"
               @open="handleOpen"
               @close="handleClose"
           >
-            <el-sub-menu index="1" >
-              <template #title>
-                <my-icon name="icon-yibiaopan" />
-                <span>仪表盘</span>
-              </template>
-                <el-menu-item index="1-1">
-                  <el-icon><DataLine /></el-icon>
-                  <span @click="router.push('backend-index-workbench')">工作台</span>
-                </el-menu-item>
-            </el-sub-menu>
+            <el-menu-item index="1" @click="router.push('backend-index-workbench')" >
+              <el-icon><DataLine /></el-icon>
+                <span>工作台</span >
+            </el-menu-item>
             <el-sub-menu index="2">
               <template #title>
                 <el-icon><Odometer /></el-icon>
                 <span>数据可视化</span>
               </template>
-              <el-menu-item index="2-1">
+              <el-menu-item index="2-1" @click="router.push('/backend-index-data-analysis')">
                 <my-icon name="icon-shujufenxi"/>
-                <span @click="router.push('/backend-index-user-level')">数据分析</span>
+                <span>数据分析</span>
               </el-menu-item>
-              <el-menu-item index="2-2">
+              <el-menu-item index="2-2" @click="router.push('/backend-index-alumni-map')">
+                <my-icon name="icon-ditu"/>
+                <span>校友地图</span>
+              </el-menu-item>
+              <el-menu-item index="2-3" @click="router.push('/backend-index-multidimensional-data-analysis')">
                 <my-icon name="icon-duoweishujufenxi"/>
-                <span @click="router.push('/backend-index-user-level')">多维数据分析</span>
+                <span>多维数据分析</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="3">
@@ -111,17 +107,17 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-gonggaoguanli" />
                 <span>公告管理</span>
               </template>
-              <el-menu-item index="3-1">
+              <el-menu-item index="3-1" @click="router.push('/backend-index-announcement')">
                 <my-icon name="icon-navicon-gggl"/>
-                <span @click="router.push('/backend-index-announcement')">平台公告管理</span>
+                <span>平台公告管理</span>
               </el-menu-item>
-              <el-menu-item index="3-2">
+              <el-menu-item index="3-2" @click="router.push('/backend-index-announcement-types')">
                 <my-icon name="icon-gonggaoleixingguanli"/>
-                <span @click="router.push('/backend-index-announcement-types')">公告类型管理</span>
+                <span>公告类型管理</span>
               </el-menu-item>
-              <el-menu-item index="3-3">
+              <el-menu-item index="3-3" @click="router.push('/backend-index-announcement-status')">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-index-announcement-status')">公告状态管理</span>
+                <span>公告状态管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="4">
@@ -129,17 +125,17 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-yonghu"/>
                 <span>用户管理</span>
               </template>
-              <el-menu-item index="4-1">
+              <el-menu-item index="4-1"  @click="router.push('/backend-index-user')">
                 <my-icon name="icon-yonghuguanli"/>
-                <span @click="router.push('/backend-index-user')">平台用户管理</span>
+                <span>平台用户管理</span>
               </el-menu-item>
-              <el-menu-item index="4-2">
+              <el-menu-item index="4-2" @click="router.push('/backend-index-user-status')">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-index-user-status')">用户状态管理</span>
+                <span>用户状态管理</span>
               </el-menu-item>
-              <el-menu-item index="4-3">
+              <el-menu-item index="4-3" @click="router.push('/backend-index-work-types')">
                 <my-icon name="icon-gongzuo" />
-                <span @click="router.push('/backend-index-work-types')">工作类型管理</span>
+                <span>工作类型管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="5">
@@ -147,13 +143,13 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-guanliyuan_jiaoseguanli"/>
                 <span>角色管理</span>
               </template>
-              <el-menu-item index="5-1">
+              <el-menu-item index="5-1" @click="router.push('/backend-index-role')">
                 <my-icon name="icon-jiaoseguanli"/>
-                <span @click="router.push('/backend-index-role')">平台角色管理</span>
+                <span>平台角色管理</span>
               </el-menu-item>
-              <el-menu-item index="5-2">
+              <el-menu-item index="5-2" @click="router.push('/backend-index-role-status')">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-index-role-status')">角色状态管理</span>
+                <span>角色状态管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="6">
@@ -161,13 +157,13 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-quanxianguanli-" />
                 <span>权限管理</span>
               </template>
-              <el-menu-item index="6-1">
+              <el-menu-item index="6-1" @click="router.push('/backend-index-permission')">
                 <my-icon name="icon-authority"/>
-                <span @click="router.push('/backend-index-permission')">平台权限管理</span>
+                <span>平台权限管理</span>
               </el-menu-item>
-              <el-menu-item index="6-2">
+              <el-menu-item index="6-2" @click="router.push('/backend-index-permission-status')">
                 <el-icon><TurnOff /></el-icon>
-                <span @click="router.push('/backend-index-permission-status')">权限状态管理</span>
+                <span>权限状态管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="7">
@@ -175,9 +171,9 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-menhu_yonghudengjiguanli"/>
                 <span>等级管理</span>
               </template>
-              <el-menu-item index="7-1">
+              <el-menu-item index="7-1" @click="router.push('/backend-index-user-level')">
                 <my-icon name="icon-dengjiguanli1"/>
-                <span @click="router.push('/backend-index-user-level')">平台等级管理</span>
+                <span>平台等级管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="8">
@@ -185,9 +181,9 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-fankuiguanli1"/>
                 <span>反馈管理</span>
               </template>
-              <el-menu-item index="8-1">
+              <el-menu-item index="8-1" @click="router.push('/backend-index-feedback')">
                 <my-icon name="icon-fankuiguanli"/>
-                <span @click="router.push('/backend-index-feedback')">平台反馈管理</span>
+                <span>平台反馈管理</span>
               </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="9">
@@ -195,23 +191,15 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-tieziguanli"/>
                 <span>帖子管理</span>
               </template>
-              <el-menu-item index="9-1">
+              <el-menu-item index="9-1" @click="router.push('/backend-index-post')">
                 <my-icon name="icon-tieziguanli1"/>
-                <span @click="router.push('/backend-index-post')">平台帖子管理</span>
+                <span>平台帖子管理</span>
               </el-menu-item>
-              <el-menu-item index="9-2">
+              <el-menu-item index="9-2" @click="router.push('/backend-index-post-types')">
                 <my-icon name="icon-type" />
-                <span @click="router.push('/backend-index-post-types')">帖子类型管理</span>
+                <span>帖子类型管理</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="10" disabled>
-              <el-icon><document /></el-icon>
-              <span>Navigator Three</span>
-            </el-menu-item>
-            <el-menu-item index="11">
-              <el-icon><setting /></el-icon>
-              <span>Navigator Four</span>
-            </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :span="21">
@@ -243,9 +231,7 @@ const handleClose = (key, keyPath) => {
 }
 
 #top {
-  //background-color: burlywood;
   height: 80px;
-  //height: calc(100% * 20 / 100) ;
   width: 100%;
   background-color: white;
   align-items: center; /* 垂直居中 */
@@ -282,11 +268,8 @@ const handleClose = (key, keyPath) => {
 }
 
 #bottom {
-  //height: calc(100% * 20) ;
   height: 88.5vh;
   width: 100%;
-  //background-color: white ;
-  //background-color: pink;
 }
 
 .centered-content {

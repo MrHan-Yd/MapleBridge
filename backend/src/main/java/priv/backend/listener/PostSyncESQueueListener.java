@@ -44,7 +44,7 @@ public class PostSyncESQueueListener {
 
     @RabbitHandler
     public void postSyncElasticsearch(String postId) {
-        LogUtils.info(this.getClass(),"发布帖子，队列执行：post表同步Elasticsearch任务开始");
+        LogUtils.info(this.getClass(),"队列执行：post表同步Elasticsearch任务开始");
         // 记录开始时间
         TimeUtils.start();
         /* TODO: Written by - Han Yongding 2024/04/03 从数据库中获取数据 */
@@ -70,9 +70,9 @@ public class PostSyncESQueueListener {
         }
 
         /* TODO: Written by - Han Yongding 2024/04/03 同步成功 */
-        LogUtils.info(this.getClass(),"发布帖子，队列执行：post表数据已同步至Elasticsearch");
+        LogUtils.info(this.getClass(),"队列执行：post表数据已同步至Elasticsearch");
         /* TODO: Written by - Han Yongding 2024/04/03 计算同步耗时 */
         LogUtils.info(this.getClass(),"同步耗时" + TimeUtils.getCurrentTime(TimeUtils.getStartTime()));
-        LogUtils.info(this.getClass(),"发布帖子，队列执行完毕：post表同步Elasticsearch任务结束");
+        LogUtils.info(this.getClass(),"队列执行完毕：post表同步Elasticsearch任务结束");
     }
 }

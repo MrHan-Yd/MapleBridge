@@ -9,85 +9,151 @@
     <!--SQL-->
 
     <!--Map-->
-    <resultMap id="getPagePostMap" type="RespPostVO" >
+    <resultMap id="getPagePostMap" type="RespPostVO">
         <id property="postId" column="post_id"/>
-        <result property="userId" column="user_id" />
-        <result property="topic" column="topic" />
-        <result property="content" column="content" />
-        <result property="timestamp" column="timestamp" />
-        <result property="linkCount" column="link_count" />
-        <result property="commentCount" column="comment_count" />
+        <result property="userId" column="user_id"/>
+        <result property="topic" column="topic"/>
+        <result property="content" column="content"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="linkCount" column="link_count"/>
+        <result property="commentCount" column="comment_count"/>
         <association property="types" column="type_id"
-                     select="priv.backend.mapper.TypesPostMapper.getTypesPostById" />
+                     select="priv.backend.mapper.TypesPostMapper.getTypesPostById"/>
     </resultMap>
-    <resultMap id="getAllPostSynchronizationESMap" type="ESPost" >
-        <id property="postId" column="post_id" />
-        <result property="userId" column="user_id" />
-        <result property="nickname" column="nickname" />
-        <result property="topic" column="topic" />
-        <result property="content" column="content" />
-        <result property="timestamp" column="timestamp" />
-        <result property="likeCount" column="like_count" />
-        <result property="commentCount" column="comment_count" />
+    <resultMap id="getAllPostSynchronizationESMap" type="ESPost">
+        <id property="postId" column="post_id"/>
+        <result property="topic" column="topic"/>
+        <result property="content" column="content"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="commentCount" column="comment_count"/>
+        <association property="user" javaType="ESUser" >
+            <id property="userId" column="user_id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="path" column="path"/>
+            <result property="fileName" column="file_name"/>
+            <result property="level" column="level"/>
+            <result property="levelName" column="level_name"/>
+        </association>
         <association property="type" column="type_id"
-                     select="priv.backend.mapper.TypesPostMapper.getESPostTypeByTypeId" />
+                     select="priv.backend.mapper.TypesPostMapper.getESPostTypeByTypeId"/>
     </resultMap>
     <!--Map-->
 
     <!--Select-->
-        <!--获取所有帖子-->
-        <select id="getPagePost" resultMap="getPagePostMap" >
-            select
-                post_id,
-                user_id,
-                topic,
-                content,
-                timestamp,
-                type_id,
-                like_count,
-                comment_count
-            from post
-        </select>
-        <!--获取所有帖子-->
-        <!-- 查询 所有帖子，用于同步到ES-->
-        <select id="getAllPostSyncES" resultMap="getAllPostSynchronizationESMap" >
-            SELECT
-                p.post_id as post_id,
-                p.user_id as user_id,
-                u.nickname as nickname,
-                p.topic as topic,
-                p.type_id as type_id,
-                p.content as content,
-                p.`timestamp` as `timestamp`,
-                p.like_count as like_count,
-                p.comment_count as comment_count
-            FROM `post` p
-                     left join `user` u
-                               on p.user_id = u.id
-        </select>
-        <!-- 查询 所有帖子，用于同步到ES-->
-        <!--根据postId查询对应帖子，同步到ES-->
-        <select id="getPostByPostIdSyncES" resultType="ESPost" parameterType="String" >
-            SELECT
-                p.post_id as post_id,
-                p.user_id as user_id,
-                u.nickname as nickname,
-                p.topic as topic,
-                p.type_id as type_id,
-                p.content as content,
-                p.`timestamp` as `timestamp`,
-                p.like_count as like_count,
-                p.comment_count as comment_count
-            FROM `post` p
-                     left join `user` u
-                               on p.user_id = u.id
-            where post_id = #{postId}
-        </select>
-        <!--根据postId查询对应帖子，同步到ES-->
+    <!--获取所有帖子-->
+    <select id="getPagePost" resultMap="getPagePostMap">
+        select post_id,
+               user_id,
+               topic,
+               content,
+               timestamp,
+               type_id,
+               like_count,
+               comment_count
+        from post
+    </select>
+    <!--获取所有帖子-->
+    <!-- 查询 所有帖子，用于同步到ES-->
+    <select id="getAllPostSyncES" resultMap="getAllPostSynchronizationESMap">
+        SELECT p.post_id       as post_id,
+               p.user_id       as user_id,
+               u.nickname      as nickname,
+               ua.avatar_path  as path,
+               ua.file_name    as file_name,
+               ul.`level`      as `level`,
+               ul.`level_name` as level_name,
+               p.topic         as topic,
+               p.type_id       as type_id,
+               p.content       as content,
+               p.`timestamp`   as `timestamp`,
+               p.like_count    as like_count,
+               p.comment_count as comment_count,
+               p.version       as version
+        FROM `post` p
+                 left join `user` u
+                           on p.user_id = u.id
+                 left join `user_avatars` ua
+                           on ua.avatars_id = u.avatars_id
+                 left join `user_level` ul
+                           on ul.level_id = u.level_id
+    </select>
+    <!-- 查询 所有帖子，用于同步到ES-->
+    <!--根据postId查询对应帖子，同步到ES-->
+    <select id="getPostByPostIdSyncES" resultMap="getAllPostSynchronizationESMap" parameterType="String">
+        SELECT p.post_id       as post_id,
+               p.user_id       as user_id,
+               u.nickname      as nickname,
+               ua.avatar_path  as path,
+               ua.file_name    as file_name,
+               ul.`level`      as `level`,
+               ul.`level_name` as level_name,
+               p.topic         as topic,
+               p.type_id       as type_id,
+               p.content       as content,
+               p.`timestamp`   as `timestamp`,
+               p.like_count    as like_count,
+               p.comment_count as comment_count,
+               p.version       as version
+        FROM `post` p
+                 left join `user` u
+                           on p.user_id = u.id
+                 left join `user_avatars` ua
+                           on ua.avatars_id = u.avatars_id
+                 left join `user_level` ul
+                           on ul.level_id = u.level_id
+        where post_id = #{postId}
+    </select>
+    <!--根据postId查询对应帖子，同步到ES-->
+    <!--根据PostId查询点赞数量和版本号-->
+    <select id="getLikeAndVersionByPostId" resultType="Post" parameterType="String">
+        SELECT like_count,
+               version
+        FROM post
+        WHERE post_id = #{postId}
+    </select>
+    <!--根据PostId查询点赞数量和版本号-->
+    <!--根据PostId查询评论数量和版本号-->
+    <select id="getCommentAndVersionByPostId" resultType="Post" parameterType="String">
+        SELECT comment_count,
+               version
+        FROM post
+        WHERE post_id = #{postId}
+    </select>
+    <!--根据PostId查询评论数量和版本号-->
     <!--Select-->
 
     <!--Update-->
-
+    <!--根据postId和version更新点赞数量-->
+    <update id="updateLikeAndVersionByPostId" parameterType="RestCountVO">
+        UPDATE
+            post
+        SET like_count = like_count + 1,
+            version    = version + 0.1
+        WHERE post_id = #{id}
+          AND version = #{version}
+    </update>
+    <!--根据postId和version更新点赞数量-->
+    <!--根据postId和version更新点赞数量-->
+    <update id="updateUnLikeAndVersionByPostId" parameterType="RestCountVO">
+        UPDATE
+            post
+        SET like_count = like_count - 1,
+            version    = version + 0.1
+        WHERE post_id = #{id}
+          AND version = #{version}
+    </update>
+    <!--根据postId和version更新点赞数量-->
+    <!--根据postId和version更新评论数量-->
+    <update id="updateCommentAndVersionByPostId" parameterType="Post">
+        UPDATE
+            post
+        SET comment_count = comment_count + 1,
+            version = version + 0.1
+        WHERE post_id = #{postId}
+          AND version = #{version}
+    </update>
+    <!--根据postId和version更新评论数量-->
     <!--Update-->
 
     <!--Insert-->

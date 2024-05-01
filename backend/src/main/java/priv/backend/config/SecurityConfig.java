@@ -108,7 +108,7 @@ public class SecurityConfig {
                     conf
 //                            .requestMatchers("/api/auth/*", "/api/auth/*/*", "error").permitAll() // 允许访问 "/api/auth/*" 和 "/error" 路径的请求
 //                            .requestMatchers("/upload/**").hasAnyRole("ADMIN", "USER") // 管理员和普通用户可以访问服务器static目录下的静态资源
-                            .requestMatchers("/upload/**").permitAll() // 管理员和普通用户可以访问服务器static目录下的静态资源
+                            .requestMatchers("/upload/**").permitAll() // 所有用户可以访问服务器static目录下的静态资源
 //                            .requestMatchers("/api/auth/backend-admin/*").hasAuthority("ROLE_SUPER_ADMIN") // 需要 "role_admin" 权限才能访问 "/api/auth/backend-admin" 路径
                             .anyRequest().authenticated(); // 其他请求需要进行身份验证
 

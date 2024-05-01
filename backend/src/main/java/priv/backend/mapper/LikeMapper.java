@@ -2,7 +2,9 @@ package priv.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import priv.backend.domain.dto.Like;
+import priv.backend.domain.dto.Post;
 import priv.backend.domain.es.dto.ESLike;
+import priv.backend.domain.vo.request.RestCountVO;
 
 import java.util.List;
 
@@ -19,4 +21,7 @@ public interface LikeMapper extends BaseMapper<Like> {
 
     /* TODO: Written by - Han Yongding 2024/04/01 根据评论唯一标识查询点赞情况 */
     List<ESLike> getESCommentLikeByCommentId(String commentId) ;
+
+    /* TODO: Written by - Han Yongding 2024/04/15 删除点赞记录 */
+    Integer deleteLikeByPostIdAndUserId(String postId, String userId) ;
 }

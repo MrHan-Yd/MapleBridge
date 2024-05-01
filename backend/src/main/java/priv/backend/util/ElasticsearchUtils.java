@@ -3,6 +3,7 @@ package priv.backend.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.dto.FilePosts;
+import priv.backend.domain.es.dto.ESComment;
 import priv.backend.domain.es.dto.ESFilePost;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.service.impl.CommentServiceImpl;
@@ -47,7 +48,31 @@ public class ElasticsearchUtils {
     /* TODO: Written by - Han Yongding 2024/04/04 帖子数据处理，补充 */
     public  ESPost ESPostDataHandle(ESPost post) {
         /* TODO: Written by - Han Yongding 2024/04/03 帖子评论数据 */
-        post.setComment(commentService.getAllCommentByPostId(post.getPostId()));
+        List<ESComment> allCommentByPostId = commentService.getAllCommentByPostId(post.getPostId())
+                .stream()
+                .peek(c -> {
+                    c.getUser().setPath(
+                            uploadUtils.generateAccessPath(
+                                    c.getUser()
+                                            .getUserId(),
+                                    c.getUser()
+                                            .getPath()));
+                    c.setSubComments(
+                            c.getSubComments()
+                                    .stream()
+                                    .peek(d -> {
+                                        d.getUser()
+                                                .setPath(
+                                                        uploadUtils
+                                                                .generateAccessPath(
+                                                                        d.getUser()
+                                                                                .getUserId(),
+                                                                        d.getUser()
+                                                                                .getPath()));
+                                    }).toList());
+                }).toList();
+        post.setComment(allCommentByPostId);
+        /* TODO: Written by - Han Yongding 2024/04/30 帖子评论用户信息 */
         /* TODO: Written by - Han Yongding 2024/04/03 帖子点赞数据 */
         post.setLike(likeService.getPostLikeByPostId(post.getPostId()));
         /* TODO: Written by - Han Yongding 2024/04/03 帖子文件数据 */
@@ -57,8 +82,11 @@ public class ElasticsearchUtils {
                     ESFilePost viewObject = l.asViewObject(ESFilePost.class);
                     viewObject.setUrl(uploadUtils.generateAccessPath(l.getUserId(), "post/" + post.getPostId()) + l.getFileName() + l.getFileSuffix());
                     return viewObject;
-                }).toList();
+                })
+                .toList();
         post.setFilePost(esFilePosts);
+        /* TODO: Written by - Han Yongding 2024/04/27 帖子发布用户信息 */
+        post.getUser().setPath(uploadUtils.generateAccessPath(post.getUser().getUserId(), post.getUser().getPath()));
         /* TODO: Written by - Han Yongding 2024/04/04 返回处理好的数据 */
         return post ;
     }

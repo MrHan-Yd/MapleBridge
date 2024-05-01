@@ -1,7 +1,14 @@
 <script setup>
 import { get } from "@/net/NetWork";
-import { ref, provide } from "vue";
+import { ref, provide, onMounted } from "vue";
 import SkeletonPostData from "@/components/SkeletonPostData.vue";
+
+/* 登录用户信息 */
+const props = defineProps({
+  userInfo: {
+    type: Object,
+  }
+})
 
 /* 默认选中推荐 */
 const activeIndex = ref('1');
@@ -46,7 +53,7 @@ const skeletonPost = function (rs) {
     </div>
     <div id="bottom">
       <div class="content" v-if="whetherShow">
-        <SkeletonPostData @whetherShow="skeletonPost" bottom-text="底部" />
+        <SkeletonPostData @whetherShow="skeletonPost" :user="userInfo" bottom-text="底部" />
       </div>
       <div class="content" v-else>
         <el-skeleton :rows="calculateSkeletonRows()" animated />

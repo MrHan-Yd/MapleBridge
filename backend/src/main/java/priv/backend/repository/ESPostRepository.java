@@ -16,7 +16,7 @@ import priv.backend.domain.es.dto.ESPost;
 @Repository
 public interface ESPostRepository extends ElasticsearchRepository<ESPost, String> {
     /* TODO: Written by - Han Yongding 2024/03/31 根据作用名称搜索 */
-    Page<ESPost> findByNickname(String name, Pageable pageable) ;
+//    Page<ESPost> findByNickname(String name, Pageable pageable) ;
     /* TODO: Written by - Han Yongding 2024/03/31 搜索标题 */
     Page<ESPost> findByTopic(String title, Pageable pageable) ;
     /* TODO: Written by - Han Yongding 2024/03/31 内容包含标题 */

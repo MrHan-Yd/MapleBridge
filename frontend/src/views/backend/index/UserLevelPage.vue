@@ -420,7 +420,6 @@ function getShowAndHide(levelId) {
 
 <style scoped>
 #user_level {
-  margin-left: 7px;
   margin-right: 7px;
   margin-bottom: 10px;
   background-color: white;

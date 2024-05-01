@@ -2,6 +2,8 @@ package priv.backend.util;
 
 import lombok.extern.slf4j.Slf4j;
 import priv.backend.enumeration.DataBaseEnum;
+import priv.backend.enumeration.DoubleEnum;
+import priv.backend.enumeration.IntegerEnum;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -69,6 +71,16 @@ public class CurrentUtils {
     /* TODO: Written by - Han Yongding 2024/04/01 长度比较 */
     public static boolean sizeWhetherUnequal(long sizeA, long sizeB) {
         return sizeA != sizeB ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 版本号更新 */
+    public static Double versionUpdate(Double version) {
+        return version + DoubleEnum.VERSION.value;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 计数更新 */
+    public static Integer countUpdate(Integer count) {
+        return count + IntegerEnum.COUNT.value;
     }
 
 }

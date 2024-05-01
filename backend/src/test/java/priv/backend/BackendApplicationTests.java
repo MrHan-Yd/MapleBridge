@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import priv.backend.domain.PageBean;
 import priv.backend.enumeration.StatusEnum;
+import priv.backend.util.CurrentUtils;
 
 import java.security.SecureRandom;
 
@@ -43,6 +44,20 @@ class BackendApplicationTests {
     void PageTest() {
         PageBean pageBean = new PageBean() ;
         System.out.println(pageBean);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 版本更新 */
+    @Test
+    void selfIncreasing() {
+        Double a = 0.9 ;
+        System.out.println(CurrentUtils.versionUpdate(a));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 点赞更新 */
+    @Test
+    void updateLikes() {
+        Integer a = 1 ;
+        System.out.println(CurrentUtils.countUpdate(a));
     }
 
 

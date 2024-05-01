@@ -65,7 +65,7 @@ const emailConfirm = (usernameOrEmail, code, success, failure) => {
     try {
         get(`api/auth/email-confirm?accountOrEmail=${usernameOrEmail}&code=${code}`, (rs) => {
             success(rs) ;
-            ElSuccess(rs.message) ;
+            // ElSuccess(rs.message) ;
         });
     } catch (error) {
         failure(error) ;

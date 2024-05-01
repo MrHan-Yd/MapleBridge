@@ -34,6 +34,7 @@ function takeAccessToken() {
     }
     /* 拿到了封装回authObj */
     const authObj = JSON.parse(str);
+
     /* 令牌过期时间 */
     let accessTokenExpire = new Date(authObj.accessTokenExpire);
     /* 刷新令牌过期时间 */
@@ -136,6 +137,18 @@ function getUserRole() {
     const authObj = JSON.parse(str);
     return authObj.role.roleName;
 
+}
+/* 获取用户名称 */
+function getUserAccount() {
+    const str = localStorage.getItem(accessAuthItem) || sessionStorage.getItem(accessAuthItem);
+    /* 如果都没有拿到则没有保存，返回null */
+    if (!str) {
+        return null;
+    }
+
+    /* 拿到了封装回authObj */
+    const authObj = JSON.parse(str);
+    return authObj.account;
 }
 
 /* 获取登录用户唯一标识 */
@@ -329,5 +342,6 @@ export {
     getUserRole,
     getUserId,
     getUserName,
-    getAllParameters
+    getAllParameters,
+    getUserAccount
 }

@@ -49,10 +49,6 @@ public class MailQueueListener {
                     MailSendUtils.createMessage("校友会登录验证邮件",
                             "您好，您正在登录校友会平台，验证码:" + code + "有效时间3分钟，如非本人操作，请尽快重置密码。",
                             email, userName) ;
-            case "registerSuccess" ->
-                    MailSendUtils.createMessage("校友会注册邮件",
-                            "欢迎注册校友会平台，您的初始密码为:xyh123456，请尽快登录平台修改密码，以确保账号安全",
-                            email, userName) ;
             default -> null ;
         } ;
         /* TODO: Written by - Han Yongding 2023/08/13 如果没有对应的类型 */

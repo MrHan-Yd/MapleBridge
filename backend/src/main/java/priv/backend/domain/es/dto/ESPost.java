@@ -24,10 +24,8 @@ import java.util.List;
 public class ESPost implements BaseData {
     @Id
     private String postId ;
-    @Field(type = FieldType.Text)
-    private String userId ;
-    @Field(type = FieldType.Text)
-    private String nickname ;
+    @Field(type = FieldType.Nested, includeInParent = true)
+    private ESUser user ;
     @Field(type = FieldType.Text)
     private String topic ;
     @Field(type = FieldType.Text)
@@ -46,4 +44,6 @@ public class ESPost implements BaseData {
     private List<ESComment> comment ;
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<ESLike> like ;
+    @Field(type = FieldType.Double)
+    private double version ;
 }

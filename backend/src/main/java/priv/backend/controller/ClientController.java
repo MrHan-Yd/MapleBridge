@@ -2,12 +2,15 @@ package priv.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.vo.request.RestClientUserVO;
+import priv.backend.domain.vo.request.RestCommentVO;
+import priv.backend.domain.vo.request.RestCountVO;
 import priv.backend.domain.vo.request.RestPostsVO;
 import priv.backend.service.es.impl.ESPostServiceImpl;
 import priv.backend.service.impl.PostServiceImpl;
@@ -87,7 +90,7 @@ public class ClientController {
         return ReturnUtils.messageHandleData(pageBean, esPostService::getAllESPost) ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/04/07 根据用户ID查询相应信息 */
+    /* TODO: Written by - Han Yongding 2024/04/07 根据用户ID查询相应信息 ES */
     @GetMapping("user/{userId}")
     public RestBean<Object> getClientUserByUserId(@PathVariable("userId")String userId) {
         return ReturnUtils.messageHandleData(() -> userService.getClientUserById(userId)) ;
@@ -99,9 +102,21 @@ public class ClientController {
         return ReturnUtils.messageHandleData(userLevelService::getAllUserLevel) ;
     }
 
-    /* TODO: Written by - Han Yongding 2024/04/10 前端修改个人信息 */
+    /* TODO: Written by - Han Yongding 2024/04/10 客户端修改个人信息 */
     @PutMapping("user")
     public RestBean<Void> updateUser(@ModelAttribute RestClientUserVO vo) {
         return ReturnUtils.messageHandle(vo, userService::updateClientUserById) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 客户端点赞 */
+    @PutMapping("like")
+    public RestBean<Void> like(@RequestBody @Validated RestCountVO vo) {
+        return ReturnUtils.messageHandle(vo, postService::likePost) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/30 发布评论 */
+    @PostMapping("comment")
+    public RestBean<String> addComment(@RequestBody @Validated RestCommentVO vo) {
+        return ReturnUtils.messageHandleData(vo, postService::commentPost) ;
     }
 }

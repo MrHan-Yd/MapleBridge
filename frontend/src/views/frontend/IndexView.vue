@@ -6,8 +6,9 @@ import {logout} from "@/net/Login";
 import router from "@/router";
 import {get, post, put, getUserId, postFormData} from "@/net/NetWork";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
-import {dateFormat} from "@/util/FromatDate";
-import * as FromatDate from "@/util/FromatDate";
+import {dateFormat} from "@/util/FormatData";
+import * as FromatDate from "@/util/FormatData";
+import {ElTag} from "element-plus";
 
 /* 页面打开时默认调用 */
 onMounted(() => {
@@ -190,7 +191,7 @@ const checkFileType = (file) => {
 const personalCenterDialogVisible = ref(false);
 
 const personalCenterDialog = () => {
-  /* 重置我为编辑状态 */
+  /* 重置为编辑状态 */
   personalCenterOperationButton.value = true;
   /* 显示对话框 */
   personalCenterDialogVisible.value = true;
@@ -252,7 +253,7 @@ function getLevel() {
             /* 计算经验值百分比 */
             levelData.currentExperiencePercentage = (relativeExp / (upperBound - lowerBound)) * 100; // 经验值百分比
           } else {
-            /* 级最高 */
+            /* 等级最高 */
             levelData.onlineExperienceValue = level.value[i].requiredExperience;
             /* 下一级名称 */
             levelData.nextLevelName = '最高等级';
@@ -551,11 +552,13 @@ const handlePictureCardPreviewImg = () => {
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <el-dialog v-model="personalCenterDialogVisible" title="个人中心" width="700" draggable top="0.6vh">
+            <el-dialog v-model="personalCenterDialogVisible" title="个人中心" width="700" top="0.6vh">
               <div class="personalCenter" v-if="userData">
                 <div id="top">
                   <div id="left">
-                    <p>LV {{ levelData.level }}</p>
+                    <p>
+                      <el-tag size="small">LV {{ levelData.level }}</el-tag>
+                    </p>
                     <p>{{ userData.level.levelName }}</p>
                   </div>
                   <div id="middle">
@@ -776,7 +779,7 @@ const handlePictureCardPreviewImg = () => {
     <div id="box_bottom">
       <div id="box_bottom_content">
         <div id="bottom_content_left">
-          <router-view v-slot="{ Component }">
+          <router-view :userInfo="userData" v-slot="{ Component }">
             <!--过渡动画-->
             <transition name="el-fade-in-linear" mode="out-in">
               <div :key="$route.path">
@@ -807,7 +810,7 @@ const handlePictureCardPreviewImg = () => {
               <el-dialog v-model="dialogVisible" title="分享中心" width="664" draggable>
                 <el-scrollbar height="400px">
                   <el-form :model="postForm" :rules="rule" ref="formRef">
-                    <el-form-item prop="typeId">
+                    <el-form-item prop="typeId" v-if="postTypes">
                       <span>选择分享类型</span>
                       <el-select
                           v-model="postForm.typeId"
@@ -1032,7 +1035,7 @@ const handlePictureCardPreviewImg = () => {
 
     #left {
       height: 100%;
-      width: 20%;
+      width: 30%;
       display: flex;
       -webkit-justify-content: flex-end;
       justify-content: flex-end;

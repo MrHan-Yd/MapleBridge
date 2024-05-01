@@ -14,11 +14,15 @@ import java.util.List;
  */
 @Data
 public class ESComment {
-    private String commentId ;
+    private String id ;
     private String postId ;
-    private String userId ;
+    private ESUser user ;
     private String content ;
     private Date timestamp ;
     private String likeCount ;
     private List<ESLike> likes ;
+    private String commentId;
+    private String replyId ;
+    private List<ESComment> subComments ;
+    private double version ;
 }

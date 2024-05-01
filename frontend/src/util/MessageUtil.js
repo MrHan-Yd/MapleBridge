@@ -1,4 +1,5 @@
 import { ElNotification } from "element-plus";
+import { ElMessage } from 'element-plus'
 import { h } from 'vue'
 
 /* 常用通知 */
@@ -34,4 +35,11 @@ function ElError(message) {
     })
 }
 
-export {ElSuccess, ElWarning, ElError}
+function ElWarningMessage(message) {
+    ElMessage({
+        message: message,
+        type: 'warning',
+    })
+}
+
+export {ElSuccess, ElWarning, ElError, ElWarningMessage}
