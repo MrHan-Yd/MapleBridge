@@ -187,7 +187,7 @@ const data = [{name:"测试",value:1000},{name:"测试2",value:2000},{name:"测�
                     icon="icon-tiezi"
                     icon-color="#7699f8"
                     title="线上总内容"
-                    value="1234567"
+                    value="7757"
                     unit="篇"
                 />
               </el-col>
@@ -196,7 +196,7 @@ const data = [{name:"测试",value:1000},{name:"测试2",value:2000},{name:"测�
                     icon="icon-dianzan"
                     icon-color="#7699f8"
                     title="线上总点赞"
-                    value="123456"
+                    value="6576"
                     unit="个"
                 />
               </el-col>
@@ -205,7 +205,7 @@ const data = [{name:"测试",value:1000},{name:"测试2",value:2000},{name:"测�
                     icon="icon-pinglun1"
                     icon-color="#7699f8"
                     title="日新增评论"
-                    value="12345"
+                    value="574"
                     unit="条"
                 />
               </el-col>

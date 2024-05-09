@@ -80,39 +80,53 @@ const indexMethod = (index) => {
 }
 const tableData = [
   {
-    author: '我滴乖',
+    author: '作者1',
     content: formatNumber(3331, "num"),
-    like: formatNumber(312312, "num"),
+    like: formatNumber(33321, "num"),
   },
   {
-    author: '姬霓太美',
+    author: '作者2',
     content: formatNumber(2331, "num"),
     like: formatNumber(23321, "num"),
   },
   {
-    author: '让我再写一篇',
+    author: '作者3',
     content: formatNumber(1001, "num"),
     like: formatNumber(12331,"num"),
   },
   {
-    author: '用魔法打败魔法',
-    content: formatNumber(558,"num"),
+    author: '作者4',
+    content: formatNumber(568,"num"),
     like: formatNumber(1997, "num"),
   },
   {
-    author: '我爱学习',
+    author: '作者5',
     content: formatNumber(558,"num"),
-    like: formatNumber(1997, "num"),
+    like: formatNumber(1243, "num"),
   },
   {
-    author: '啊对对对对',
-    content: formatNumber(558,"num"),
-    like: formatNumber(1997, "num"),
+    author: '作者6',
+    content: formatNumber(548,"num"),
+    like: formatNumber(1443, "num"),
   },
   {
-    author: '是嘛是嘛是嘛',
-    content: formatNumber(558,"num"),
-    like: formatNumber(1997, "num"),
+    author: '作者7',
+    content: formatNumber(533,"num"),
+    like: formatNumber(233, "num"),
+  },{
+    author: '作者8',
+    content: formatNumber(434,"num"),
+    like: formatNumber(175, "num"),
+  },
+  ,{
+    author: '作者9',
+    content: formatNumber(343,"num"),
+    like: formatNumber(202, "num"),
+  },
+  ,{
+    author: '作者10',
+    content: formatNumber(255,"num"),
+    like: formatNumber(57, "num"),
   },
 ]
 </script>
@@ -124,7 +138,7 @@ const tableData = [
         <el-col :span="6">
           <data-analysis-assembly
               title="访问总量"
-              value="123123"
+              value="57757"
               riseAndFall="rise"
               comparedToYesterday="208"
               :data="totalNumberOfVisitors"
@@ -133,7 +147,7 @@ const tableData = [
         <el-col :span="6">
           <data-analysis-assembly
               title="内容总发布量"
-              value="1235567"
+              value="35553"
               riseAndFall="rise"
               comparedToYesterday="311"
               type="bar"
@@ -143,7 +157,7 @@ const tableData = [
         <el-col :span="6">
           <data-analysis-assembly
               title="评论总量"
-              value="3311"
+              value="2334"
               riseAndFall="fall"
               comparedToYesterday="151"
               :data="totalComment"
@@ -152,7 +166,7 @@ const tableData = [
         <el-col :span="6">
           <data-analysis-assembly
               title="点赞总量"
-              value="123455"
+              value="4565"
               riseAndFall="flat"
               type="pie"
               :data="totalLike"

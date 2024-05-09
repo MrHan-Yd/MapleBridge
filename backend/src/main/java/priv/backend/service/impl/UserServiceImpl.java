@@ -17,18 +17,18 @@ import priv.backend.domain.dto.User;
 import priv.backend.domain.dto.UserAvatars;
 import priv.backend.domain.dto.UserProfile;
 import priv.backend.domain.es.dto.ESClientUser;
+import priv.backend.domain.mongo.dto.MongoUserPreferences;
+import priv.backend.domain.mongo.vo.RestMongoPostTypeVO;
 import priv.backend.domain.vo.request.RestClientUserVO;
 import priv.backend.domain.vo.request.RestUserVO;
 import priv.backend.domain.vo.response.RespUserVO;
 import priv.backend.enumeration.DataBaseEnum;
+import priv.backend.enumeration.KafkaTopicEnum;
 import priv.backend.mapper.UserLevelMapper;
 import priv.backend.mapper.UserMapper;
 import priv.backend.repository.ESClientUserRepository;
 import priv.backend.service.UserService;
-import priv.backend.util.CurrentUtils;
-import priv.backend.util.LogUtils;
-import priv.backend.util.RandomStringUtil;
-import priv.backend.util.UploadUtils;
+import priv.backend.util.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -409,9 +409,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 this.saveOrUpdate(new User(id, nickname, gender, birthday, avatarsId, profileId, id, CurrentUtils.getTheCurrentSystemTime()))) ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/05/08 注入Kafka工具类 */
+    @Resource
+    private KafkaProducerUtils kafkaUtils ;
+
     /* TODO: Written by - Han Yongding 2024/04/11 根据用户ID查询用户信息，同步ES使用 */
     @Override
     public ESClientUser getClientUserByUserId(String userId) {
         return mapper.getClientUserByUserId(userId) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/08 收集用户喜好 */
+    @Override
+    public String collectUserHobby(RestMongoPostTypeVO vo) {
+        kafkaUtils.sendMessage(KafkaTopicEnum.COLLECT_USER_PREFERENCES.topic, vo.asViewObject(MongoUserPreferences.class)) ;
+        return null ;
     }
 }

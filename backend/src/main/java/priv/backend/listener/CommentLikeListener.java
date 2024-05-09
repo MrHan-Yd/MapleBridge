@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import priv.backend.domain.dto.Post;
+import priv.backend.domain.dto.Comment;
 import priv.backend.domain.vo.request.RestCountVO;
+import priv.backend.service.impl.CommentServiceImpl;
 import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.util.LogUtils;
 import priv.backend.util.TimeUtils;
@@ -16,29 +16,33 @@ import priv.backend.util.TimeUtils;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : 帖子点赞重试监听器
- * @CreateDate :  2024-04-15 13:47
+ * @Description : 评论点赞重试监听器
+ * @CreateDate :  2024-05-05 9:35
  */
 @Component
 @Slf4j
-@RabbitListener(queues = "postLikeRetry")
-public class PostLikeListener {
+@RabbitListener(queues = "commentLikeRetry")
+public class CommentLikeListener {
 
-    /* TODO: Written by - Han Yongding 2024/04/15 注入帖子业务层实现类 */
-    private final PostServiceImpl postService;
+    /* TODO: Written by - Han Yongding 2024/05/05 注入评论业务层实现类 */
+    private final CommentServiceImpl commentService;
 
-    /* TODO: Written by - Han Yongding 2024/04/15 注入post队列，用于同步更新帖子数据*/
+    /* TODO: Written by - Han Yongding 2024/05/05 注入post队列，用于同步更新帖子数据*/
     private final AmqpTemplate amqpTemplate ;
 
-    @Autowired
-    public PostLikeListener(PostServiceImpl postService,
-                            AmqpTemplate amqpTemplate) {
-        this.postService = postService;
+    /* TODO: Written by - Han Yongding 2024/05/05 插入帖子表业务层 */
+    private final PostServiceImpl postService ;
+
+    public CommentLikeListener(CommentServiceImpl commentService,
+                               AmqpTemplate amqpTemplate,
+                               PostServiceImpl postService) {
+        this.commentService = commentService;
         this.amqpTemplate = amqpTemplate;
+        this.postService = postService;
     }
 
     @RabbitHandler
-    public void receivePostLikeRetry(RestCountVO vo) {
+    public void receiveCommentLikeRetry(RestCountVO vo) {
         /* TODO: Written by - Han Yongding 2024/04/15 记录开始时间 */
         TimeUtils.start();
 
@@ -69,7 +73,7 @@ public class PostLikeListener {
             /* TODO: Written by - Han Yongding 2024/04/15 更新点赞数量和版本号，如果成功则退出循环 */
 
             LogUtils.info(this.getClass(), "正在尝试更新点赞数量和版本号");
-            updated = postService.updateLikeAndVersionByPostId(vo);
+            updated = commentService.updateCommentAndVersionById(vo);
 
             /* TODO: Written by - Han Yongding 2024/04/15 成功则同步更新单条数据 */
             amqpTemplate.convertAndSend("postSyncES", vo.getId()) ;
@@ -79,10 +83,10 @@ public class PostLikeListener {
 
                 LogUtils.info(this.getClass(), "正在获取最新版本号");
                 /* TODO: Written by - Han Yongding 2024/04/15 如果更新失败，获取最新版本号并重试 */
-                Post post = postService.getLikeAndVersionByPostId(vo.getId());
-                if (post != null) {
+                Comment comment = commentService.getCommentLikeCountById(vo.getCommentId());
+                if (comment != null) {
                     LogUtils.info(this.getClass(), "最新版本号获取成功");
-                    vo.setVersion(post.getVersion());
+                    vo.setVersion(comment.getVersion());
                 }
                 LogUtils.info(this.getClass(), "等待进行下次重试");
                 /* TODO: Written by - Han Yongding 2024/04/15 重试次数加一 */

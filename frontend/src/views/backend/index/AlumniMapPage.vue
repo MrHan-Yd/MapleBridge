@@ -2,7 +2,6 @@
 import { ref,nextTick, onMounted } from 'vue';
 import china from '@/json/china.json';
 import * as echarts from 'echarts';
-import {formatNumber} from "@/util/FormatData" ;
 /* 地图数据 */
 import map from "@/json/china.json";
 let dataList = ref([]);
@@ -80,9 +79,9 @@ onMounted(()=>{
     {name:'河南省',value:220},
     {name:'湖北省',value:720},
     {name:'湖南省',value:210},
-    {name:'广东省',value:5000},
+    {name:'广东省',value:1377},
     {name:'广西壮族自治区',value:20},
-    {name:'海南省',value:2000},
+    {name:'海南省',value:1023},
     {name:'重庆市',value:20},
     {name:'四川省',value:240},
     {name:'贵州省',value:420},

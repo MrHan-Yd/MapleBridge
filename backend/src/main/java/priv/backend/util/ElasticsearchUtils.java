@@ -23,30 +23,30 @@ import java.util.List;
 public class ElasticsearchUtils {
 
     /* TODO: Written by - Han Yongding 2024/04/01 注入评论表业务层 */
-    private final CommentServiceImpl commentService ;
+    private final CommentServiceImpl commentService;
 
     /* TODO: Written by - Han Yongding 2024/04/01 注入点赞表业务层 */
-    private final LikeServiceImpl likeService ;
+    private final LikeServiceImpl likeService;
 
     /* TODO: Written by - Han Yongding 2024/04/03 注入帖子文件业务层 */
-    private final FilePostServiceImpl filePostService ;
+    private final FilePostServiceImpl filePostService;
 
     /* TODO: Written by - Han Yongding 2024/04/04 上载常用工具类 */
-    private final UploadUtils uploadUtils ;
+    private final UploadUtils uploadUtils;
 
     @Autowired
     public ElasticsearchUtils(CommentServiceImpl commentService,
                               LikeServiceImpl likeService,
                               FilePostServiceImpl filePostService,
                               UploadUtils uploadUtils) {
-        this.commentService = commentService ;
-        this.likeService = likeService ;
-        this.filePostService = filePostService ;
-        this.uploadUtils = uploadUtils ;
+        this.commentService = commentService;
+        this.likeService = likeService;
+        this.filePostService = filePostService;
+        this.uploadUtils = uploadUtils;
     }
 
     /* TODO: Written by - Han Yongding 2024/04/04 帖子数据处理，补充 */
-    public  ESPost ESPostDataHandle(ESPost post) {
+    public ESPost ESPostDataHandle(ESPost post) {
         /* TODO: Written by - Han Yongding 2024/04/03 帖子评论数据 */
         List<ESComment> allCommentByPostId = commentService.getAllCommentByPostId(post.getPostId())
                 .stream()
@@ -61,15 +61,15 @@ public class ElasticsearchUtils {
                             c.getSubComments()
                                     .stream()
                                     .peek(d -> {
-                                        d.getUser()
-                                                .setPath(
-                                                        uploadUtils
-                                                                .generateAccessPath(
-                                                                        d.getUser()
-                                                                                .getUserId(),
-                                                                        d.getUser()
-                                                                                .getPath()));
-                                    }).toList());
+                                                d.getUser().setPath(
+                                                        uploadUtils.generateAccessPath(
+                                                                d.getUser().getUserId(),
+                                                                d.getUser().getPath())
+                                                );
+                                                d.setLikes(likeService.getPostLikeByPostIdAndCommentId(d.getPostId(), d.getId()));
+                                            }
+                                    ).toList());
+                    c.setLikes(likeService.getPostLikeByPostIdAndCommentId(c.getPostId(), c.getId()));
                 }).toList();
         post.setComment(allCommentByPostId);
         /* TODO: Written by - Han Yongding 2024/04/30 帖子评论用户信息 */
@@ -88,6 +88,6 @@ public class ElasticsearchUtils {
         /* TODO: Written by - Han Yongding 2024/04/27 帖子发布用户信息 */
         post.getUser().setPath(uploadUtils.generateAccessPath(post.getUser().getUserId(), post.getUser().getPath()));
         /* TODO: Written by - Han Yongding 2024/04/04 返回处理好的数据 */
-        return post ;
+        return post;
     }
 }

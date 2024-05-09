@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import priv.backend.domain.dto.User;
 import priv.backend.domain.es.dto.ESClientUser;
+import priv.backend.domain.mongo.vo.RestMongoPostTypeVO;
 import priv.backend.domain.vo.request.RestClientUserVO;
 import priv.backend.domain.vo.request.RestUserVO;
 import priv.backend.domain.vo.response.RespUserVO;
@@ -46,4 +47,7 @@ public interface UserService extends IService<User>, UserDetailsService {
 
     /* TODO: Written by - Han Yongding 2024/04/11 根据用户ID查询用户信息，同步ES使用 */
     ESClientUser getClientUserByUserId(String userId) ;
+
+    /* TODO: Written by - Han Yongding 2024/05/08 收集用户喜好 */
+    String collectUserHobby(RestMongoPostTypeVO vo) ;
 }

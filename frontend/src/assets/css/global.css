@@ -1,5 +1,22 @@
 /* global.css */
 
+html, body {
+    /* 对整个页面禁止文字选中 */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 取消图片拖拽同时禁止图片被复制*/
+img {
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* 取消横向滚动条 */
 body {
     overflow-x: hidden;

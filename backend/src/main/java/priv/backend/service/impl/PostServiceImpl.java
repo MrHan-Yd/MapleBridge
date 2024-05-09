@@ -282,12 +282,22 @@ public class PostServiceImpl implements PostService {
                     return "点赞失败，请稍候重试";
                 }
 
-                /* TODO: Written by - Han Yongding 2024/04/15 点赞表插入成功，更新帖子表点赞数量和版本号 */
-                if (updatePostLikeCountAndVersion(vo) != null) {
-                    /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
-                    status.setRollbackOnly();
-                    return "点赞失败，请稍候重试";
+                /* TODO: Written by - Han Yongding 2024/05/05 判断是点赞评论还是帖子 */
+                if (vo.getCommentId() != null) {
+                    if (updateCommentLikeCountAndVersion(vo) != null) {
+                        /* TODO: Written by - Han Yongding 2024/05/05 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "点赞失败，请稍候重试";
+                    }
+                } else {
+                    /* TODO: Written by - Han Yongding 2024/04/15 点赞表插入成功，更新帖子表点赞数量和版本号 */
+                    if (updatePostLikeCountAndVersion(vo) != null) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "点赞失败，请稍候重试";
+                    }
                 }
+
 
                 /* TODO: Written by - Han Yongding 2024/04/15 成功则同步更新单条数据 */
                 amqpTemplate.convertAndSend("postSyncES", vo.getId()) ;
@@ -299,18 +309,35 @@ public class PostServiceImpl implements PostService {
             return unlikePostTemplate.execute(status -> {
                 /* TODO: Written by - Han Yongding 2024/04/15 取消点赞 */
 
-                /* TODO: Written by - Han Yongding 2024/04/15 删除点赞记录失败 */
-                if (this.deleteLikeByPostIdAndUserId(vo.getId(), vo.getUserId()) != null) {
-                    /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
-                    status.setRollbackOnly();
-                    return "取消点赞失败，请稍候重试";
-                }
+                /* TODO: Written by - Han Yongding 2024/05/05 判断是取消点赞评论还是帖子 */
+                if (vo.getCommentId() != null) {
+                    /* TODO: Written by - Han Yongding 2024/05/05 删除点赞记录失败 */
+                    if (this.deleteLikeByCommentIdAndUserId(vo.getCommentId(), vo.getUserId()) != null) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "取消点赞失败，请稍候重试";
+                    }
 
-                /* TODO: Written by - Han Yongding 2024/04/15 点赞表插入成功，更新帖子表点赞数量和版本号 */
-                if (updatePostUnLikeCountAndVersion(vo) != null) {
-                    /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
-                    status.setRollbackOnly();
-                    return "取消点赞失败，请稍候重试";
+                    /* TODO: Written by - Han Yongding 2024/05/05 更新点赞数量和版本号 */
+                    if (updateUnCommentCountAndVersion(vo) != null) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "取消点赞失败，请稍候重试";
+                    }
+                } else {
+                    /* TODO: Written by - Han Yongding 2024/04/15 删除点赞记录失败 */
+                    if (this.deleteLikeByPostIdAndUserId(vo.getId(), vo.getUserId()) != null) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "取消点赞失败，请稍候重试";
+                    }
+
+                    /* TODO: Written by - Han Yongding 2024/04/15 点赞表插入成功，更新帖子表点赞数量和版本号 */
+                    if (updatePostUnLikeCountAndVersion(vo) != null) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 尝试回滚 */
+                        status.setRollbackOnly();
+                        return "取消点赞失败，请稍候重试";
+                    }
                 }
 
                 /* TODO: Written by - Han Yongding 2024/04/15 成功则同步更新单条数据 */
@@ -368,6 +395,102 @@ public class PostServiceImpl implements PostService {
         });
     }
 
+    /* TODO: Written by - Han Yongding 2024/05/05 注入评论表业务层 */
+    @Resource
+    private CommentServiceImpl commentService;
+
+    /* TODO: Written by - Han Yongding 2024/04/15 更新评论表表点赞数量和版本号 */
+    private String updateCommentLikeCountAndVersion(RestCountVO vo) {
+        return likePostTemplate.execute(status -> {
+            if (vo == null) {
+                return "数据为空";
+            }
+
+            boolean updated = false;
+            int maxRetries = 3;
+            int retries = 0;
+
+            /* TODO: Written by - Han Yongding 2024/04/25 使用前端传递过来的版本号进行更新，如果更新失败则重试 */
+            while (!updated && retries < maxRetries) {
+                // 尝试更新
+                updated = commentService.updateCommentAndVersionById(vo);
+
+                if (!updated) {
+                    // 更新失败，尝试获取最新的版本号并重新更新
+                    Comment comment = commentService.getCommentLikeCountById(vo.getCommentId());
+                    if (comment != null) {
+                        vo.setVersion(comment.getVersion());
+                    }
+                    /* TODO: Written by - Han Yongding 2024/04/15 重试次数增加 */
+                    retries++;
+                    try {
+                        Thread.sleep(200); // 重试间隔，可以根据需要调整
+                    } catch (InterruptedException e) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 回滚数据 */
+                        status.setRollbackOnly();
+                        /* TODO: Written by - Han Yongding 2024/04/15 终止线程 */
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+
+            /* TODO: Written by - Han Yongding 2024/04/15 更新失败，扔到队列中让队列处理 */
+            if (!updated) {
+                likeTemplate.convertAndSend("commentLikeRetry", vo) ;
+                return "点赞失败，请稍候重试";
+            }
+
+            /* TODO: Written by - Han Yongding 2024/04/15 更新成功 */
+            return null;
+        });
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 更新评论表表点赞数量和版本号 */
+    private String updateUnCommentCountAndVersion(RestCountVO vo) {
+        return likePostTemplate.execute(status -> {
+            if (vo == null) {
+                return "数据为空";
+            }
+
+            boolean updated = false;
+            int maxRetries = 3;
+            int retries = 0;
+
+            // 使用前端传递过来的版本号进行更新，如果更新失败则重试
+            while (!updated && retries < maxRetries) {
+                // 尝试更新
+                updated = commentService.updateUnCommentAndVersionById(vo);
+
+                if (!updated) {
+                    // 更新失败，尝试获取最新的版本号并重新更新
+                    Comment comment = commentService.getCommentLikeCountById(vo.getCommentId());
+                    if (comment != null) {
+                        vo.setVersion(comment.getVersion());
+                    }
+                    /* TODO: Written by - Han Yongding 2024/04/15 重试次数增加 */
+                    retries++;
+                    try {
+                        Thread.sleep(200); // 重试间隔，可以根据需要调整
+                    } catch (InterruptedException e) {
+                        /* TODO: Written by - Han Yongding 2024/04/15 回滚数据 */
+                        status.setRollbackOnly();
+                        /* TODO: Written by - Han Yongding 2024/04/15 终止线程 */
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+
+            /* TODO: Written by - Han Yongding 2024/04/15 更新失败，扔到队列中让队列处理 */
+            if (!updated) {
+                likeTemplate.convertAndSend("commentUnLikeRetry", vo) ;
+                return "取消点赞失败，请稍候重试";
+            }
+
+            /* TODO: Written by - Han Yongding 2024/04/15 更新成功 */
+            return null;
+        });
+    }
+
     /* TODO: Written by - Han Yongding 2024/04/15 插入点赞表 */
     @Override
     public String insertLike(RestCountVO vo) {
@@ -401,6 +524,23 @@ public class PostServiceImpl implements PostService {
                 return "数据为空";
             }
             if (!likeService.deleteLikeByPostIdAndUserId(postId, userId)) {
+                return "删除失败";
+            }
+
+            /* TODO: Written by - Han Yongding 2024/04/15 删除成功 */
+            return null;
+        }) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 删除点赞记录 */
+    @Override
+    public String deleteLikeByCommentIdAndUserId(String commentId, String userId) {
+        return unlikePostTemplate.execute(status -> {
+            /* TODO: Written by - Han Yongding 2024/04/15 数据为空，不能插入 */
+            if (commentId == null || userId == null) {
+                return "数据为空";
+            }
+            if (!likeService.deleteLikeByCommentIdAndUserId(commentId, userId)) {
                 return "删除失败";
             }
 
@@ -455,9 +595,6 @@ public class PostServiceImpl implements PostService {
         });
     }
 
-    /* TODO: Written by - Han Yongding 2024/04/30 注入评论业务层 */
-    @Resource
-    private CommentServiceImpl commentService;
 
     /* TODO: Written by - Han Yongding 2024/04/30 注入评论事务 */
     @Resource

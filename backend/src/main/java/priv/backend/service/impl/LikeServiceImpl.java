@@ -34,6 +34,12 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
         return likeMapper.getPostLikeByPostId(postId) ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/05/05 根据评论唯一标识符和帖子唯一标识符查询评论点赞情况 */
+    @Override
+    public List<ESLike> getPostLikeByPostIdAndCommentId(String postId, String commentId) {
+        return likeMapper.getPostLikeByPostIdAndCommentId(postId, commentId) ;
+    }
+
     /* TODO: Written by - Han Yongding 2024/04/15 插入帖子点赞记录 */
     @Override
     public boolean insertPostLike(Like like)  {
@@ -44,5 +50,11 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
         /* TODO: Written by - Han Yongding 2024/04/15 根据PostId和userId查询点赞记录 */
     public Boolean deleteLikeByPostIdAndUserId(String postId, String userId) {
         return likeMapper.deleteLikeByPostIdAndUserId(postId, userId) >= 1;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/04/15 根据CommentId和userId删除点赞记录 */
+    @Override
+    public Boolean deleteLikeByCommentIdAndUserId(String commentId, String userId) {
+        return likeMapper.deleteLikeByCommentIdAndUserId(commentId, userId) >= 1;
     }
 }

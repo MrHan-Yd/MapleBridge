@@ -1,13 +1,16 @@
 package priv.backend.controller;
 
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.kafka.support.KafkaUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.es.dto.ESPost;
+import priv.backend.domain.mongo.vo.RestMongoPostTypeVO;
 import priv.backend.domain.vo.request.RestClientUserVO;
 import priv.backend.domain.vo.request.RestCommentVO;
 import priv.backend.domain.vo.request.RestCountVO;
@@ -17,6 +20,7 @@ import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.service.impl.TypesPostServiceImpl;
 import priv.backend.service.impl.UserLevelServiceImpl;
 import priv.backend.service.impl.UserServiceImpl;
+import priv.backend.util.KafkaProducerUtils;
 import priv.backend.util.ReturnUtils;
 
 import java.util.List;
@@ -118,5 +122,12 @@ public class ClientController {
     @PostMapping("comment")
     public RestBean<String> addComment(@RequestBody @Validated RestCommentVO vo) {
         return ReturnUtils.messageHandleData(vo, postService::commentPost) ;
+    }
+
+
+    /* TODO: Written by - Han Yongding 2024/05/07 收集用户喜好数据  */
+    @PostMapping("collect-preference")
+    public RestBean<Void> collectPreference(@RequestBody @Validated RestMongoPostTypeVO vo) {
+        return ReturnUtils.messageHandle(vo, userService::collectUserHobby) ;
     }
 }

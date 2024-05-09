@@ -1,6 +1,5 @@
 <script setup>
-import { get } from "@/net/NetWork";
-import { ref, provide, onMounted } from "vue";
+import { ref } from "vue";
 import SkeletonPostData from "@/components/SkeletonPostData.vue";
 
 /* 登录用户信息 */

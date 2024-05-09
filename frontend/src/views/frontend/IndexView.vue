@@ -1,13 +1,12 @@
 <script setup>
 import {ref, reactive, onMounted} from 'vue'
-import {Delete, Plus, Search, UploadFilled, ZoomIn} from "@element-plus/icons-vue";
+import { Plus, Search} from "@element-plus/icons-vue";
 import MyIcon from "@/components/MyIcon.vue";
 import {logout} from "@/net/Login";
 import router from "@/router";
-import {get, post, put, getUserId, postFormData} from "@/net/NetWork";
+import {get, put, getUserId, postFormData} from "@/net/NetWork";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
-import {dateFormat} from "@/util/FormatData";
-import * as FromatDate from "@/util/FormatData";
+import * as FormatDate from "@/util/FormatData";
 import {ElTag} from "element-plus";
 
 /* 页面打开时默认调用 */
@@ -319,7 +318,7 @@ function editButton() {
   }
 
   if (userData.value.birthday !== null) {
-    personalInformationFromData.birthday = FromatDate.momentFormatDate(userData.value.birthday);
+    personalInformationFromData.birthday = FormatDate.momentFormatDate(userData.value.birthday);
   }
 
   if (userData.value.userProfile !== null) {
@@ -376,7 +375,7 @@ function saveButton() {
   userFormData.append("avatars", personalInformationFromData.avatars);
   userFormData.append("nickname", personalInformationFromData.nickname);
   userFormData.append("gender", personalInformationFromData.gender);
-  userFormData.append("birthday", FromatDate.dateFormat(personalInformationFromData.birthday));
+  userFormData.append("birthday", FormatDate.dateFormat(personalInformationFromData.birthday));
   userFormData.append("profileId", personalInformationFromData.profileId);
   userFormData.append("bio", personalInformationFromData.bio);
   userFormData.append("lastName", personalInformationFromData.lastName);
@@ -617,7 +616,7 @@ const handlePictureCardPreviewImg = () => {
                     </div>
                     <div class="content">
                       <p>生日</p>
-                      <p>{{ userData.birthday === null ? "未填写" : FromatDate.showDateFormat(userData.birthday) }}</p>
+                      <p>{{ userData.birthday === null ? "未填写" : FormatDate.showDateFormat(userData.birthday) }}</p>
                     </div>
                     <div class="content" style="height: 100px;display: flex;align-items: center;text-align: left">
                       <p>简介</p>
@@ -764,7 +763,7 @@ const handlePictureCardPreviewImg = () => {
                   <!--上次更新时间-->
                   <span
                       style="display: inline-block; margin-top: 10px">上次更新时间：{{
-                      userData.updateTime === null ? "暂无更新时间" : FromatDate.showDateTimeFormat(userData.updateTime)
+                      userData.updateTime === null ? "暂无更新时间" : FormatDate.showDateTimeFormat(userData.updateTime)
                     }}</span>
                 </div>
                 <div id="bottom">

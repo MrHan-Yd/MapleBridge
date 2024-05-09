@@ -64,6 +64,24 @@ public class RabbitConfig {
                 .build() ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/05/05 评论表 点赞重试 */
+
+    @Bean("commentLikeRetryQueue")
+    public Queue commentLikeRetryQueue() {
+        return QueueBuilder
+               .durable("commentLikeRetry")
+               .build() ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/05 评论表 取消点赞重试 */
+
+    @Bean("commentUnLikeRetryQueue")
+    public Queue commentUnLikeRetryQueue() {
+        return QueueBuilder
+               .durable("commentUnLikeRetry")
+               .build() ;
+    }
+
     /** TODO: Written by - Han Yongding 2024/02/28 消息转换器 */
     @Bean
     public MessageConverter messageConverter() {

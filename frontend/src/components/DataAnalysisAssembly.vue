@@ -38,7 +38,7 @@ onMounted(() => {
 
   /* 图表开始 */
   const myChatDom = echarts.init(echartsRef.value);
-  let echartsOption = "";
+  let echartsOption ;
   if (props.type === "pie") {
     /* 饼图开始 */
     echartsOption = {

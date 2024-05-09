@@ -13,30 +13,50 @@
     <!--Map-->
 
     <!--Select-->
-        <!--根据帖子唯一标识获取帖子点赞情况-->
-        <select id="getPostLikeByPostId" resultType="ESLike" >
-            SELECT
-                like_id,
-                user_id,
-                post_id,
-                comment_id,
-                `timestamp`
-            FROM `like`
-            WHERE post_id = #{postId}
-            AND comment_id IS NULL
-        </select>
-        <!--根据帖子唯一标识获取帖子点赞情况-->
-        <!--根据评论唯一标识获取点赞情况-->
-        <select id="getESCommentLikeByCommentId" resultType="ESLike" >
-            SELECT
-                like_id,
-                user_id,
-                post_id,
-                comment_id,
-                `timestamp`
-            FROM `like`
-            WHERE comment_id = #{commentId}
-        </select>
+    <!--根据帖子唯一标识获取帖子点赞情况-->
+    <select id="getPostLikeByPostId" resultType="ESLike">
+        SELECT like_id,
+               user_id,
+               post_id,
+               comment_id,
+               `timestamp`
+        FROM `like`
+        WHERE post_id = #{postId}
+          AND comment_id IS NULL
+    </select>
+    <!--根据帖子唯一标识获取帖子点赞情况-->
+    <!--根据帖子唯一标识获取评论点赞情况-->
+    <select id="getPostLikeByPostIdAndCommentId" resultType="ESLike">
+        SELECT like_id,
+               user_id,
+               post_id,
+               comment_id,
+               `timestamp`
+        FROM `like`
+        WHERE post_id = #{postId}
+          AND comment_id = #{commentId}
+
+    </select>
+    <!--根据帖子唯一标识获取帖子点赞情况-->
+    <!--根据评论唯一标识获取点赞情况-->
+    <select id="getESCommentLikeByCommentId" resultType="ESLike">
+        SELECT like_id,
+               user_id,
+               post_id,
+               comment_id,
+               `timestamp`
+        FROM `like`
+        WHERE comment_id = #{commentId}
+    </select>
+    <!--根据评论唯一标识获取点赞情况-->
+    <!--根据评论唯一标识获取版本号和点赞数量-->
+    <select id="getCommentLikeCountById" resultType="Comment">
+        SELECT like_count,
+               version
+        FROM comment
+        WHERE id = #{commentId}
+    </select>
+    <!--根据评论唯一标识获取版本号和点赞数量-->
     <!--Select-->
 
     <!--Update-->
@@ -48,13 +68,22 @@
     <!--Insert-->
 
     <!--Delete-->
-        <!--根据postId和用户ID删除点赞记录-->
-        <delete id="deleteLikeByPostIdAndUserId" parameterType="String" >
-            DELETE FROM `like`
-            WHERE post_id = #{postId}
-            AND user_id = #{userId}
-        </delete>
-        <!--根据postId和用户ID删除点赞记录-->
+    <!--根据postId和用户ID删除点赞记录-->
+    <delete id="deleteLikeByPostIdAndUserId" parameterType="String">
+        DELETE
+        FROM `like`
+        WHERE post_id = #{postId}
+          AND user_id = #{userId}
+    </delete>
+    <!--根据postId和用户ID删除点赞记录-->
+    <!--根据帖子Id和用户ID删除点赞记录-->
+    <delete id="deleteLikeByCommentIdAndUserId" parameterType="String">
+        DELETE
+        FROM `like`
+        WHERE comment_id = #{commentId}
+          AND user_id = #{userId}
+    </delete>
+    <!--根据帖子Id和用户ID删除点赞记录-->
     <!--Delete-->
 
 </mapper>

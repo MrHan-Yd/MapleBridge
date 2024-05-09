@@ -1,5 +1,5 @@
 import axios from 'axios' ;
-import {ElWarning, ElSuccess, ElError} from "@/util/MessageUtil" ;
+import {ElWarning, ElSuccess} from "@/util/MessageUtil" ;
 
 const accessAuthItem = "access_token";
 /* 默认错误方法 */

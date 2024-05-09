@@ -102,9 +102,37 @@
     AND reply_id != ''
 </select>
     <!--Select-->
-
+    <!--根据评论唯一标识获取版本号和点赞数量-->
+    <select id="getCommentLikeCountById" resultType="Comment" >
+        SELECT
+            like_count,
+            version
+        FROM comment
+        WHERE id = #{commentId}
+    </select>
+    <!--根据评论唯一标识获取版本号和点赞数量-->
+    <!--Select-->
     <!--Update-->
-
+    <!--根据评论唯一标识更新点赞状态和version更新点赞数量-->
+    <update id="updateCommentAndVersionById" parameterType="RestCountVO">
+        UPDATE
+            comment
+        SET like_count = like_count + 1,
+            version    = version + 0.1
+        WHERE id = #{commentId}
+          AND version = #{version}
+    </update>
+    <!--根据评论唯一标识更新点赞状态和version更新点赞数量-->
+    <!--根据评论唯一标识更新点赞状态和version更新点赞数量-->
+    <update id="updateUnCommentAndVersionById" parameterType="RestCountVO">
+        UPDATE
+            comment
+        SET like_count = like_count - 1,
+            version    = version + 0.1
+        WHERE id = #{commentId}
+          AND version = #{version}
+    </update>
+    <!--根据评论唯一标识更新点赞状态和version更新点赞数量-->
     <!--Update-->
 
     <!--Insert-->

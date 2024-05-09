@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.Comment;
 import priv.backend.domain.es.dto.ESComment;
+import priv.backend.domain.vo.request.RestCountVO;
 import priv.backend.mapper.CommentMapper;
 import priv.backend.service.CommentService;
 
@@ -39,4 +40,22 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public String addComment(Comment vo) {
         return mapper.insert(vo) == 1 ? vo.getId() : null ;
     }
+
+    /* TODO: Written by - Han Yongding 2024/05/05 根据评论ID和版本号更新点赞数量 */
+    @Override
+    public Boolean updateCommentAndVersionById(RestCountVO vo) {
+        return mapper.updateCommentAndVersionById(vo) == 1 ;
+    }
+    /* TODO: Written by - Han Yongding 2024/05/05 根据评论ID和版本号更新点赞数量 */
+    @Override
+    public Boolean updateUnCommentAndVersionById(RestCountVO vo) {
+        return mapper.updateUnCommentAndVersionById(vo) == 1 ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/05 根据评论id查询点赞数量和版本号 */
+    @Override
+    public Comment getCommentLikeCountById(String id) {
+        return mapper.getCommentLikeCountById(id) ;
+    }
+
 }

@@ -1,12 +1,12 @@
 <script setup>
-import {defineProps, ref, onMounted, computed, reactive} from 'vue';
-import {get, getAllParameters, getUserId, post, put} from '@/net/NetWork' ;
+import {defineProps, ref, computed, reactive} from 'vue';
+import {getAllParameters, getUserId, post, put} from '@/net/NetWork' ;
 import {ElSuccess, ElWarning, ElWarningMessage} from "@/util/MessageUtil";
 import {CaretTop, ChatDotRound, CloseBold, Warning} from "@element-plus/icons-vue";
-import {stringTurnInt} from "@/util/CurrentUtil";
 import {formatNumber} from "@/util/FormatData" ;
 import PostUserAssembly from "@/components/PostUserAssembly.vue";
 import CommentAssembly from "@/components/CommentAssembly.vue";
+import { recordData } from "@/util/CollectingData" ;
 
 /* 分页信息 */
 const page = reactive({
@@ -84,7 +84,7 @@ getPostEs(page);
 const likedPosts = ref({});
 
 // 点赞和取消点赞函数
-function toggleLike(postId, version) {
+function toggleLike(postId, version, typeId) {
   const isPostLiked = likedPosts.value[postId];
 
   // 根据当前状态决定执行点赞或取消点赞操作
@@ -100,6 +100,8 @@ function toggleLike(postId, version) {
     });
   } else {
     // 点赞
+    // /* 记录收集用户偏好类型 */
+    recordData(typeId) ;
     put("api/index/like", {id: postId, userId: getUserId(), version: version, type: 'like'}, (rs) => {
       if (rs.code === 200) {
         // 更新帖子点赞数
@@ -163,6 +165,8 @@ function toggleCommentButton() {
 
 /* 点击查看帖子详情 */
 function check(item) {
+  /* 收集用户偏好类型 */
+  recordData(item.type.typeId) ;
   dialogCommentButton.value = false;
   dialogVisible.value = true;
   dialogTitle.value = item.topic;
@@ -280,6 +284,8 @@ function submitComment() {
         /* 清空回复表单 */
         deleteReplyForm();
         commentForm.content = '';
+        commentForm.commentId =  '';
+        commentForm.replyId =  '';
         ElSuccess("发布成功");
       } else {
         ElWarning(rs.message);
@@ -336,11 +342,11 @@ function deleteReplyForm() {
     </div>
     <div class="bottom">
       <!--      {{ bottomText }}-->
-      <el-button @click="toggleLike(item.postId, item.version)" type="primary" :icon="CaretTop"
+      <el-button @click="toggleLike(item.postId, item.version, item.type.typeId)" type="primary" :icon="CaretTop"
                  :plain="!likedPosts[item.postId]">
         {{ likedPosts[item.postId] ? '取消赞' : '点赞' }} {{ formatNumber(item.likeCount, "num") }}
       </el-button>
-      <el-button :icon="ChatDotRound">{{ formatNumber(item.commentCount, "num") }}条评论</el-button>
+      <el-button :icon="ChatDotRound" @click="check(item)">{{ formatNumber(item.commentCount, "num") }}条评论</el-button>
       <el-button :icon="Warning">举报</el-button>
     </div>
   </div>
@@ -351,7 +357,8 @@ function deleteReplyForm() {
   <!--浏览弹窗-->
   <el-dialog
       v-model="dialogVisible"
-      :title="dialogTitle" width="800"
+      :title="dialogTitle"
+      width="800"
       draggable
       :modal="false"
       style="
@@ -535,7 +542,7 @@ function deleteReplyForm() {
     width: 100%;
     position: sticky; /* 使用粘性定位 */
     bottom: 0; /* 固定在顶部 */
-    z-index: 99999; /* 确保盒子在对话框标题上方 */
+    z-index: 99; /* 确保盒子在对话框标题上方 */
     display: flex;
     align-items: center;
     justify-content: center;

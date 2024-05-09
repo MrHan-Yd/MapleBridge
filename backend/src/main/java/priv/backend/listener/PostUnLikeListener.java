@@ -62,7 +62,7 @@ public class PostUnLikeListener {
         LogUtils.info(this.getClass(), "正在尝试更新减少点赞数量");
         /* TODO: Written by - Han Yongding 2024/04/15 尝试更新点赞数量和版本号 */
         while (!updated && retries < maxRetries) {
-            LogUtils.info(this.getClass(), "第" + String.valueOf(retries + 1) + "次尝试更新点赞数量");
+            LogUtils.info(this.getClass(), "第" + (retries + 1) + "次尝试更新点赞数量");
 
             /* TODO: Written by - Han Yongding 2024/04/15 删除成功 */
 
