@@ -1,8 +1,8 @@
 package priv.backend.initializer;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.repository.ESPostRepository;
@@ -23,6 +23,7 @@ import java.util.stream.StreamSupport;
  * @CreateDate :  2024-04-01 9:38
  */
 @Component
+@Order(2)
 public class PostElasticsearchInitializer implements CommandLineRunner {
 
     /* TODO: Written by - Han Yongding 2024/04/01 注入帖子表业务层 */

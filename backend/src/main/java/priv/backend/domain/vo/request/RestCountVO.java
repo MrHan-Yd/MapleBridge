@@ -18,7 +18,6 @@ public class RestCountVO implements BaseData {
     private String id ;
     @NotNull
     private String userId ;
-    @NotNull
     private Double version ;
     private String commentId ;
     @Pattern(regexp = "like|unlike")

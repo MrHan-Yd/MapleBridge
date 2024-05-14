@@ -200,7 +200,6 @@ function check(item) {
 
   /* 浏览的帖子ID */
   commentForm.postId = item.postId;
-  console.log(item)
 }
 
 /* 关闭详情对话框回调 */
@@ -244,6 +243,9 @@ function submitComment() {
               content: commentForm.content,
               commentId: commentForm.commentId,
               replyId: commentForm.replyId,
+              likeCount: 0,
+              likes: [],
+              comment: [],
               user: {
                 userId: props.user.id,
                 nickname: props.user.nickname,

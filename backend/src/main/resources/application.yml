@@ -7,6 +7,16 @@ spring:
     file_path: E:/Project/MapleBridge/backend/src/main/resources/static
     file_visit_path: /upload/
     file_host: http://localhost:9999
+
+  # 轻量级定时任务框架配置
+  thread-pool-task-scheduler:
+    # 线程池大小
+    pool-size: 10
+    # 线程名称前缀
+    thread-name-prefix: maple-bridge-task-scheduler-
+    # 当前项目包路径
+    project-package-path: priv.backend
+
   #静态资源访问
   # security安全框架配置
   security:
@@ -63,16 +73,30 @@ spring:
 
   #Kafka消息队列
   kafka:
+    # Kafka的服务器地址
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: my-group
+      # 消费者组ID列表
+      group-id:
+        - collect-group
+        - persistence-group
+      # 从最早的偏移量开始消费
       auto-offset-reset: earliest
+      # 消息键的反序列化器
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 消息值的反序列化器（使用Spring Kafka的JsonDeserializer）
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      # JsonDeserializer所需的可信任包
+      properties:
+        spring.json.trusted.packages: "priv.backend.domain.mongo.dto,priv.backend.domain.dto"
+
     producer:
+      # 消息键的序列化器
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  #elasicSearch
+      # 消息值的序列化器（使用Spring Kafka的JsonSerializer）
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  #elasicSearch 配置
   elasticsearch:
     # 地址
     uris: https://127.0.0.1:9200

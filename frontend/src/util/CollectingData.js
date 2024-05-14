@@ -52,8 +52,6 @@ function uploadData() {
             }
         }) ;
     }
-    console.log(dataList)
-    console.log(count.value)
 }
 
 export {recordData} ;

@@ -2,10 +2,9 @@ package priv.backend.initializer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import priv.backend.domain.es.dto.ESClientUser;
-import priv.backend.domain.es.vo.RespESClientUser;
 import priv.backend.repository.ESClientUserRepository;
 import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.util.CurrentUtils;
@@ -24,6 +23,7 @@ import java.util.stream.StreamSupport;
  * @CreateDate :  2024-04-07 10:12
  */
 @Component
+@Order(1)
 public class ClientUserElasticsearchInitializer implements CommandLineRunner {
 
     /* TODO: Written by - Han Yongding 2024/04/07 注入用户业务层实现类 */

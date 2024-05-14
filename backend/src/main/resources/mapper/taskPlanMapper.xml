@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.TaskPlanMapper">
+    <!--SQL-->
+
+    <!--SQL-->
+
+    <!--Map-->
+    <resultMap id="getTaskPlanPageMap" type="RespTaskPlanVo">
+        <id property="id" column="id"/>
+        <result property="cron" column="cron"/>
+        <result property="createId" column="create_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="remarks" column="remarks"/>
+        <association property="task" javaType="Task">
+            <id property="taskId" column="task_id"/>
+            <result property="taskName" column="task_name"/>
+            <result property="taskRemarks" column="task_remarks"/>
+        </association>
+    </resultMap>
+    <resultMap id="getTaskPlanMap" type="TaskExecutionPlan">
+        <id property="id" column="id"/>
+        <result property="cron" column="cron"/>
+        <result property="status" column="status"/>
+        <result property="remarks" column="remarks"/>
+        <association property="task" javaType="Task">
+            <id property="taskId" column="task_id"/>
+            <result property="taskName" column="task_name"/>
+            <result property="taskRemarks" column="task_remarks"/>
+            <result property="methodName" column="method_name"/>
+        </association>
+    </resultMap>
+    <!--Map-->
+
+    <!--Select-->
+    <!--分页查询所有任务计划-->
+    <select id="getTaskPlanPage" resultMap="getTaskPlanPageMap" >
+        SELECT
+            tp.id as id,
+            tp.`cron` as cron,
+            tp.create_id as create_id,
+            tp.create_time as create_time,
+            tp.update_id as update_id,
+            tp.update_time as update_time,
+            tp.status as status,
+            tp.remarks as remarks,
+            t.task_id as task_id,
+            t.task_name as task_name,
+            t.task_remarks as task_remarks
+        FROM task_plan tp
+                 LEFT JOIN task t on t.task_id = tp.task_id
+        where tp.status != '2'
+    </select>
+    <!--分页查询所有任务计划-->
+    <!--查询所有任务计划-->
+    <select id="getTaskPlan" resultMap="getTaskPlanMap" >
+        SELECT
+            tp.id as id,
+            tp.`cron` as cron,
+            tp.status as status,
+            tp.remarks as remarks,
+            t.task_id as task_id,
+            t.task_name as task_name,
+            t.task_remarks as task_remarks,
+            t.method_name as method_name
+        FROM task_plan tp
+                 LEFT JOIN task t on t.task_id = tp.task_id
+    </select>
+    <!--查询所有任务计划-->
+    <!--Select-->
+
+    <!--Update-->
+
+    <!--Update-->
+
+    <!--Insert-->
+
+    <!--Insert-->
+
+    <!--Delete-->
+
+    <!--Delete-->
+
+</mapper>

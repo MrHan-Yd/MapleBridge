@@ -200,6 +200,16 @@ const handleClose = (key, keyPath) => {
                 <span>帖子类型管理</span>
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="10">
+              <template #title>
+                <my-icon name="icon-pingtaiguanli"/>
+                <span>平台管理</span>
+              </template>
+              <el-menu-item index="10-1" @click="router.push('/backend-index-task-plan')">
+                <my-icon name="icon-renwujihua"/>
+                <span>任务执行计划</span>
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </el-col>
         <el-col :span="21">

@@ -101,6 +101,19 @@
             <scope>test</scope>
         </dependency>
         <!--SpringTest-->
+        <!--Spring AOP-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--Spring AOP-->
+        <!--AspectJ-->
+<!--        <dependency>-->
+<!--            <groupId>org.aspectj</groupId>-->
+<!--            <artifactId>aspectjtools</artifactId>-->
+<!--&lt;!&ndash;            <version>1.8.9</version>&ndash;&gt;-->
+<!--        </dependency>-->
+        <!--AspectJ-->
         <!--解决yaml依赖1.33版本漏洞问题-->
 <!--        <dependency>-->
 <!--            <groupId>org.yaml</groupId>-->
@@ -179,6 +192,13 @@
             <version>2.0.1</version>
         </dependency>
         <!--ElasticSearch-->
+        <!--Reflections 是一个 Java 库，用于在运行时扫描和检索 Java 类和资源的信息-->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
+        </dependency>
+        <!--Reflections 是一个 Java 库，用于在运行时扫描和检索 Java 类和资源的信息-->
     </dependencies>
 
     <build>

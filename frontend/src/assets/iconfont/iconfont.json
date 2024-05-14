@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1964732",
+      "name": "任务计划",
+      "font_class": "renwujihua",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "5093337",
+      "name": "平台管理",
+      "font_class": "pingtaiguanli",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "9702191",
       "name": "活跃用户",
       "font_class": "huoyueyonghu",

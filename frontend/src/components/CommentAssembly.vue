@@ -1,6 +1,6 @@
 <script setup>
 import PostUserAssembly from "@/components/PostUserAssembly.vue";
-import {CaretTop, ChatDotSquare, Star, StarFilled} from "@element-plus/icons-vue";
+import {ChatDotSquare, Star, StarFilled} from "@element-plus/icons-vue";
 import {defineEmits, reactive, ref} from "vue";
 import {formatNumber} from "@/util/FormatData";
 import {getUserId, put} from "@/net/NetWork";
@@ -47,10 +47,17 @@ function initLikedPosts() {
     const userLike = item.likes.find(like => like.userId === getUserId());
     likedPosts.value[item.id] = !!userLike;
 
+    console.log(item)
+    console.log(item.subComments)
+    if (item.subComments === undefined) {
+      item.subComments = [] ;
+    }
     /* 内层：回复评论 */
     item.subComments.forEach(subItem => {
-      const userLike = subItem.likes.find(like => like.userId === getUserId());
-      likedPosts.value[subItem.id] = !!userLike;
+      if (subItem.likes.length !== 0) {
+        const userLike = subItem.likes.find(like => like.userId === getUserId());
+        likedPosts.value[subItem.id] = !!userLike;
+      }
     });
   });
 }

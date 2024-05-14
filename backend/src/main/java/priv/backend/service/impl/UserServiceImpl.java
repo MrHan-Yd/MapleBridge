@@ -31,7 +31,6 @@ import priv.backend.service.UserService;
 import priv.backend.util.*;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +143,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setCreateId(user.getId());
             mapper.updateById(user);
         }
+
+        /* TODO: Written by - Han Yongding 2024/04/11 保存成功，同步es */
+        amqpTemplate.convertAndSend("clientUserSyncES", user.getId()) ;
 
         /* TODO: Written by - Han Yongding 2024/02/08 新增成功 */
         return null;

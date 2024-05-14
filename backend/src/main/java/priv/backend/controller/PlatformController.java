@@ -6,6 +6,8 @@ import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.*;
 import priv.backend.service.impl.*;
+import priv.backend.service.system.Impl.TaskPlanServiceImpl;
+import priv.backend.service.system.Impl.TaskServiceImpl;
 import priv.backend.util.ReturnUtils;
 
 /**
@@ -195,6 +197,45 @@ public class PlatformController {
     @DeleteMapping("post/{postId}")
     public RestBean<Void> deletePost(@PathVariable("postId") String postId) {
         return ReturnUtils.messageHandle(() -> postServiceImpl.deletePost(postId)) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/11 注入任务业务层实现类 */
+    @Resource
+    private TaskServiceImpl taskService;
+
+    /* TODO: Written by - Han Yongding 2024/05/11 查询没有计划的任务，前端新增计划选择使用 */
+    @GetMapping("task")
+    public RestBean<Object> getAllTask() {
+        return ReturnUtils.messageHandleData(taskService::getAllTasks);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/11 注入任务计划业务层实现类 */
+    @Resource
+    private TaskPlanServiceImpl taskPlanService;
+
+    /* TODO: Written by - Han Yongding 2024/05/11 查询所有任务计划 */
+    @GetMapping("task-plan")
+    public RestBean<Object> getAllTaskPlan(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(() -> taskPlanService.getAllTaskPlan(pageBean));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/11 新增任务计划 */
+    @PostMapping("task-plan")
+    public RestBean<Void> insertTaskPlan(@RequestBody RestTaskPlanVO vo) {
+        return ReturnUtils.messageHandle(vo, taskPlanService::insertTaskPlan);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/11 修改任务计划 */
+    @PutMapping("task-plan")
+    public RestBean<Void> updateTaskPlan(@RequestBody RestTaskPlanVO vo) {
+        return ReturnUtils.messageHandle(vo, taskPlanService::updateTaskPlan);
+    }
+
+
+    /* TODO: Written by - Han Yongding 2024/05/11 删除任务计划 */
+    @DeleteMapping("task-plan/{id}")
+    public RestBean<Void> deleteTaskPlan(@PathVariable("id") String id) {
+        return ReturnUtils.messageHandle(() -> taskPlanService.deleteTaskPlan(id));
     }
 
 }

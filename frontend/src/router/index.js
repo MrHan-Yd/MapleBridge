@@ -102,6 +102,10 @@ const router = createRouter({
                     path: '/backend-index-multidimensional-data-analysis',
                     name: 'backend-index-multidimensional-data-analysis',
                     component: () => import('@/views/backend/index/MultidimensionalDataAnalysisPage.vue')
+                } , {
+                    path: '/backend-index-task-plan',
+                    name: 'backend-index-task-plan',
+                    component: () => import('@/views/backend/index/TaskPlanPage.vue')
                 }
             ]
         } , {
