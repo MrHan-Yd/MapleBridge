@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESPost;
-import priv.backend.repository.ESPostRepository;
+import priv.backend.repository.elasticsearch.ESPostRepository;
 import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.util.ElasticsearchUtils;
 import priv.backend.util.LogUtils;

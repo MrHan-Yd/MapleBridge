@@ -3,7 +3,6 @@ package priv.backend.domain.vo.request;
 import lombok.Data;
 import priv.backend.domain.BaseData;
 
-import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.

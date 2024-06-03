@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.*;
+import priv.backend.domain.vo.response.RespServerParametersVO;
 import priv.backend.service.impl.*;
+import priv.backend.service.system.Impl.ServerParametersServiceImpl;
 import priv.backend.service.system.Impl.TaskPlanServiceImpl;
 import priv.backend.service.system.Impl.TaskServiceImpl;
 import priv.backend.util.ReturnUtils;
@@ -236,6 +238,22 @@ public class PlatformController {
     @DeleteMapping("task-plan/{id}")
     public RestBean<Void> deleteTaskPlan(@PathVariable("id") String id) {
         return ReturnUtils.messageHandle(() -> taskPlanService.deleteTaskPlan(id));
+    }
+
+    /* TODO: Written by - Han Yongding 2024/05/28 注入服务器参数业务层实现类 */
+    @Resource
+    private ServerParametersServiceImpl serverParametersService ;
+
+    /* TODO: Written by - Han Yongding 2024/05/28 获取服务器参数 */
+    @GetMapping("server-param")
+    public RestBean<RespServerParametersVO> getServerParam() {
+        return ReturnUtils.messageHandleData(serverParametersService::getServerParameters) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/02 获取服务器服务信息 */
+    @GetMapping("service-info")
+    public RestBean<Object> getServerInfo() {
+        return ReturnUtils.messageHandleData(serverParametersService::getServiceInformation);
     }
 
 }

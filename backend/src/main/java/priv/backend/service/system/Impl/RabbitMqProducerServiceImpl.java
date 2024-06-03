@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import priv.backend.service.system.RabbitMqProducerService;
 import priv.backend.util.Const;
 import priv.backend.util.FlowUtils;
-import priv.backend.util.RandomStringUtil;
+import priv.backend.util.RandomStringUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +50,7 @@ public class RabbitMqProducerServiceImpl implements RabbitMqProducerService {
                 return "请求频繁，请稍后再试!" ;
             }
             /* TODO: Written by - Han Yongding 2023/09/18 生成一个随机的六位数验证码，*/
-            String code = RandomStringUtil.getRandomSixDigitCode() ;
+            String code = RandomStringUtils.getRandomSixDigitCode() ;
             /* TODO: Written by - Han Yongding 2023/09/18 存储创建好的随机验证码 */
             Map<String, Object> data = Map.of("type", type, "email", email, "code", code) ;
             /* TODO: Written by - Han Yongding 2023/09/18 将验证码放入注册好的消息队列中 */

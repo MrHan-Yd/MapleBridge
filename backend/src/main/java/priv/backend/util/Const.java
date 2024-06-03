@@ -32,4 +32,8 @@ public class Const {
 
     /** TODO: Written by - Han Yongding 2023/08/22 跨域过滤器优先级 */
     public static final int ORDER_CORS = -102 ;
+
+    /* TODO: Written by - Han Yongding 2024/05/28 redis数据key */
+    public static final String REDIS_DATA_KEY = "data:" ;
+
 }

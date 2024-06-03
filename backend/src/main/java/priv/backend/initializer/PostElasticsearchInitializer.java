@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESPost;
-import priv.backend.repository.ESPostRepository;
+import priv.backend.repository.elasticsearch.ESPostRepository;
 import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.util.CurrentUtils;
 import priv.backend.util.ElasticsearchUtils;

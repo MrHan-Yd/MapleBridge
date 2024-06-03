@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.es.dto.ESPost;
-import priv.backend.repository.ESPostRepository;
+import priv.backend.repository.elasticsearch.ESPostRepository;
 import priv.backend.service.es.ESPostService;
 
 /**

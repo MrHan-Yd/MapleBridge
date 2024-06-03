@@ -93,7 +93,7 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
 
 
             /* TODO: Written by - Han Yongding 2024/01/10 获取随机的六位数字字符串 */
-            String code = RandomStringUtil.getRandomSixDigitCode();
+            String code = RandomStringUtils.getRandomSixDigitCode();
 
             /* TODO: Written by - Han Yongding 2023/09/18 存储创建好的随机验证码 */
             Map<String, Object> data = Map.of("type", type, "email", email, "code", code);

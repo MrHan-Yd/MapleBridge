@@ -106,6 +106,14 @@ const router = createRouter({
                     path: '/backend-index-task-plan',
                     name: 'backend-index-task-plan',
                     component: () => import('@/views/backend/index/TaskPlanPage.vue')
+                } , {
+                    path: '/backend-index-server-param',
+                    name: 'backend-index-server-param',
+                    component: () => import('@/views/backend/index/ServerParamPage.vue')
+                } , {
+                    path: '/backend-index-service-info',
+                    name: 'backend-index-service-info',
+                    component: () => import('@/views/backend/index/ServiceInfoPage.vue')
                 }
             ]
         } , {

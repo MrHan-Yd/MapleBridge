@@ -1,4 +1,4 @@
-package priv.backend.repository;
+package priv.backend.repository.elasticsearch;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

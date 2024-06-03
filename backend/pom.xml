@@ -24,6 +24,10 @@
         <pagehelper.version>5.3.3</pagehelper.version>
         <commons.version>3.12.0</commons.version>
         <kaptcha.version>2.3.2</kaptcha.version>
+        <redisson.version>3.30.0</redisson.version>
+        <jakarta.json.version>2.0.1</jakarta.json.version>
+        <reflections.version>0.9.12</reflections.version>
+        <oshi.version>6.2.2</oshi.version>
     </properties>
     <!--依赖版本管理-->
 
@@ -51,6 +55,13 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <!--Redis-->
+        <!--Redis分布式锁-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+        <!--Redis分布式锁-->
         <!--SpringSendMail-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -189,16 +200,23 @@
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-api</artifactId>
-            <version>2.0.1</version>
+            <version>${jakarta.json.version}</version>
         </dependency>
         <!--ElasticSearch-->
         <!--Reflections 是一个 Java 库，用于在运行时扫描和检索 Java 类和资源的信息-->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
+            <version>${reflections.version}</version>
         </dependency>
         <!--Reflections 是一个 Java 库，用于在运行时扫描和检索 Java 类和资源的信息-->
+        <!--获取服务器参数依赖-->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.version}</version>
+        </dependency>
+        <!--获取服务器参数依赖-->
     </dependencies>
 
     <build>

@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESClientUser;
-import priv.backend.repository.ESClientUserRepository;
+import priv.backend.repository.elasticsearch.ESClientUserRepository;
 import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.util.LogUtils;
 import priv.backend.util.TimeUtils;

@@ -26,7 +26,7 @@ import priv.backend.enumeration.DataBaseEnum;
 import priv.backend.enumeration.KafkaTopicEnum;
 import priv.backend.mapper.UserLevelMapper;
 import priv.backend.mapper.UserMapper;
-import priv.backend.repository.ESClientUserRepository;
+import priv.backend.repository.elasticsearch.ESClientUserRepository;
 import priv.backend.service.UserService;
 import priv.backend.util.*;
 
@@ -117,12 +117,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             /* TODO: Written by - Han Yongding 2024/04/01 前台注册,无法选择用户, 上面会赋值为普通用户 */
             if ("1758482033179316225".equals(v.getRoleId())) {
                 /* TODO: Written by - Han Yongding 2024/04/01 初始化昵称 */
-                v.setNickname("用户" + RandomStringUtil.generateRandomNumericString(4));
+                v.setNickname("用户" + RandomStringUtils.generateRandomNumericString(4));
             }
             /* TODO: Written by - Han Yongding 2024/04/01 后台新增, 选择了管理员用户 */
             if ("1752529962403770370".equals(v.getRoleId())) {
                 /* TODO: Written by - Han Yongding 2024/04/01 初始化昵称 */
-                v.setNickname("管理" + RandomStringUtil.generateRandomNumericString(4));
+                v.setNickname("管理" + RandomStringUtils.generateRandomNumericString(4));
             }
             /* TODO: Written by - Han Yongding 2024/03/01 获取当前系统时间 */
             v.setCreateTime(CurrentUtils.getTheCurrentSystemTime());

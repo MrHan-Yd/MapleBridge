@@ -23,7 +23,7 @@ import java.util.List;
 public class UserPreferenceCollectionTask {
     /* TODO: Written by - Han Yongding 2024/05/14 注入内容推荐工具类 */
     @Resource
-    private RecommendUtil recommendUtil ;
+    private RecommendUtils recommendUtil ;
 
     /* TODO: Written by - Han Yongding 2024/05/14 注入Mongo工具类 */
     @Resource

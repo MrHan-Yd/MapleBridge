@@ -18,7 +18,7 @@ import java.util.PriorityQueue;
  * @CreateDate :  2024-05-14 21:36
  */
 @Component
-public class RecommendUtil {
+public class RecommendUtils {
     /**
      * 使用基于内容的推荐算法推荐用户可能喜欢的帖子类型。
      *

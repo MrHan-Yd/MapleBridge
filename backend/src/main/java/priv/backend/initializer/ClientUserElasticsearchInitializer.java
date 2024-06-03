@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESClientUser;
-import priv.backend.repository.ESClientUserRepository;
+import priv.backend.repository.elasticsearch.ESClientUserRepository;
 import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.util.CurrentUtils;
 import priv.backend.util.LogUtils;

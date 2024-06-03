@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26508479",
+      "name": "服务信息",
+      "font_class": "fuwuxinxi",
+      "unicode": "e6e3",
+      "unicode_decimal": 59107
+    },
+    {
+      "icon_id": "11006166",
+      "name": "平台监控",
+      "font_class": "pingtaijiankong",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "22806240",
+      "name": "服务器监控",
+      "font_class": "fuwuqijiankong",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "35432536",
+      "name": "缓存监控 (2)",
+      "font_class": "a-huancunjiankong2",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
       "icon_id": "1964732",
       "name": "任务计划",
       "font_class": "renwujihua",

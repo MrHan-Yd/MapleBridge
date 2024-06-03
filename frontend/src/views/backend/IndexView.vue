@@ -210,6 +210,20 @@ const handleClose = (key, keyPath) => {
                 <span>任务执行计划</span>
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="11">
+              <template #title>
+                <my-icon name="icon-pingtaijiankong"/>
+                <span>平台监控</span>
+              </template>
+              <el-menu-item index="11-1" @click="router.push('/backend-index-server-param')">
+                <my-icon name="icon-fuwuqijiankong"/>
+                <span>服务器监控</span>
+              </el-menu-item>
+              <el-menu-item index="11-2" @click="router.push('/backend-index-service-info')">
+                <my-icon name="icon-fuwuxinxi"/>
+                <span>服务信息</span>
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </el-col>
         <el-col :span="21">
