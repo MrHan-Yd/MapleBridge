@@ -256,4 +256,13 @@ public class PlatformController {
         return ReturnUtils.messageHandleData(serverParametersService::getServiceInformation);
     }
 
+    /* TODO: Written by - Han Yongding 2024/06/09 注入网站流量表业务层实现类 */
+    @Resource
+    private WebsiteTrafficServiceImpl websiteTrafficService ;
+
+    /* TODO: Written by - Han Yongding 2024/06/09 获取网站流量表 */
+    @GetMapping("website-traffic")
+    public RestBean<Object> getWebsiteTraffic(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, websiteTrafficService::queryAllWebsiteTraffic);
+    }
 }

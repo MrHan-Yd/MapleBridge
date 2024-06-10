@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import DashboardAssembly from "@/components/DashboardAssembly.vue";
-import { get } from "@/net/NetWork" ;
+import { get } from "@/net/http" ;
 import {ElWarning} from "@/util/MessageUtil"; ;
 
 const data = ref({

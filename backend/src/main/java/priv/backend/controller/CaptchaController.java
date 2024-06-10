@@ -28,12 +28,8 @@ public class CaptchaController {
 
     /** TODO: Written by - Han Yongding 2024/02/18 获取英文验证码 */
     @GetMapping("captcha-image/{codeId}")
-    public void getCaptchaImage(@PathVariable("codeId") String codeId , HttpServletResponse response) {
-        try {
-            captchaService.getCaptchaImage(codeId, response).flush();
-        } catch (Exception e) {
-            log.warn("验证码生成失败", e);
-        }
+    public RestBean<String> getCaptchaImage(@PathVariable("codeId") String codeId) {
+        return ReturnUtils.messageHandleData(() ->captchaService.getCaptchaImage(codeId));
     }
 
     /* TODO: Written by - Han Yongding 2024/02/26 验证验证码 */
@@ -46,11 +42,7 @@ public class CaptchaController {
 
     /** TODO: Written by - Han Yongding 2024/02/18 获取算数验证码 */
     @GetMapping("captcha-math/{codeId}")
-    public void getCaptchaMath(@PathVariable("codeId") String codeId , HttpServletResponse response) {
-        try {
-            captchaService.getCaptchaMath(codeId, response).flush();
-        } catch (Exception e) {
-            log.warn("验证码生成失败", e);
-        }
+    public RestBean<String> getCaptchaMath(@PathVariable("codeId") String codeId) {
+        return ReturnUtils.messageHandleData(() -> captchaService.getCaptchaMath(codeId));
     }
 }

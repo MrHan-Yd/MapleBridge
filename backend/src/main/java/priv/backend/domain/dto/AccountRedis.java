@@ -19,5 +19,4 @@ public class AccountRedis {
     private String email ;
     private String roleId ;
     private String refreshToken ;
-    private Date refreshTokenExpire ;
 }

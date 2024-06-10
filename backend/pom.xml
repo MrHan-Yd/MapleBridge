@@ -28,6 +28,8 @@
         <jakarta.json.version>2.0.1</jakarta.json.version>
         <reflections.version>0.9.12</reflections.version>
         <oshi.version>6.2.2</oshi.version>
+        <useragent.version>1.21</useragent.version>
+        <ip2region.version>2.7.0</ip2region.version>
     </properties>
     <!--依赖版本管理-->
 
@@ -217,6 +219,20 @@
             <version>${oshi.version}</version>
         </dependency>
         <!--获取服务器参数依赖-->
+        <!--获取请求信息依赖-->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>${useragent.version}</version>
+        </dependency>
+        <!--获取请求信息依赖-->
+        <!--离线IP定位管理框架-->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
+        </dependency>
+        <!--离线IP定位管理框架-->
     </dependencies>
 
     <build>

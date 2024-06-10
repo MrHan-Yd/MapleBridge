@@ -1,7 +1,7 @@
 <script setup>
 import {computed, reactive, ref} from "vue";
 import {EditPen, Lock, Message} from "@element-plus/icons-vue";
-import {get, put} from "@/net/NetWork";
+import {get, put} from "@/net/http";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import {ElSuccess, ElWarning} from '@/util/MessageUtil' ;

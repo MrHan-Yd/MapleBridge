@@ -17,6 +17,7 @@ import priv.backend.domain.RestBean;
 import priv.backend.enumeration.CodeEnum;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
 
 /**
  * Created by IntelliJ IDEA.
@@ -97,7 +98,7 @@ public class GlobalExceptionHandlingController {
     /* TODO: Written by - Han Yongding 2024/03/05 处理通用异常 */
     @ExceptionHandler(Exception.class)
     public RestBean<Void> exception(Exception exception) {
-        log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
+        log.warn("Resolve [{}: {}]", exception.getClass().getName() + "-" + Arrays.toString(exception.getStackTrace()), exception.getMessage());
         return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "服务器内部错误，请联系管理员");
     }
 
@@ -107,7 +108,7 @@ public class GlobalExceptionHandlingController {
     public RestBean<Void> handleRedisException(org.springframework.dao.InvalidDataAccessApiUsageException exception) {
         log.warn("Resolve [{}: {}]", exception.getClass().getName(), exception.getMessage());
         // 根据具体情况返回适当的错误信息或状态码
-        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "Redis配置错误或服务异常关闭，请检查Redis日志获取详细信息。");
+        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "Redis配置错误或服务异常关闭，请检查Redis日志获取详细信息");
     }
 
 }

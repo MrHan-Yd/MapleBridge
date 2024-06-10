@@ -150,25 +150,20 @@ public class SecurityConfig {
         String tokenArr = jwtUtils.createTokenAndRefreshToken(user, account.getId(), account.getAccount()) ;
         /* TODO: Written by - Han Yongding 2024/02/17 Token */
         String token = jwtUtils.getToken(tokenArr) ;
-        /* TODO: Written by - Han Yongding 2024/02/17 Token过期时间 */
-        Date accessTokenExpire = jwtUtils.expireTime("token") ;
         /* TODO: Written by - Han Yongding 2024/02/17 刷新Token */
         String refreshToken = jwtUtils.getRefreshToken(tokenArr) ;
-        /* TODO: Written by - Han Yongding 2024/02/17 刷新Token过期时间 */
-        Date refreshTokenExpire = jwtUtils.expireTime("refresh");
 //        /* TODO: Written by - Han Yongding 2023/09/11 响应前端的用户实体类 */
         RespAuthorizeVO vo = account.asViewObject(RespAuthorizeVO.class, v -> {
             v.setRole(roleService.getRoleById(account.getRoleId()));
-            v.setAccessToken(token) ;
-            v.setAccessTokenExpire(accessTokenExpire) ;
-            v.setRefreshToken(refreshToken) ;
-            v.setRefreshTokenExpire(refreshTokenExpire);
         }) ;
+        response.setHeader("Authorization", token);
+        response.setHeader("Refreshtoken", refreshToken);
+        response.setHeader("Access-Control-Expose-Headers", "Authorization,Refreshtoken");
+
 
         /* TODO: Written by - Han Yongding 2024/02/17 缓存用户信息到Redis， key为用用户ID */
         AccountRedis accountRedis = account.asViewObject(AccountRedis.class, v -> {
             v.setRefreshToken(refreshToken) ;
-            v.setRefreshTokenExpire(refreshTokenExpire) ;
         });
 
         redisTemplate.opsForValue().set(Const.USER_INFORMATION_DATA + account.getId(), accountRedis, 30, TimeUnit.MINUTES) ;

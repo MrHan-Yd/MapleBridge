@@ -2,10 +2,10 @@
 import {ChatDotRound, Lock, User} from '@element-plus/icons-vue'
 import {reactive, ref} from "vue" ;
 import {login, validateCaptchaImage} from "@/net/Login";
+import {get} from "@/net/http";
 import router from "@/router";
 import {generateUniqueId} from "@/util/UUID" ;
 import {ElError, ElWarning} from "@/util/MessageUtil";
-import axios from "axios";
 
 
 /* 表单校验 */
@@ -24,18 +24,18 @@ const captchaImage = ref("") ;
 /* 刷新英文验证码 */
 const refreshCaptcha = async () => {
   try {
-    const response = await axios.get(`/api/auth/captcha-image/${generateUniqueId()}`, {
-      responseType: 'blob', // 设置响应类型为 blob
+    get(`/api/auth/captcha-image/${generateUniqueId()}`, (rs) => {
+      if (rs.code === 200) {
+        // 将Base64编码的图片数据转换为图片 URL
+        captchaImage.value = `data:image/jpeg;base64, ${rs.data}`;
+      } else {
+        ElWarning("无法获取验证码图像");
+        // console.error('Failed to fetch captcha image');
+      }
     });
 
-    if (response.status === 200) {
-      captchaImage.value = URL.createObjectURL(new Blob([response.data]));
-    } else {
-      ElWarning("无法获取验证码图像");
-      console.error('Failed to fetch captcha image');
-    }
   } catch (error) {
-    ElError("获取图像时出错：" + error)
+    ElError("获取图像时出错：" + error);
   }
 }
 

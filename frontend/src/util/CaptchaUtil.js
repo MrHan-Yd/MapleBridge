@@ -1,7 +1,7 @@
 import { EmailType } from '@/enum/EmailType' ;
 import {ElError, ElWarning, ElSuccess} from '@/util/MessageUtil' ;
 import { ref } from 'vue' ;
-import { get } from "@/net/NetWork" ;
+import { get } from "@/net/http" ;
 
 
 /* 获取验证码 */

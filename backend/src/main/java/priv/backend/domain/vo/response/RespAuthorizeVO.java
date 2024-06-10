@@ -16,8 +16,4 @@ public class RespAuthorizeVO {
     private String id ;
     private String account ;
     private RespUserRoleNoIdVO role ;
-    private String accessToken ;
-    private Date accessTokenExpire ;
-    private String refreshToken ;
-    private Date refreshTokenExpire ;
 }

@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router" ;
 import {unauthorized} from "@/net/Login";
-import {getUserRole} from "@/net/NetWork";
+import {getUserRole} from "@/net/http";
 
 const router = createRouter({
     history: createWebHistory(import.meta.BASE_URL) ,
@@ -114,6 +114,10 @@ const router = createRouter({
                     path: '/backend-index-service-info',
                     name: 'backend-index-service-info',
                     component: () => import('@/views/backend/index/ServiceInfoPage.vue')
+                } , {
+                    path: '/backend-index-website-traffic',
+                    name: 'backend-index-website-traffic',
+                    component: () => import('@/views/backend/index/WebsiteTrafficPage.vue')
                 }
             ]
         } , {

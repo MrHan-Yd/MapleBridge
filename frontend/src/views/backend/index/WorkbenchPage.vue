@@ -1,7 +1,7 @@
 <script setup>
 
 import MyIcon from "@/components/MyIcon.vue";
-import {getUserAccount} from "@/net/NetWork";
+import {getUserAccount} from "@/net/http";
 import WorkbenchAssembly from "@/components/WorkbenchAssembly.vue";
 import {onMounted} from "vue";
 import * as echarts from 'echarts';

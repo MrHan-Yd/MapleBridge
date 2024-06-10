@@ -28,6 +28,10 @@ public class TimeUtils {
         return (System.currentTimeMillis() - time)  / 1000 > 0 ? (System.currentTimeMillis() - time) / 1000 + "秒" : System.currentTimeMillis() - time + "毫秒" ;
     }
 
+    public static String end() {
+        return TimeUtils.getCurrentTime(TimeUtils.getStartTime()) ;
+    }
+
     /**
      * TODO: Written by - Han Yongding 2024/05/28 在传入的时间上加上5分钟
      *

@@ -1,13 +1,12 @@
 import {
     defaultFailure,
-    internalPost,
+    post,
     storeAccessToken,
     deleteAccessToken,
-    takeAccessToken,
-    get
-} from '@/net/NetWork' ;
+    get, getToken, setRemember
+} from '@/net/http' ;
 import {ElMessage} from "element-plus";
-import {ElSuccess} from "@/util/MessageUtil";
+import {ElSuccess, ElWarning} from "@/util/MessageUtil";
 import {getUniqueId} from '@/util/UUID' ;
 
 
@@ -23,34 +22,55 @@ function validateCaptchaImage(code, success, failure) {
 
 /* 登录函数 */
 function login(username, password, remember, success, failure = defaultFailure) {
-    internalPost('/api/auth/login', {
+    /**
+     * 待解决： 登录后勾选记住我，拦截器会在响应时存入token，因前端登录逻辑是登录成功后才存入，
+     * 导致，哪怕勾选，由于还没有响应，拦截器已经存入了，所以默认存入会话中，
+     * 需要修复！！！！！！
+     */
+    /* 先存储记住状态 */
+    setRemember(remember) ;
+
+    post('/api/auth/login', {
             username: username,
             password: password
-        }, {
-            'Content-Type': 'application/x-www-form-urlencoded'
         },
         (rs) => {
+
             /* 存储Token */
-            storeAccessToken(rs.data.accessToken, remember, rs.data.accessTokenExpire, rs.data.id, rs.data.account, rs.data.refreshToken, rs.data.refreshTokenExpire, rs.data.role);
+            storeAccessToken(remember, rs.data.id, rs.data.account, rs.data.role);
             ElMessage.success("登录成功");
             ElSuccess(`欢迎${rs.data.account}使用校友会管理平台`)
             success(rs);
-        }, failure);
+        }, (rs) => {
+            /* 登录失败，提示错误信息 */
+            ElWarning(rs.data.message);
+            /* 清空本地信息 */
+            deleteAccessToken();
+            failure(rs);
+        });
 }
 
 function loginFrontend(username, password, success, failure = defaultFailure) {
-    internalPost('/api/auth/login', {
+
+    /* 先存储记住状态 */
+    setRemember(true) ;
+
+    post('/api/auth/login', {
             username: username,
             password: password
-        }, {
-            'Content-Type': 'application/x-www-form-urlencoded'
         },
         (rs) => {
             /* 存储Token, 前端登录，默认勾选记住我，也就是长时间保存用户令牌 */
-            storeAccessToken(rs.data.accessToken, true, rs.data.accessTokenExpire, rs.data.id, rs.data.account, rs.data.refreshToken, rs.data.refreshTokenExpire, rs.data.role);
+            storeAccessToken(true, rs.data.id, rs.data.account, rs.data.role);
             ElMessage.success("登录成功");
             success(rs);
-        }, failure);
+        }, (rs) => {
+            /* 登录失败，提示错误信息 */
+            ElWarning(rs.data.message);
+            /* 清空本地信息 */
+            deleteAccessToken();
+            failure(rs);
+        });
 }
 
 /* 退出登录函数 */
@@ -66,8 +86,8 @@ function logout(success, failure = defaultFailure) {
 
 /* 判断是否登录(判断是否未验证) */
 function unauthorized() {
-    /*takeAccessToken验证为true，此函数是判断未验证，所以用了非(!)*/
-    return !takeAccessToken();
+    /*验证为true，此函数是判断未验证，所以用了非(!)*/
+    return !getToken();
 }
 
 /* 将定义好的函数暴露出去 */

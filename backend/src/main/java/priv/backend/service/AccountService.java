@@ -46,7 +46,7 @@ public interface AccountService {
     String emailConfirm(RestLoginConfirmVO vo) ;
 
     /* TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
-    RespRefreshTokenVO refreshToken(String refreshToken) throws ProgramCustomException ;
+    String refreshToken(String refreshToken) throws ProgramCustomException ;
 
     /* TODO: Written by - Han Yongding 2024/02/27 重置密码 */
     String resetPassword(RestEmailResetVO vo) ;

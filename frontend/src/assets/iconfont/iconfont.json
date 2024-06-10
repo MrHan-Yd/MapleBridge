@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "769516",
+      "name": "网站流量",
+      "font_class": "wangzhanliuliang",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "7171183",
+      "name": "日志管理",
+      "font_class": "rizhiguanli",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "35432520",
+      "name": "登录日志 (2)",
+      "font_class": "a-denglurizhi2",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "36343646",
+      "name": "请求日志-1",
+      "font_class": "qingqiurizhi-1",
+      "unicode": "e77b",
+      "unicode_decimal": 59259
+    },
+    {
       "icon_id": "26508479",
       "name": "服务信息",
       "font_class": "fuwuxinxi",

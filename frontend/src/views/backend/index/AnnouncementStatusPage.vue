@@ -2,7 +2,7 @@
 import {reactive, ref} from 'vue' ;
 import {ElMessageBox} from "element-plus";
 import {CirclePlus, Search, TurnOff} from "@element-plus/icons-vue";
-import {post, get, put, getUserId, delete_} from "@/net/NetWork";
+import {post, get, put, getUserId, delete_} from "@/net/http";
 import {ElError, ElSuccess, ElWarning} from "@/util/MessageUtil" ;
 import {formatDate} from "@/util/FormatData" ;
 import MyIconButton from "@/components/MyIconButton.vue";
@@ -42,7 +42,7 @@ const background = ref(false);
 
 /* 查询重置 */
 const onReset = () => {
-  console.log('reset!');
+  // console.log('reset!');
 }
 
 /* 表格 */
@@ -210,7 +210,7 @@ getData();
 
 /*  查询提交 */
 const onSubmit = () => {
-  console.log('submit!');
+  // console.log('submit!');
 }
 
 /* 关闭表单*/
