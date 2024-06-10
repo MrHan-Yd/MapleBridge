@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.dto.User;
 import priv.backend.domain.vo.request.*;
-import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import priv.backend.exception.custom.ProgramCustomException;
 import priv.backend.mapper.UserMapper;
 import priv.backend.service.AccountService;
@@ -253,7 +252,7 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, User> implements
 
     /** TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
     @Override
-    public RespRefreshTokenVO refreshToken(String refreshToken) throws ProgramCustomException {
+    public String refreshToken(String refreshToken) throws ProgramCustomException {
         /* TODO: Written by - Han Yongding 2024/02/17 令牌不能为空 */
         if (refreshToken == null) {
             throw new ProgramCustomException("刷新令牌为空，无法颁发新令牌") ;

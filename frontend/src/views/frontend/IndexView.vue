@@ -4,7 +4,7 @@ import { Plus, Search} from "@element-plus/icons-vue";
 import MyIcon from "@/components/MyIcon.vue";
 import {logout} from "@/net/Login";
 import router from "@/router";
-import {get, put, getUserId, postFormData} from "@/net/NetWork";
+import {get, put, getUserId, postFormData} from "@/net/http";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
 import * as FormatDate from "@/util/FormatData";
 import {ElTag} from "element-plus";
@@ -31,7 +31,7 @@ const activeIndex = ref('1');
 
 /* 菜单选择 */
 const handleSelect = (key, keyPath) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 
 /* 模态框 */
@@ -162,7 +162,7 @@ const dialogVisible2 = ref(false)
 
 /* 删除照片墙 */
 const handleRemove = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles);
+  // console.log(uploadFile, uploadFiles);
 }
 /* 照片墙预览 */
 const handlePictureCardPreview = (uploadFile) => {

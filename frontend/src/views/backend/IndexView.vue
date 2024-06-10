@@ -22,10 +22,10 @@ function userLogout() {
 }
 
 const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 </script>
 
@@ -222,6 +222,16 @@ const handleClose = (key, keyPath) => {
               <el-menu-item index="11-2" @click="router.push('/backend-index-service-info')">
                 <my-icon name="icon-fuwuxinxi"/>
                 <span>服务信息</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="12">
+              <template #title>
+                <my-icon name="icon-rizhiguanli"/>
+                <span>平台日志</span>
+              </template>
+              <el-menu-item index="12-1" @click="router.push('/backend-index-website-traffic')">
+                <my-icon name="icon-wangzhanliuliang"/>
+                <span>流量日志</span>
               </el-menu-item>
             </el-sub-menu>
           </el-menu>

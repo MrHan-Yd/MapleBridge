@@ -1,5 +1,5 @@
 import { reactive, ref } from 'vue' ;
-import {getUserId, post} from "@/net/NetWork";
+import {getUserId, post} from "@/net/http";
 
 /* 提交的数据列表 */
 const dataList = reactive({

@@ -5,7 +5,7 @@ import {EmailType} from '@/enum/EmailType' ;
 import {askCode, coldTime, resetAskCodeAntiShake} from "@/util/CaptchaUtil";
 import {computed, reactive, ref} from "vue";
 import {ElWarning, ElSuccess} from "@/util/MessageUtil";
-import {post} from "@/net/NetWork" ;
+import {post} from "@/net/http" ;
 
 const form = reactive({
   account: '',

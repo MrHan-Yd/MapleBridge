@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from "@/router";
-import axios from "axios";
 import ElementPlus from "element-plus" ;
 import zhCn from "element-plus/es/locale/lang/zh-cn" ;
 import "element-plus/dist/index.css"
@@ -17,9 +16,6 @@ import '@/assets/css/global.css';
 
 /* 引入echarts */
 import echarts from './util/echarts' ;
-
-/* 配置后端服务器接口 */
-axios.defaults.baseURL = 'http://localhost:9999/' ;
 
 const app = createApp(App) ;
 
@@ -46,3 +42,4 @@ app.provide('$echarts', echarts);
 app.component('MyIcon', MyIcon) ;
 
 app.mount('#app') ;
+

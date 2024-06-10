@@ -2,7 +2,6 @@ package priv.backend.domain.vo.response;
 
 import lombok.Data;
 
-import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,8 +15,4 @@ public class RespAuthorizeVO {
     private String id ;
     private String account ;
     private RespUserRoleNoIdVO role ;
-    private String accessToken ;
-    private Date accessTokenExpire ;
-    private String refreshToken ;
-    private Date refreshTokenExpire ;
 }

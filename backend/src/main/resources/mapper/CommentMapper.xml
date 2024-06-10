@@ -70,7 +70,7 @@
                c.comment_id   as comment_id,
                c.reply_id     as reply_id,
                c.version      as version
-        FROM `comment` C
+        FROM `comment` c
                  LEFT JOIN `user` u on u.id = c.user_id
                  LEFT JOIN `user_avatars` ua on ua.avatars_id = u.avatars_id
                  LEFT JOIN `user_level` ul on ul.level_id = u.level_id
@@ -93,7 +93,7 @@
     c.comment_id   as comment_id,
     c.reply_id     as reply_id,
     c.version      as version
-    FROM `comment` C
+    FROM `comment` c
     LEFT JOIN `user` u on u.id = c.user_id
     LEFT JOIN `user_avatars` ua on ua.avatars_id = u.avatars_id
     LEFT JOIN `user_level` ul on ul.level_id = u.level_id

@@ -3,7 +3,7 @@ import {Lock, User, Message, EditPen} from '@element-plus/icons-vue'
 import {computed, reactive, ref} from "vue" ;
 import router from "@/router";
 import {ElMessage} from "element-plus";
-import {get, post} from "@/net/NetWork" ;
+import {get, post} from "@/net/http" ;
 import { askCodeAntiShake, coldTime, resetAskCodeAntiShake } from '@/util/CaptchaUtil' ;
 
 

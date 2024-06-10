@@ -3,9 +3,6 @@ package priv.backend.util;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 
 
 /**
@@ -26,6 +23,10 @@ public class TimeUtils {
     /** TODO: 2022/8/30 耗时计算(秒或毫秒) */
     public static String getCurrentTime(long time){
         return (System.currentTimeMillis() - time)  / 1000 > 0 ? (System.currentTimeMillis() - time) / 1000 + "秒" : System.currentTimeMillis() - time + "毫秒" ;
+    }
+
+    public static String end() {
+        return TimeUtils.getCurrentTime(TimeUtils.getStartTime()) ;
     }
 
     /**

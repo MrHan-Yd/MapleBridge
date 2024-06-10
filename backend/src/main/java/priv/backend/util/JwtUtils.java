@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.vo.response.RespCreateJwtVO;
-import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Calendar;
@@ -350,7 +349,7 @@ public class JwtUtils {
     }
 
     /** TODO: Written by - Han Yongding 2023/11/02 通过刷新token颁发新token */
-    public RespRefreshTokenVO issueANewTokenByRefreshToken(String refreshToken) {
+    public String issueANewTokenByRefreshToken(String refreshToken) {
         /* TODO: Written by - Han Yongding 2023/11/02 获取令牌的jwt对象 */
         DecodedJWT jwt = this.getDecodedJWTByRefreshToken(refreshToken) ;
         /* TODO: Written by - Han Yongding 2023/11/02 解析权限 */
@@ -365,6 +364,6 @@ public class JwtUtils {
         /* TODO: Written by - Han Yongding 2024/02/17 解析新令牌获取过期时间 */
         Date expiresAt = this.getDecodedJWTByToken(token).getExpiresAt();
         /* TODO: Written by - Han Yongding 2024/02/17 生成token和过期时间后返回给前端 */
-        return new RespRefreshTokenVO(token, expiresAt) ;
+        return token;
     }
 }

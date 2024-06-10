@@ -1,6 +1,6 @@
 <script setup>
 import {defineProps, ref, computed, reactive} from 'vue';
-import {getAllParameters, getUserId, post, put} from '@/net/NetWork' ;
+import {getAllParameters, getUserId, post, put} from '@/net/http' ;
 import {ElSuccess, ElWarning, ElWarningMessage} from "@/util/MessageUtil";
 import {CaretTop, ChatDotRound, CloseBold, Warning} from "@element-plus/icons-vue";
 import {formatNumber} from "@/util/FormatData" ;

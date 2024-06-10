@@ -3,7 +3,7 @@ import PostUserAssembly from "@/components/PostUserAssembly.vue";
 import {ChatDotSquare, Star, StarFilled} from "@element-plus/icons-vue";
 import {defineEmits, reactive, ref} from "vue";
 import {formatNumber} from "@/util/FormatData";
-import {getUserId, put} from "@/net/NetWork";
+import {getUserId, put} from "@/net/http";
 
 const prop = defineProps({
   comment: {

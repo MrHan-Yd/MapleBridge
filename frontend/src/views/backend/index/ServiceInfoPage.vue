@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { get } from "@/net/NetWork";
+import { get } from "@/net/http";
 import {ElWarning} from "@/util/MessageUtil";
 
 const data = ref({

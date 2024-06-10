@@ -4,7 +4,6 @@ import priv.backend.domain.vo.request.RestLoginConfirmVO;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
-import priv.backend.domain.vo.response.RespRefreshTokenVO;
 import priv.backend.exception.custom.ProgramCustomException;
 
 /**
@@ -46,7 +45,7 @@ public interface AccountService {
     String emailConfirm(RestLoginConfirmVO vo) ;
 
     /* TODO: Written by - Han Yongding 2024/02/17 token过期，返回新token */
-    RespRefreshTokenVO refreshToken(String refreshToken) throws ProgramCustomException ;
+    String refreshToken(String refreshToken) throws ProgramCustomException ;
 
     /* TODO: Written by - Han Yongding 2024/02/27 重置密码 */
     String resetPassword(RestEmailResetVO vo) ;

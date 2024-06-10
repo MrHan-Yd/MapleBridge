@@ -1,0 +1,171 @@
+spring:
+  application:
+    name: MapleBridgeServer
+
+  # 上传文件配置
+  upload:
+    #本地文件路径
+    file_path: /E:/Project/MapleBridge
+    #服务器文件路径
+    file_visit_path: /upload/
+    #本地访问路径
+    file_host: https://localhost:9999
+
+
+  # 轻量级定时任务框架配置
+  thread-pool-task-scheduler:
+    # 线程池大小
+    pool-size: 10
+    # 线程名称前缀
+    thread-name-prefix: maple-bridge-task-scheduler-
+    # 当前项目包路径
+    project-package-path: priv.backend
+
+  #静态资源访问
+  # security安全框架配置
+  security:
+    # Security 过滤器优先级默认-100，此处可以不用设置，是为了方便学习
+    filter:
+      order: -100
+      # 3秒内访问不能操作50次，单位：秒
+      max-request-limit-time: 3
+      # 限制时间内请求不能超过50次
+      max-request-limit: 50
+      # 违规封禁时间，单位：秒
+      ban-time: 30
+    jwt:
+      # Token KEY
+      token_key: WGjFZaFYUh1yQKZVwgSZA5Zr1nhBWi37
+      # 刷新Token KEY
+      refresh_token: mWJnDDQW5hWCMcn0vaENxeTdv2A4Ybm8
+      # 分
+      expire: 5
+      # 天
+      refresh_expire: 7
+
+  #数据源
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    #本地数据库地址
+    url: jdbc:mariadb://localhost:3307/maple_bridge_db?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    #本地数据库密码
+    password: root
+
+  #邮件服务
+  mail:
+    host: smtp.163.com
+    username: weiguang_mr_han@163.com
+    password: XOWCJBJXGVLZHQYV
+
+  #RabbitMQ消息队列
+  rabbitmq:
+    username: admin  # RabbitMQ 本地的用户名
+    password: admin  # RabbitMQ 本地的密码
+    virtual-host: /maple_bridge  # 虚拟主机，用于隔离不同应用的消息队列
+    host: 127.0.0.1  # RabbitMQ 服务器的主机地址
+    port: 5672  # RabbitMQ 服务器的端口
+
+    #listener:
+    #  simple:
+    #    default-requeue-rejected: false  # 当消息处理失败时，是否重新将消息放入队列
+    #    retry:
+    #      enabled: true  # 是否启用消息重试
+    #      max-attempts: 3  # 最大重试次数
+    #      initial-interval: 5000  # 初始重试间隔（毫秒）
+    #      multiplier: 1.0  # 重试间隔的乘数因子
+    #      max-interval: 10000  # 最大重试间隔（毫秒）
+
+  #Kafka消息队列
+  kafka:
+    # Kafka的服务器地址
+    bootstrap-servers: localhost:9092
+    consumer:
+      # 消费者组ID列表
+      group-id:
+        - collect-group
+        - persistence-group
+        - website-traffic-group
+      # 从最早的偏移量开始消费
+      auto-offset-reset: earliest
+      # 消息键的反序列化器
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 消息值的反序列化器（使用Spring Kafka的JsonDeserializer）
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      # JsonDeserializer所需的可信任包
+      properties:
+        spring.json.trusted.packages: "priv.backend.domain.mongo.dto,priv.backend.domain.dto"
+
+    producer:
+      # 消息键的序列化器
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 消息值的序列化器（使用Spring Kafka的JsonSerializer）
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  #elasicSearch 配置
+  elasticsearch:
+    # 地址
+    uris: https://127.0.0.1:9200
+    # 用户名
+    username: elastic
+    # 本地密码
+    password: 7ImyfkwV_ZBmXPgE-67c
+    # 证书密码：elastic
+    # 超时时间
+    socket-timeout: 10s
+
+  data:
+    # redis 配置
+    redis:
+      host: 127.0.0.1
+      #本地密码
+      password: wgRedis010517
+      port: 6379
+
+    # MongoDB 配置
+    mongodb:
+      host: localhost
+      port: 27017
+      #本地数据库命
+      database: myDataBase
+      authentication-database: admin
+      username: mongo
+      #本地密码
+      password: mongo
+  # 静态资源文件
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+  # 设置文件上传大小
+  servlet:
+    multipart:
+      # 单文件最大支持
+      max-file-size: 1MB
+      # 整个请求最大支持，前端多文件上传最多允许上传8张图片，这个配置够用
+      max-request-size: 10MB
+
+# 服务器配置
+server:
+  port: 9999
+  servlet:
+    context-path: /
+  #ssl
+  ssl:
+    #enabled: false
+    # 保存SSL证书的秘钥库的路径
+    key-store: classpath:ssl/hanyongding.xyz_1717480771.jks
+    key-store-password: wbKIr1bou2Nt
+    # 证书类型
+    key-store-type: JKS
+    #    key-store-protocol: TLS
+# 持久层框架配置
+mybatis-plus:
+  #SQL映射文件位置
+  mapper-locations: classpath*:/mapper/*Mapper.xml,classpath*:/mapper/*Mapper/*Mapper.xml
+  #别名
+  type-aliases-package: priv.backend.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

@@ -2,7 +2,6 @@ package priv.backend.domain.dto;
 
 import lombok.Data;
 
-import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,5 +18,4 @@ public class AccountRedis {
     private String email ;
     private String roleId ;
     private String refreshToken ;
-    private Date refreshTokenExpire ;
 }
