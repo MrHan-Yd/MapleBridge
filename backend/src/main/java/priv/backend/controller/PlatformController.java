@@ -260,9 +260,29 @@ public class PlatformController {
     @Resource
     private WebsiteTrafficServiceImpl websiteTrafficService ;
 
-    /* TODO: Written by - Han Yongding 2024/06/09 获取网站流量表 */
+    /* TODO: Written by - Han Yongding 2024/06/09 分页获取所有网站流量表 */
     @GetMapping("website-traffic")
     public RestBean<Object> getWebsiteTraffic(PageBean pageBean) {
         return ReturnUtils.messageHandleData(pageBean, websiteTrafficService::queryAllWebsiteTraffic);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/16 注入登录日志业务层实现类 */
+    @Resource
+    private LoginLogServiceImpl loginLogService ;
+
+    /* TODO: Written by - Han Yongding 2024/06/16 分页获取所有登录日志 */
+    @GetMapping("login-log")
+    public RestBean<Object> getLoginLog(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, loginLogService::getAll);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/16 注入请求日志业务层实现类 */
+    @Resource
+    private RequestLogServiceImpl requestLogService ;
+
+    /* TODO: Written by - Han Yongding 2024/06/16 分页获取所有请求日志 */
+    @GetMapping("request-log")
+    public RestBean<Object> getRequestLog(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, requestLogService::getAll) ;
     }
 }

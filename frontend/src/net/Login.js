@@ -1,9 +1,8 @@
 import {
     defaultFailure,
-    post,
     storeAccessToken,
     deleteAccessToken,
-    get, getToken, setRemember
+    get, getToken, setRemember, internalPost
 } from '@/net/http' ;
 import {ElMessage} from "element-plus";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
@@ -30,10 +29,11 @@ function login(username, password, remember, success, failure = defaultFailure) 
     /* 先存储记住状态 */
     setRemember(remember) ;
 
-    post('/api/auth/login', {
+    internalPost('/api/auth/login', {
             username: username,
             password: password
         },
+        'login',
         (rs) => {
 
             /* 存储Token */
@@ -41,12 +41,10 @@ function login(username, password, remember, success, failure = defaultFailure) 
             ElMessage.success("登录成功");
             ElSuccess(`欢迎${rs.data.account}使用校友会管理平台`)
             success(rs);
-        }, (rs) => {
-            /* 登录失败，提示错误信息 */
-            ElWarning(rs.data.message);
+        }, (message) => {
             /* 清空本地信息 */
             deleteAccessToken();
-            failure(rs);
+            failure(message);
         });
 }
 
@@ -55,22 +53,39 @@ function loginFrontend(username, password, success, failure = defaultFailure) {
     /* 先存储记住状态 */
     setRemember(true) ;
 
-    post('/api/auth/login', {
-            username: username,
-            password: password
-        },
-        (rs) => {
-            /* 存储Token, 前端登录，默认勾选记住我，也就是长时间保存用户令牌 */
-            storeAccessToken(true, rs.data.id, rs.data.account, rs.data.role);
-            ElMessage.success("登录成功");
-            success(rs);
-        }, (rs) => {
-            /* 登录失败，提示错误信息 */
-            ElWarning(rs.data.message);
-            /* 清空本地信息 */
-            deleteAccessToken();
-            failure(rs);
-        });
+    internalPost("/api/auth/login", {
+        username: username,
+        password: password
+    }, "login",(rs) => {
+        /* 存储Token, 前端登录，默认勾选记住我，也就是长时间保存用户令牌 */
+        storeAccessToken(true, rs.data.id, rs.data.account, rs.data.role);
+        ElMessage.success("登录成功");
+        success(rs);
+    }, (message) => {
+        /* 登录失败，提示错误信息 */
+        ElWarning(message);
+        /* 清空本地信息 */
+        deleteAccessToken();
+        failure(message);
+    })
+    // post('/api/auth/login', {
+    //         username: username,
+    //         password: password
+    //     },{
+    //         'Content-Type': 'application/x-www-form-urlencoded'
+    //     },
+    //     (rs) => {
+    //         /* 存储Token, 前端登录，默认勾选记住我，也就是长时间保存用户令牌 */
+    //         storeAccessToken(true, rs.data.id, rs.data.account, rs.data.role);
+    //         ElMessage.success("登录成功");
+    //         success(rs);
+    //     }, (message) => {
+    //         /* 登录失败，提示错误信息 */
+    //         ElWarning(message);
+    //         /* 清空本地信息 */
+    //         deleteAccessToken();
+    //         failure(message);
+    //     });
 }
 
 /* 退出登录函数 */

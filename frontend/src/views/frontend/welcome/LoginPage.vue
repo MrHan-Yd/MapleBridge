@@ -65,8 +65,6 @@ function login() {
           /* 登录 */
           loginFrontend(loginForm.username, loginForm.password, () => {
             router.push("/frontend-index-home");
-          }, (message) => {
-            ElWarning(message) ;
           });
         } else {
           ElWarning(rs.message) ;

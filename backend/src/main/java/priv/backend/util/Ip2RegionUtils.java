@@ -1,6 +1,7 @@
 package priv.backend.util;
 
 import org.lionsoul.ip2region.xdb.Searcher;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import priv.backend.domain.IpInformation;
@@ -24,8 +25,9 @@ public class Ip2RegionUtils {
      */
     private Searcher getSearcher() throws IOException {
         /* TODO: Written by - Han Yongding 2024/06/08 获取ip离线库资源 */
-        byte[] bytes = Searcher.loadContentFromFile(ResourceUtils.getFile("classpath:ip/ip2region.xdb").getCanonicalPath()) ;
-        return Searcher.newWithBuffer(bytes) ;
+//        byte[] bytes = Searcher.loadContentFromFile(ResourceUtils.getFile("classpath:ip/ip2region.xdb").getCanonicalPath()) ;
+        ClassPathResource classPathResource = new ClassPathResource("/ip/ip2region.xdb") ;
+        return Searcher.newWithBuffer(classPathResource.getContentAsByteArray()) ;
     }
 
     /**

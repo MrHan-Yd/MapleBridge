@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {refreshToken, isRefresh} from '@/net/RefreshToken';
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
+import {unauthorized} from "@/net/Login";
 
 let accessAuthItem = "user";
 let tokenAuth = "token";
@@ -8,7 +9,7 @@ let refreshTokenAuth = "refreshToken";
 
 const http = axios.create({
     baseURL: 'https://localhost:9999/',
-    // baseURL: 'https://hanyongding.xyz:9999/',
+    //baseURL: 'https://hanyongding.xyz:9999/',
     timeout: 5000,
     headers: {
         Authorization: `Bearer ${getToken()}`
@@ -18,13 +19,21 @@ const http = axios.create({
 
 /* 请求拦截器 */
 http.interceptors.request.use( async (config) => {
-        config.headers["Content-Type"] = !!config.headers.__isFromData ? 'application/json' : 'multipart/form-data';
+        if(!!config.__isLogin) {
+            config.headers["Content-Type"] = 'application/x-www-form-urlencoded';
+        } else {
+            config.headers["Content-Type"] = isFromData(config) ? 'application/json' : 'multipart/form-data';
+        }
         return config;
     },
     (error) => {
         return Promise.reject(error);
     }
 );
+
+function isFromData(config) {
+    return !!config.__isFromData;
+}
 
 /* 响应拦截器 */
 http.interceptors.response.use(async (response) => {
@@ -39,8 +48,8 @@ http.interceptors.response.use(async (response) => {
         setRefreshToken(refreshToken);
     }
 
-    /* 没有权限并且不是刷新token的情况下 */
-    if (response.data.code === 401 && !isRefresh(response.config)) {
+    /* 没有权限并且不是刷新token的情况下， 未登录页不需要刷新 */
+    if (response.data.code === 401 && !isRefresh(response.config) && !unauthorized()) {
         /* 刷新token */
         const isSuccess = await refreshToken();
 
@@ -232,12 +241,7 @@ function getRefreshToken() {
 
 /* 内部使用Post请求 */
 function internalPost(url, data, header = true, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    header = header ? {
-        __isFromData: false
-    } : {
-        __isFromData: true
-    }
-    http.post(url, data, header)
+    http.post(url, data, header === 'login' ? { __isLogin : true} : isData(header))
         .then(({data}) => {
         if (data.code === 200 || data.code === 403) {
             if (data.code === 200) {
@@ -252,8 +256,8 @@ function internalPost(url, data, header = true, success = defaultSuccess, failur
 }
 
 /* 内部使用Put请求 */
-function internalPut(url, data, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    http.put(url, data).then(({data}) => {
+function internalPut(url, data, header = true, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
+    http.put(url, data, isData(header)).then(({data}) => {
         if (data.code === 200) {
             success(data);
         } else {
@@ -307,7 +311,7 @@ function getAllParameters(url, success = defaultSuccess, failure = defaultFailur
 
 /* 普通post 暴露给外面使用 */
 function post(url, data, success, failure = defaultFailure) {
-    internalPost(url, data, true, success, failure);
+    internalPost(url, data,true, success, failure);
 }
 /* 上传Post请求 */
 function postFormData(url, data, success, failure = defaultFailure) {
@@ -316,12 +320,25 @@ function postFormData(url, data, success, failure = defaultFailure) {
 
 /* 普通put 暴露给外面使用 */
 function put(url, data, success = defaultSuccess, failure = defaultFailure) {
-    internalPut(url, data, success, failure);
+    internalPut(url, data,  true, success, failure);
+}
+
+/* 上传Put请求 */
+function putFormData(url, data, success, failure = defaultFailure) {
+    internalPut(url, data, false, success, failure);
 }
 
 /* 普通delete 暴露给外面使用 */
 function delete_(url, success = defaultSuccess, failure = defaultFailure) {
     internalDelete(url, success, failure);
+}
+
+function isData(header) {
+    return header ? {
+        __isFromData: true
+    } : {
+        __isFromData: false
+    }
 }
 
 
@@ -331,6 +348,7 @@ export {
     post,
     postFormData,
     put,
+    putFormData,
     delete_,
     defaultFailure,
     internalPost,

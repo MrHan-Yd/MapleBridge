@@ -84,6 +84,8 @@ spring:
         - collect-group
         - persistence-group
         - website-traffic-group
+        - login-log-group
+        - request-log-group
       # 从最早的偏移量开始消费
       auto-offset-reset: earliest
       # 消息键的反序列化器

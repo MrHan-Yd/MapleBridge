@@ -1,10 +1,10 @@
 <script setup>
 import {ref, reactive, onMounted} from 'vue'
-import { Plus, Search} from "@element-plus/icons-vue";
+import { Plus, Search } from "@element-plus/icons-vue";
 import MyIcon from "@/components/MyIcon.vue";
 import {logout} from "@/net/Login";
 import router from "@/router";
-import {get, put, getUserId, postFormData} from "@/net/http";
+import {get, put, getUserId, postFormData, putFormData } from "@/net/http";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
 import * as FormatDate from "@/util/FormatData";
 import {ElTag} from "element-plus";
@@ -386,7 +386,7 @@ function saveButton() {
   userFormData.append("major", personalInformationFromData.major);
   userFormData.append("graduationYear", personalInformationFromData.graduationYear);
 
-  put("api/index/user", userFormData, (rs) => {
+  putFormData("api/index/user", userFormData, (rs) => {
     if (rs.code === 200) {
       ElSuccess(rs.message);
       /* 清空表单及头像内容 */

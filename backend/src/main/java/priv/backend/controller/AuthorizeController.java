@@ -2,18 +2,22 @@ package priv.backend.controller;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.*;
+import priv.backend.annotations.ExposeHeaders;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.vo.request.RestLoginConfirmVO;
 import priv.backend.domain.vo.request.RestConfirmVO;
 import priv.backend.domain.vo.request.RestEmailRegisterVO;
 import priv.backend.domain.vo.request.RestEmailResetVO;
 import priv.backend.enumeration.CodeEnum;
+import priv.backend.enumeration.HeaderEnum;
 import priv.backend.exception.custom.ProgramCustomException;
 import priv.backend.service.impl.AccountServiceImpl;
 import priv.backend.util.ReturnUtils;
+
 
 
 /**
@@ -58,10 +62,14 @@ public class AuthorizeController {
     }
 
     /** TODO: Written by - Han Yongding 2023/10/27 token过期，提供给前端刷新 */
-    @GetMapping("refresh-token/{refreshToken}")
-    public RestBean<Object> refreshToken(@PathVariable("refreshToken") @Valid String refreshToken) {
+    @GetMapping("refresh-token")
+    @ExposeHeaders(value = "Authorization")
+    public RestBean<Void> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         try {
-            return RestBean.success(accountService.refreshToken(refreshToken)) ;
+            String authorization = request.getHeader("Authorization") ;
+            String token = accountService.refreshToken(authorization);
+            response.setHeader(HeaderEnum.AUTHORIZATION.headerName, token);
+            return RestBean.success() ;
         } catch (ProgramCustomException e) {
             return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, e.getExceptionMessage()) ;
         }

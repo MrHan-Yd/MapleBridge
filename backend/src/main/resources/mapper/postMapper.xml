@@ -121,6 +121,13 @@
         WHERE post_id = #{postId}
     </select>
     <!--根据PostId查询评论数量和版本号-->
+    <!--根据用户ID查询有关的帖子ID-->
+    <select id="getPostIdByUserId" resultType="String" parameterType="String">
+        SELECT post_id
+        FROM post
+        WHERE user_id = #{userId}
+    </select>
+    <!--根据用户ID查询有关的帖子ID-->
     <!--Select-->
 
     <!--Update-->

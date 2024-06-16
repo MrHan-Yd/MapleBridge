@@ -704,4 +704,9 @@ public class PostServiceImpl implements PostService {
         });
     }
 
+    /* TODO: Written by - Han Yongding 2024/06/16 根据用户ID查询相关的帖子ID */
+    @Override
+    public List<String> getPostIdByUserId(String userId) {
+        return mapper.getPostIdByUserId(userId);
+    }
 }

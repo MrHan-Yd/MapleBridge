@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD) // 注解作用于方法上
 @Retention(RetentionPolicy.RUNTIME) //保留注解到运行时
 public @interface ExposeHeaders {
-    String value(); // 要暴露的header名称
+    String value(); // 要暴露的header内容
 }

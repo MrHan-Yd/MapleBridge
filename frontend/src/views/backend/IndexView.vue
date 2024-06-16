@@ -30,7 +30,7 @@ const handleClose = (key, keyPath) => {
 </script>
 
 <template>
-  <div id="index_content">
+  <div id="index-content">
     <div id="top">
       <el-row :gutter="20" class="centered-content">
         <el-col :span="6" class="centered-content">
@@ -233,6 +233,14 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-wangzhanliuliang"/>
                 <span>流量日志</span>
               </el-menu-item>
+              <el-menu-item index="12-2" @click="router.push('/backend-index-login-log')">
+                <my-icon name="icon-a-denglurizhi2"/>
+                <span>登录日志</span>
+              </el-menu-item>
+              <el-menu-item index="12-3" @click="router.push('/backend-index-request-log')">
+                <my-icon name="icon-qingqiurizhi-1"/>
+                <span>请求日志</span>
+              </el-menu-item>
             </el-sub-menu>
           </el-menu>
         </el-col>
@@ -257,69 +265,72 @@ const handleClose = (key, keyPath) => {
 </template>
 
 <style scoped>
-#index_content {
+#index-content {
+  background-color:#f5f6f9;
+  margin: 0 ;
+  min-height: 100vh;
   //display: flex ;
-  background-color: #f5f6f9;
-  margin: 0; /* 可以去除 body 的默认边距 */
-  min-height: 100vh; /* 使 body 至少铺满视窗高度 */
-}
+  //background-color: #f5f6f9;
+  //margin: 0; /* 可以去除 body 的默认边距 */
+  //min-height: 100vh; /* 使 body 至少铺满视窗高度 */
 
-#top {
-  height: 80px;
-  width: 100%;
-  background-color: white;
-  align-items: center; /* 垂直居中 */
-  box-shadow: 0 2px 2px #999;
-}
+  #top {
+    height: 80px;
+    width: 100%;
+    background-color: white;
+    align-items: center; /* 垂直居中 */
+    box-shadow: 0 2px 2px #999;
+  }
 
-#top >>> #home_link {
-  margin-right: 20px;
-  font-size: 20px;
-}
+  #top >>> #home_link {
+    margin-right: 20px;
+    font-size: 20px;
+  }
 
-#top >>> #logo-img {
-  margin-left: 25px;
-  width: auto;
-  height: 80px;
-  max-width: 100%; /* 设置最大宽度，防止超过容器宽度 */
-  max-height: 60px; /* 设置最大高度为容器高度，确保在容器内显示 */
-  transform: scale(2);
-  transform-origin: center 40%;
-}
+  #top >>> #logo-img {
+    margin-left: 25px;
+    width: auto;
+    height: 80px;
+    max-width: 100%; /* 设置最大宽度，防止超过容器宽度 */
+    max-height: 60px; /* 设置最大高度为容器高度，确保在容器内显示 */
+    transform: scale(2);
+    transform-origin: center 40%;
+  }
 
-#top >>> #logo-text {
-  margin-left: 20px;
-  font-size: 20px;
-}
+  #top >>> #logo-text {
+    margin-left: 20px;
+    font-size: 20px;
+  }
 
-#top >>> #avatar-div {
-  height: 100%;
-  width: 90px;
-}
+  #top >>> #avatar-div {
+    height: 100%;
+    width: 90px;
+  }
 
-#top >>> #avatar-div:hover {
-  background-color: #e5e5e5;
-}
+  #top >>> #avatar-div:hover {
+    background-color: #e5e5e5;
+  }
 
-#bottom {
-  height: 88.5vh;
-  width: 100%;
-}
+  #bottom {
+    height: 88.5vh;
+    width: 100%;
+  }
 
-.centered-content {
-  display: flex;
-  align-items: center; /* 垂直居中 */
-  height: 100%;
-}
+  .centered-content {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    height: 100%;
+  }
 
-.centered-content-center {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
+  .centered-content-center {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+  }
 
-.flex-end {
-  display: flex;
-  justify-content: flex-end;
+  .flex-end {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

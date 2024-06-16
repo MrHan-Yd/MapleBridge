@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Request implements BaseData {
-    /* 获取请求参数 */
+    /* 获取用户代理 */
     private String userAgent ;
     /* 获取设备类型 */
     private String deviceType ;

@@ -5,7 +5,7 @@ import {computed, reactive, ref} from "vue";
 import {askCode, coldTime, resetAskCodeAntiShake} from '@/util/CaptchaUtil' ;
 import { EmailType } from '@/enum/EmailType' ;
 import {ElWarning, ElSuccess} from "@/util/MessageUtil";
-import {get, put} from "@/net/NetWork";
+import {get, put} from "@/net/http";
 
 
 /* 电子邮件表单 */

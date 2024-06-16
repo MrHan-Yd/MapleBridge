@@ -72,4 +72,7 @@ public interface PostService {
 
     /* TODO: Written by - Han Yongding 2024/05/05 删除点赞记录 */
     String deleteLikeByCommentIdAndUserId(String postId, String userId) ;
+
+    /* TODO: Written by - Han Yongding 2024/06/16 根据用户ID查询相关的帖子ID */
+    List<String> getPostIdByUserId(String userId) ;
 }

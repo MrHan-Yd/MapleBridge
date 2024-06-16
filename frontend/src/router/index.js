@@ -118,6 +118,14 @@ const router = createRouter({
                     path: '/backend-index-website-traffic',
                     name: 'backend-index-website-traffic',
                     component: () => import('@/views/backend/index/WebsiteTrafficPage.vue')
+                } , {
+                    path: '/backend-index-login-log',
+                    name: 'backend-index-login-log',
+                    component: () => import('@/views/backend/index/LoginLogPage.vue')
+                } , {
+                    path: '/backend-index-request-log',
+                    name: 'backend-index-request-log',
+                    component: () => import('@/views/backend/index/RequestLogPage.vue')
                 }
             ]
         } , {

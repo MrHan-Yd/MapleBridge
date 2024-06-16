@@ -102,7 +102,8 @@ function toggleLike(postId, version, typeId) {
     // 点赞
     // /* 记录收集用户偏好类型 */
     recordData(typeId) ;
-    put("api/index/like", {id: postId, userId: getUserId(), version: version, type: 'like'}, (rs) => {
+    put("api/index/like", {id: postId, userId: getUserId(), version: version, type: 'like'},
+        (rs) => {
       if (rs.code === 200) {
         // 更新帖子点赞数
         updateLikeCount(postId, 1);

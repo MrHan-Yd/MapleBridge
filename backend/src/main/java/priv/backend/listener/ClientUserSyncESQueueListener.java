@@ -1,16 +1,20 @@
 package priv.backend.listener;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.es.dto.ESClientUser;
 import priv.backend.repository.elasticsearch.ESClientUserRepository;
+import priv.backend.service.impl.PostServiceImpl;
 import priv.backend.service.impl.UserServiceImpl;
 import priv.backend.util.LogUtils;
 import priv.backend.util.TimeUtils;
 import priv.backend.util.UploadUtils;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,13 +36,23 @@ public class ClientUserSyncESQueueListener {
     /* TODO: Written by - Han Yongding 2024/04/12 注入上载工具类 */
     private final UploadUtils uploadUtils ;
 
+    /* TODO: Written by - Han Yongding 2024/06/16 注入post业务层实现类 */
+    private final PostServiceImpl postService ;
+
+    /* TODO: Written by - Han Yongding 2024/06/16 注入RabbitMQ模板 */
+    private final AmqpTemplate template ;
+
     @Autowired
     public ClientUserSyncESQueueListener(UserServiceImpl userService,
                                          ESClientUserRepository repository,
-                                         UploadUtils uploadUtils) {
+                                         UploadUtils uploadUtils,
+                                         PostServiceImpl postService,
+                                         AmqpTemplate template) {
         this.userService = userService ;
         this.repository = repository ;
         this.uploadUtils = uploadUtils ;
+        this.postService = postService ;
+        this.template = template ;
     }
 
     @RabbitHandler
@@ -65,6 +79,11 @@ public class ClientUserSyncESQueueListener {
         if (save.getId() == null) {
             log.info("数据同步失败，原因：同步ES失败");
         }
+
+        /* TODO: Written by - Han Yongding 2024/06/16 更新ES中用户相关数据 */
+        postService.getPostIdByUserId(dto.getId()).forEach(id -> {
+            template.convertAndSend("postSyncES", id) ;
+        });
 
         /* TODO: Written by - Han Yongding 2024/04/11 同步成功 */
         LogUtils.info(this.getClass(),"客户端修改信息，队列执行：user表数据已同步至Elasticsearch");
