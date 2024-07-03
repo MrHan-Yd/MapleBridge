@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @CreateDate :  2024-06-09 16:35
  */
 @Data
-public class RespWebsiteTrafficVO {
+public class RespWebsiteTrafficLogVO {
     private String pageUrl ;
     /* 获取请求参数 */
     private String userAgent ;

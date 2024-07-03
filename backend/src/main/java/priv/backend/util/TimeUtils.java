@@ -2,6 +2,7 @@ package priv.backend.util;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -75,4 +76,18 @@ public class TimeUtils {
         return LocalDateTime.now().isAfter(time);
     }
 
+    /* TODO: Written by - Han Yongding 2024/06/29 获取当前系统年月字符串 */
+    public static String getCurrentYearMonth() {
+        return LocalDateTime.now().toString().substring(0, 7);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/30 获取当前系统日期 */
+    public static LocalDate getLocalDate() {
+        return LocalDate.now() ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/30 获取当前时间日期 */
+    public static LocalDateTime getLocalDateTime() {
+        return LocalDateTime.now() ;
+    }
 }

@@ -1,9 +1,12 @@
 package priv.backend.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.RestBean;
+import priv.backend.domain.dto.Log;
 import priv.backend.domain.vo.request.*;
 import priv.backend.domain.vo.response.RespServerParametersVO;
 import priv.backend.service.impl.*;
@@ -11,6 +14,8 @@ import priv.backend.service.system.Impl.ServerParametersServiceImpl;
 import priv.backend.service.system.Impl.TaskPlanServiceImpl;
 import priv.backend.service.system.Impl.TaskServiceImpl;
 import priv.backend.util.ReturnUtils;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -258,7 +263,7 @@ public class PlatformController {
 
     /* TODO: Written by - Han Yongding 2024/06/09 注入网站流量表业务层实现类 */
     @Resource
-    private WebsiteTrafficServiceImpl websiteTrafficService ;
+    private WebsiteTrafficLogServiceImpl websiteTrafficService ;
 
     /* TODO: Written by - Han Yongding 2024/06/09 分页获取所有网站流量表 */
     @GetMapping("website-traffic")
@@ -284,5 +289,84 @@ public class PlatformController {
     @GetMapping("request-log")
     public RestBean<Object> getRequestLog(PageBean pageBean) {
         return ReturnUtils.messageHandleData(pageBean, requestLogService::getAll) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/27 注入日志业务层实现类 */
+    @Resource
+    private LogServiceImpl logService ;
+    /* TODO: Written by - Han Yongding 2024/06/27 分页获取平台日志表 */
+    @GetMapping("logs")
+    public RestBean<Page<Log>> getLogs(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, logService::getLogs) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/29 备份日志表 */
+    @PostMapping("logs")
+    public RestBean<Void> backupLogs(@RequestBody RestLogVO vo) {
+        return ReturnUtils.messageHandle(vo.getTableName(), logService::backupLogs) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 清空日志表 */
+    @DeleteMapping("logs/{tableName}/truncate")
+    public RestBean<Void> truncateLogs(@PathVariable("tableName") String tableName) {
+        return ReturnUtils.messageHandle(tableName, logService::truncateLogs) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 分页获取备份日志表 */
+    @GetMapping("backup-logs")
+    public RestBean<Page<Log>> getBackupLogs(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, logService::getBackupLogs);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 导出日志表 */
+    @GetMapping("backup-logs/{tableName}/export")
+    public RestBean<Object> exportLogs(@PathVariable("tableName") String tableName) {
+        return ReturnUtils.messageHandleData(tableName, logService::getBackupLogData);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 批量导出日志表 */
+    @GetMapping("backup-logs/export")
+    public RestBean<Object> batchExportLogs(@RequestParam("ids") List<String> tableName) {
+        return ReturnUtils.messageHandleData(tableName, logService::batchExportLogs);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 删除备份日志表 */
+    @DeleteMapping("backup-logs/{tableName}/drop")
+    public RestBean<Void> dropBackupLogs(@PathVariable("tableName") String tableName) {
+        return ReturnUtils.messageHandle(tableName, logService::dropBackupTableByName);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 批量删除备份日志表 */
+    @DeleteMapping("backup-logs/drop")
+    public RestBean<Void> batchDropBackupLogs(@RequestParam("ids") List<String> tableName) {
+        return ReturnUtils.messageHandle(tableName, logService::batchDropBackupLogs);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/30 关键词业务层 */
+    @Resource
+    private SensitiveWordsServiceImpl sensitiveWordsService ;
+
+    /* TODO: Written by - Han Yongding 2024/06/30 分页查询关键词 */
+    @GetMapping("sensitive-words")
+    public RestBean<Object> getSensitiveWords(PageBean pageBean) {
+        return ReturnUtils.messageHandleData(pageBean, sensitiveWordsService::getAll);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/30 新增关键词 */
+    @PostMapping("sensitive-words")
+    public RestBean<Void> insertSensitiveWords(@RequestBody RestSensitiveWordsVO vo) {
+        return ReturnUtils.messageHandle(vo, sensitiveWordsService::add);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/06/30 删除关键词 */
+    @DeleteMapping("sensitive-words/{id}")
+    public RestBean<Void> deleteSensitiveWords(@PathVariable("id") String id) {
+        return ReturnUtils.messageHandle(id, sensitiveWordsService::delete);
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/01 批量删除关键词 */
+    @DeleteMapping("sensitive-words")
+    public RestBean<Void> deleteSensitiveWordsBatch(@RequestParam("ids") List<String> ids) {
+        return ReturnUtils.messageHandle(ids, sensitiveWordsService::deleteBatch);
     }
 }

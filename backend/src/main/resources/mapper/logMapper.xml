@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="priv.backend.mapper.LogMapper">
+    <!--SQL-->
+    <!--查询所有日志表SQL-->
+    <sql id="getLogsSQL">
+        FROM
+        information_schema.tables
+        WHERE table_schema = 'maple_bridge_db'
+          AND table_name LIKE '%log%'
+          AND table_name NOT REGEXP '[0-9]'
+    </sql>
+    <!--查询所有日志表SQL-->
+    <!--查询所有备份日志表SQL-->
+    <sql id="getBackupLogsSQL">
+        FROM
+        information_schema.tables
+        WHERE table_schema = 'maple_bridge_db'
+          AND table_name LIKE '%log%'
+          AND table_name REGEXP '[0-9]'
+    </sql>
+    <!--查询所有备份日志表SQL-->
+    <!--SQL-->
+
+    <!--Map-->
+
+    <!--Map-->
+
+    <!--Select-->
+    <!--查询备份日志表的数据-->
+    <select id="getBackupLogData" resultType="Map">
+        SELECT *
+        from ${backupTableName}
+    </select>
+    <!--分页查询所有日志表-->
+    <select id="getLogs" resultType="Log">
+        SELECT
+        table_name,
+        table_type,
+        engine,
+        version,
+        table_rows,
+        avg_row_length,
+        data_length,
+        index_length,
+        create_time,
+        update_time,
+        table_collation,
+        table_comment
+        <include refid="getLogsSQL"/>
+    </select>
+    <!--分页查询所有日志表-->
+    <!--分页查询所有备份日志表-->
+    <select id="getBackupLogs" resultType="Log">
+        SELECT
+        table_name,
+        table_type,
+        engine,
+        version,
+        table_rows,
+        avg_row_length,
+        data_length,
+        index_length,
+        create_time,
+        update_time,
+        table_collation,
+        table_comment
+        <include refid="getBackupLogsSQL"/>
+    </select>
+    <!--分页查询所有备份日志表-->
+    <!--不分页查询所有日志表-->
+    <select id="getTableName" resultType="String">
+        SELECT table_name
+        <include refid="getLogsSQL"/>
+    </select>
+    <!--不分页查询所有日志表-->
+    <!--不分页查询所有备份日志表-->
+    <select id="getBackupTableName" resultType="String">
+        SELECT table_name
+        <include refid="getBackupLogsSQL"/>
+    </select>
+    <!--不分页查询所有备份日志表-->
+    <!--查询日志表数据条数-->
+    <select id="countLogs" parameterType="String">
+        select count(*) as number
+        from ${tableName}
+    </select>
+    <!--查询日志表数据条数-->
+    <!--检查日志表是否存在-->
+    <select id="checkTableExists">
+        select count(*)
+        from information_schema.tables
+        where table_schema = 'maple_bridge_db'
+          and table_name = #{tableName}
+    </select>
+    <!--检查日志表是否存在-->
+    <!--Select-->
+
+    <!--Update-->
+    <!--清空日志表-->
+    <update id="truncateTableByName">
+        TRUNCATE TABLE ${tableName}
+    </update>
+    <!--清空日志表-->
+    <!--Update-->
+
+    <!--Insert-->
+    <!--备份日志表-->
+    <insert id="backupLogs">
+        create
+            table ${backupTableName}
+            COMMENT #{comment}
+        as
+            select *
+            from ${tableName}
+    </insert>
+    <!--备份日志表-->
+    <!--Insert-->
+
+    <!--Delete-->
+    <!--删除备份日志表-->
+    <delete id="deleteBackupTableByName">
+        drop table ${backupTableName}
+    </delete>
+    <!--删除备份日志表-->
+    <!--Delete-->
+
+</mapper>

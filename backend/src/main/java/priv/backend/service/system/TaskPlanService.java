@@ -36,4 +36,7 @@ public interface TaskPlanService extends IService<TaskPlan> {
 
     /* TODO: Written by - Han Yongding 2024/05/15 根据任务ID删除任务计划 */
     String deleteTaskPlanByTaskId(String taskId) ;
+
+    /* TODO: Written by - Han Yongding 2024/07/03 根据ID查询任务计划是否存在 */
+    boolean isTaskPlanExistById(String id) ;
 }

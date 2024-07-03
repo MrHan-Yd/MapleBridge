@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="priv.backend.mapper.WebsiteTrafficMapper">
+<mapper namespace="priv.backend.mapper.WebsiteTrafficLogMapper">
     <!--SQL-->
 
     <!--SQL-->
 
     <!--Map-->
-    <resultMap id="getAllMap" type="RespWebsiteTrafficVO" >
+    <resultMap id="getAllMap" type="RespWebsiteTrafficLogVO" >
         <result property="pageUrl" column="page_url" />
         <result property="ip" column="visitor_ip" />
         <result property="timestamp" column="timestamp" />
@@ -37,7 +37,7 @@
             country,
             region,
             network
-        FROM website_traffic
+        FROM website_traffic_log
     </select>
     <!--Select-->
 

@@ -529,7 +529,6 @@ function getShowAndHide(roleId) {
 #role >>> #top {
   padding-left: 10px;
   padding-right: 10px;
-  //margin: 10px ;
 }
 
 #role >>> #bottom {

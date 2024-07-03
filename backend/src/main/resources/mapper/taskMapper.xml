@@ -22,8 +22,8 @@
         FROM task t
         LEFT JOIN task_plan tp ON t.task_id = tp.task_id
         WHERE tp.task_id IS NULL OR tp.status = '2';
-    <!--查询所有任务，用于前端计划选择(没有计划的任务)-->
     </select>
+    <!--查询所有任务，用于前端计划选择(没有计划的任务)-->
     <!--Select-->
 
     <!--Update-->

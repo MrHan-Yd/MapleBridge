@@ -2,7 +2,7 @@ class Page {
     private _total?: number = 0
     private _size?: number = 10
     private _current?: number = 1
-    private _pages?: number | undefined = 0
+    private _pages?: number = 0
 
     get total(): number {
         return this._total as number
@@ -28,7 +28,7 @@ class Page {
         this._current = current
     }
 
-    get pages(): number | undefined {
+    get pages(): number {
         return this._pages as number
     }
 

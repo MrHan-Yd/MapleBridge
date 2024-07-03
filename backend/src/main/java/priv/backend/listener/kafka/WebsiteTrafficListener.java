@@ -3,8 +3,8 @@ package priv.backend.listener.kafka;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import priv.backend.domain.dto.WebsiteTraffic;
-import priv.backend.service.impl.WebsiteTrafficServiceImpl;
+import priv.backend.domain.dto.WebsiteTrafficLog;
+import priv.backend.service.impl.WebsiteTrafficLogServiceImpl;
 import priv.backend.util.LogUtils;
 import priv.backend.util.TimeUtils;
 
@@ -19,15 +19,15 @@ import priv.backend.util.TimeUtils;
 public class WebsiteTrafficListener {
 
     /* TODO: Written by - Han Yongding 2024/06/09 注入网站流量记录表业务层 */
-    private final WebsiteTrafficServiceImpl websiteTrafficService;
+    private final WebsiteTrafficLogServiceImpl websiteTrafficService;
 
     @Autowired
-    public WebsiteTrafficListener(WebsiteTrafficServiceImpl websiteTrafficService) {
+    public WebsiteTrafficListener(WebsiteTrafficLogServiceImpl websiteTrafficService) {
         this.websiteTrafficService = websiteTrafficService;
     }
 
     @KafkaListener(topics = "website_traffic_logs", groupId = "website-traffic-group")
-    public void websiteTrafficHandler(WebsiteTraffic websiteTraffic) {
+    public void websiteTrafficHandler(WebsiteTrafficLog websiteTraffic) {
         LogUtils.info(this.getClass(), "website-traffic-Kafka" + "——记录平台流量日志任务开始执行");
         /* TODO: Written by - Han Yongding 2024/06/09 记录开始时间 */
         TimeUtils.start() ;

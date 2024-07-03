@@ -25,6 +25,8 @@ public class RequestLogListener {
 
     public void listen(RequestLog log) {
         LogUtils.info(this.getClass(),"kafka-接收到请求日志");
+        log.setParameter(log.getParameter().length() > 128 ? "数据过长，截取前半部分" + log.getParameter().substring(0, 128) : log.getParameter());
+        log.setResponseValue(log.getResponseValue().length() > 128 ? "数据过长，截取前半部分" + log.getResponseValue().substring(0, 128) : log.getResponseValue());
         if (service.save(log)) {
             LogUtils.info(this.getClass(), "kafka-请求日志已记录") ;
         } else {

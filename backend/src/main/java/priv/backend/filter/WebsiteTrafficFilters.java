@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.backend.domain.IpInformation;
 import priv.backend.domain.Request;
-import priv.backend.domain.dto.WebsiteTraffic;
+import priv.backend.domain.dto.WebsiteTrafficLog;
 import priv.backend.enumeration.KafkaTopicEnum;
 import priv.backend.util.Const;
 import priv.backend.util.Ip2RegionUtils;
@@ -50,7 +50,7 @@ public class WebsiteTrafficFilters extends HttpFilter {
                             FilterChain chain) throws IOException, ServletException {
         Request requestDetails = requestUtils.getRequestDetails(request);
         IpInformation ipInformation = ip2RegionUtils.getIpInformation(ip2RegionUtils.getIpPosition(requestDetails.getIp()));
-        WebsiteTraffic viewObject = requestDetails.asViewObject(WebsiteTraffic.class, v -> {
+        WebsiteTrafficLog viewObject = requestDetails.asViewObject(WebsiteTrafficLog.class, v -> {
             v.setCountry(ipInformation.getCountry());
             v.setPageUrl(request.getRequestURI());
             v.setRegion(ipInformation.getRegion());

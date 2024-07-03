@@ -102,7 +102,6 @@ public class GlobalExceptionHandlingController {
         return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "服务器内部错误，请联系管理员");
     }
 
-    /* TODO: 编写者 - 您的姓名 2024/05/29 处理Redis异常 */
     /* TODO: Written by - Han Yongding 2024/05/29 处理Redis异常 */
     @ExceptionHandler(org.springframework.dao.InvalidDataAccessApiUsageException.class)
     public RestBean<Void> handleRedisException(org.springframework.dao.InvalidDataAccessApiUsageException exception) {

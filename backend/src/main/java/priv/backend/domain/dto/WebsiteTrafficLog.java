@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
  * @CreateDate :  2024-06-08 23:38
  */
 @Data
-@TableName("website_traffic")
-public class WebsiteTraffic {
+@TableName("website_traffic_log")
+public class WebsiteTrafficLog {
     @TableId(type = IdType.ASSIGN_ID)
     private String trafficId ;
     @TableField("page_url")

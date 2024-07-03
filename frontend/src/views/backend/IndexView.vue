@@ -209,6 +209,10 @@ const handleClose = (key, keyPath) => {
                 <my-icon name="icon-renwujihua"/>
                 <span>任务执行计划</span>
               </el-menu-item>
+              <el-menu-item index="10-2" @click="router.push('/backend-index-sensitive-words')">
+                <my-icon name="icon-guanjiancikuguanli"/>
+                <span>关键词库管理</span>
+              </el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="11">
               <template #title>
@@ -242,6 +246,20 @@ const handleClose = (key, keyPath) => {
                 <span>请求日志</span>
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="13">
+              <template #title>
+                <my-icon name="icon-rizhiguanli1"/>
+                <span>日志管理</span>
+              </template>
+              <el-menu-item index="13-1" @click="router.push('/backend-index-logs')">
+                <my-icon name="icon-rizhiguanli3"/>
+                <span>日志表</span>
+              </el-menu-item>
+              <el-menu-item index="13-2" @click="router.push('/backend-index-logs_backups')">
+                <my-icon name="icon-huifu"/>
+                <span>日志备份</span>
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </el-col>
         <el-col :span="21">
@@ -269,10 +287,6 @@ const handleClose = (key, keyPath) => {
   background-color:#f5f6f9;
   margin: 0 ;
   min-height: 100vh;
-  //display: flex ;
-  //background-color: #f5f6f9;
-  //margin: 0; /* 可以去除 body 的默认边距 */
-  //min-height: 100vh; /* 使 body 至少铺满视窗高度 */
 
   #top {
     height: 80px;

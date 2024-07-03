@@ -126,6 +126,18 @@ const router = createRouter({
                     path: '/backend-index-request-log',
                     name: 'backend-index-request-log',
                     component: () => import('@/views/backend/index/RequestLogPage.vue')
+                } , {
+                    path: '/backend-index-logs',
+                    name: 'backend-index-logs',
+                    component: () => import('@/views/backend/index/LogsPage.vue')
+                } , {
+                    path: '/backend-index-logs_backups',
+                    name: 'backend-index-logs_backups',
+                    component: () => import('@/views/backend/index/LogsBackupsPage.vue')
+                } , {
+                    path: '/backend-index-sensitive-words',
+                    name: 'backend-index-sensitive-words',
+                    component: () => import('@/views/backend/index/SensitiveWordsPage.vue')
                 }
             ]
         } , {

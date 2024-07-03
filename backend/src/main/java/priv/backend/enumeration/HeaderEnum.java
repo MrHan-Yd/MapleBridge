@@ -10,7 +10,7 @@ package priv.backend.enumeration;
 public enum HeaderEnum {
     ACCESS_CONTROL_EXPOSE_HEADERS("Access-Control-Expose-Headers"),
     AUTHORIZATION("Authorization"),
-    REFRESH_TOKEN("Refreshtoken");
+    REFRESH_TOKEN("RefreshToken");
 
     public final String headerName;
     HeaderEnum(String headerName) {

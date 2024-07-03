@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import priv.backend.domain.PageBean;
-import priv.backend.domain.dto.WebsiteTraffic;
-import priv.backend.domain.vo.response.RespWebsiteTrafficVO;
-import priv.backend.mapper.WebsiteTrafficMapper;
-import priv.backend.service.WebsiteTrafficService;
+import priv.backend.domain.dto.WebsiteTrafficLog;
+import priv.backend.domain.vo.response.RespWebsiteTrafficLogVO;
+import priv.backend.mapper.WebsiteTrafficLogMapper;
+import priv.backend.service.WebsiteTrafficLogService;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,16 +18,16 @@ import priv.backend.service.WebsiteTrafficService;
  * @CreateDate :  2024-06-09 15:01
  */
 @Service
-public class WebsiteTrafficServiceImpl extends ServiceImpl<WebsiteTrafficMapper, WebsiteTraffic> implements WebsiteTrafficService {
+public class WebsiteTrafficLogServiceImpl extends ServiceImpl<WebsiteTrafficLogMapper, WebsiteTrafficLog> implements WebsiteTrafficLogService {
 
     /* TODO: Written by - Han Yongding 2024/06/09 注入Mapper */
     @Resource
-    private WebsiteTrafficMapper mapper;
+    private WebsiteTrafficLogMapper mapper;
 
     /* TODO: Written by - Han Yongding 2024/06/09 分页查询所有网站流量记录 */
     @Override
-    public Page<RespWebsiteTrafficVO> queryAllWebsiteTraffic(PageBean pageBean) {
-        Page<RespWebsiteTrafficVO> page = new Page<>(pageBean.getPageNum(), pageBean.getPageSize());
+    public Page<RespWebsiteTrafficLogVO> queryAllWebsiteTraffic(PageBean pageBean) {
+        Page<RespWebsiteTrafficLogVO> page = new Page<>(pageBean.getPageNum(), pageBean.getPageSize());
         return mapper.getAll(page);
     }
 }

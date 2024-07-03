@@ -153,13 +153,13 @@ server:
   servlet:
     context-path: /
   #ssl
-  ssl:
+  #ssl:
     #enabled: false
     # 保存SSL证书的秘钥库的路径
-    key-store: classpath:ssl/hanyongding.xyz_1717480771.jks
-    key-store-password: wbKIr1bou2Nt
+    #key-store: classpath:ssl/hanyongding.xyz_1717480771.jks
+    #key-store-password: wbKIr1bou2Nt
     # 证书类型
-    key-store-type: JKS
+    #key-store-type: JKS
     #    key-store-protocol: TLS
 # 持久层框架配置
 mybatis-plus:

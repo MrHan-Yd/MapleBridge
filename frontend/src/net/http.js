@@ -8,7 +8,7 @@ let tokenAuth = "token";
 let refreshTokenAuth = "refreshToken";
 
 const http = axios.create({
-    baseURL: 'https://localhost:9999/',
+    baseURL: 'http://localhost:9999/',
     //baseURL: 'https://hanyongding.xyz:9999/',
     timeout: 5000,
     headers: {
@@ -273,8 +273,17 @@ function internalPut(url, data, header = true, success = defaultSuccess, failure
 }
 
 /* 内部使用Get请求 */
-function internalGet(url, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    http.get(url).then(({data}) => {
+function internalGet(url, dataArray, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
+    let apiURI = url;
+
+    // 如果 jsonData 存在且是数组，则作为请求体传递
+    if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
+        // 构建 DELETE 请求的 URL，将 jsonData 中的 ID 列表作为查询参数传递给后端
+        apiURI = `${url}?ids=${dataArray.join(",")}`;
+    }
+
+
+    http.get(apiURI).then(({data}) => {
         if (data.code === 200 || data.code === 403) {
             success(data);
         } else {
@@ -291,8 +300,16 @@ function internalGet(url, success = defaultSuccess, failure = defaultFailure, er
 }
 
 /* 内部使用delete请求 */
-function internalDelete(url, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    http.delete(url).then(({data}) => {
+function internalDelete(url, dataArray, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
+    let apiURI = url;
+
+    // 如果 jsonData 存在且是数组，则作为请求体传递
+    if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
+        // 构建 DELETE 请求的 URL，将 jsonData 中的 ID 列表作为查询参数传递给后端
+        apiURI = `${url}?ids=${dataArray.join(",")}`;
+    }
+
+    http.delete(apiURI).then(({data}) => {
         if (data.code === 200) {
             success(data);
         } else {
@@ -303,10 +320,15 @@ function internalDelete(url, success = defaultSuccess, failure = defaultFailure,
 
 /* 普通get 暴露给外面使用 */
 function get(url, success = defaultSuccess, failure = defaultFailure) {
-    internalGet(url, success, failure);
+    internalGet(url,"", success, failure);
 }
 function getAllParameters(url, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    internalGet(url, success, failure, error);
+    internalGet(url,"", success, failure, error);
+}
+
+/* 批量获取 */
+function get_batch(url, data, success = defaultSuccess, failure = defaultFailure) {
+    internalGet(url, data, success, failure);
 }
 
 /* 普通post 暴露给外面使用 */
@@ -330,7 +352,12 @@ function putFormData(url, data, success, failure = defaultFailure) {
 
 /* 普通delete 暴露给外面使用 */
 function delete_(url, success = defaultSuccess, failure = defaultFailure) {
-    internalDelete(url, success, failure);
+    internalDelete(url, "", success, failure);
+}
+
+/* 批量删除 */
+function delete_batch(url, data, success = defaultSuccess, failure = defaultFailure) {
+    internalDelete(url, data, success, failure);
 }
 
 function isData(header) {
@@ -345,11 +372,13 @@ function isData(header) {
 /* 将定义好的函数暴露出去 */
 export {
     get,
+    get_batch,
     post,
     postFormData,
     put,
     putFormData,
     delete_,
+    delete_batch,
     defaultFailure,
     internalPost,
     storeAccessToken,

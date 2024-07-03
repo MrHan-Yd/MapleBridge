@@ -26,7 +26,7 @@ import java.util.Objects;
  * Created by IntelliJ IDEA.
  *
  * @author : weiguang
- * @Description : Security事件监听器
+ * @Description : Security事件监听器（做登录日志记录）
  * @CreateDate : 2024-06-15 17:19
  */
 @Component

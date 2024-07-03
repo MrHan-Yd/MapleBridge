@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26500431",
+      "name": "敏感词库管理",
+      "font_class": "mingancikuguanli",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "40001407",
+      "name": "关键词库管理",
+      "font_class": "guanjiancikuguanli",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "24848479",
+      "name": "日志管理",
+      "font_class": "rizhiguanli3",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "13872072",
+      "name": "日志管理",
+      "font_class": "rizhiguanli1",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "36535507",
+      "name": "日志备份",
+      "font_class": "huifu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
       "icon_id": "769516",
       "name": "网站流量",
       "font_class": "wangzhanliuliang",

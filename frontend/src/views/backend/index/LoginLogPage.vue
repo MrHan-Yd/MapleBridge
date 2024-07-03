@@ -1,14 +1,17 @@
-<script lang="ts" setup>
-import { ref, reactive} from "vue";
+<script setup lang="ts">
+import {ref, reactive} from 'vue'
 import { get } from '@/net/http';
 import { formatDate} from "@/util/FormatData";
 import {ElError, ElWarning} from "@/util/MessageUtil";
 import Page from "@/domain/Page";
-import LoginLog from "@/domain/LoginLog";
-import Response from "@/domain/Response";
+import {LoginLog} from "@/domain/LoginLog";
+import {Response} from "@/domain/Response";
+
+/* 表格数据 */
+const tableData = ref<LoginLog[]>([]);
 
 /* 分页参数 */
-const pageData: Page = reactive<Page>(new Page()) ;
+const pageData = reactive<Page>(new Page()) ;
 
 /* 分页 */
 const page = ref<number>(1);
@@ -32,17 +35,7 @@ function isTableDataEmpty() {
   return tableData.value.length > 0 && !tableData.value.every((obj: LoginLog) => Object.values(obj).every(value => value === ''));
 }
 
-/* 表格数据 */
-const tableData: LoginLog[] = ref<LoginLog[]>([{
-  username: '',
-  loginTime: '',
-  loginDevice: '',
-  ip: '',
-  country: '',
-  province: '',
-  region: '',
-  network: ''
-}]);
+
 /* 获取数据 */
 const getData = async (num?: number, size?: number) => {
   // 使用空值合并运算符 ?? 设置默认值
@@ -51,7 +44,7 @@ const getData = async (num?: number, size?: number) => {
 
   /* 页面加载后请求后台获取数据 */
   try {
-    const response: Promise<Response | string> = await new Promise((resolve, reject) => {
+    const response: any = await new Promise<Response<LoginLog[]> | string>((resolve, reject) => {
       get("api/backend/login-log?pageNum=" + page.value + "&pageSize=" + pageSize.value, (rs: any) => {
         if (rs.code === 200) {
           resolve(rs);
@@ -66,7 +59,7 @@ const getData = async (num?: number, size?: number) => {
 
         /* 请求状态码400时，标识没有数据，并且当前页-1小于1表示已删除最后一条数据 */
         if (code === 400 && (pageData.pages === undefined || pageData.pages - 1 < 1)) {
-          tableData.value = "" ;
+          tableData.value = [] ;
           ElWarning(message) ;
           reject(message);
         }
@@ -87,7 +80,7 @@ const getData = async (num?: number, size?: number) => {
       ElWarning(response);
     }
 
-  } catch (error) {
+  } catch (error: any) {
     if (error.data.code === 403) {
       ElWarning(error.data.message) ;
     } else {

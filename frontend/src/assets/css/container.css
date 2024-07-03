@@ -1,0 +1,21 @@
+.container {
+    height: 87.5vh;
+    margin-right: 7px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+
+    & > .title {
+        display: block;
+        padding-top: 10px;
+        font-size: 18px;
+    }
+
+    & >>> .pagination {
+        margin-top: 12px;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+    }
+}

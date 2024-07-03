@@ -455,7 +455,6 @@ function getShowAndHide(statusId) {
 #role_status >>> #top {
   padding-left: 10px;
   padding-right: 10px;
-  //margin: 10px ;
 }
 
 #role_status >>> #bottom {

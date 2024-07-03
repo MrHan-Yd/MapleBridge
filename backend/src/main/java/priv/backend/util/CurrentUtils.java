@@ -48,11 +48,6 @@ public class CurrentUtils {
         return DataBaseEnum.UnboundE_EMail.getContents().replace("^", userName) ;
     }
 
-    /** TODO: 2022/8/30 耗时计算(秒或毫秒) */
-    public static String getCurrentTime(long time){
-        return (System.currentTimeMillis() - time)  / 1000 > 0 ? (System.currentTimeMillis() - time) / 1000 + "秒" : System.currentTimeMillis() - time + "毫秒" ;
-    }
-
     /** TODO: Written by - Han Yongding 2024/01/22 获取系统当前时间 */
     public static Timestamp getTheCurrentSystemTime() {
         return new Timestamp(System.currentTimeMillis()) ;
@@ -61,6 +56,12 @@ public class CurrentUtils {
     /** TODO: Written by - Han Yongding 2024/01/22 判断数据库插入和更新操作是否成功 */
     public static boolean isEmptyByDtoInsertOrUpdate(int result) {
         return result < 1 ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/02 字符串加反单引号 */
+
+    public static String wrapWithBackticks(String originalString) {
+        return String.format("`%s`", originalString);
     }
 
     /** TODO: Written by - Han Yongding 2024/02/11 判断字符串是否为空 */
@@ -83,4 +84,8 @@ public class CurrentUtils {
         return count + IntegerEnum.COUNT.value;
     }
 
+    /* TODO: Written by - Han Yongding 2024/07/01 拼接当前年月 */
+    public static String getCurrentYearMonth(String tableName) {
+        return tableName + "_" + TimeUtils.getCurrentYearMonth();
+    }
 }

@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 public class TaskPlanServiceImpl extends ServiceImpl<TaskPlanMapper, TaskPlan> implements TaskPlanService {
     /* TODO: Written by - Han Yongding 2024/05/11 注入任务计划表Dao */
-     private final TaskPlanMapper mapper ;
+    private final TaskPlanMapper mapper;
 
     @Autowired
     public TaskPlanServiceImpl(TaskPlanMapper mapper) {
@@ -37,33 +37,35 @@ public class TaskPlanServiceImpl extends ServiceImpl<TaskPlanMapper, TaskPlan> i
     /* TODO: Written by - Han Yongding 2024/05/11 插入任务计划 */
     @Override
     public String insertTaskPlan(RestTaskPlanVO vo) {
-        if (vo  == null) {
+        if (vo == null) {
             return "任务计划不能为空";
         }
 
         /* TODO: Written by - Han Yongding 2024/05/15 查询数据库中是否存在相同的任务计划，如果有就删除，因为数据库做了伪删除和字段唯一，不删除插入会报错 */
-
-        if (this.deleteTaskPlanByTaskId(vo.getTaskId()) != null) {
-            return "任务计划没有完全清空，且本次删除操作失败，无法继续制定计划，请联系管理员处理" ;
-        } else {
-            /* TODO: Written by - Han Yongding 2024/05/11 初始化 */
-            TaskPlan viewObject = vo.asViewObject(TaskPlan.class);
-            viewObject.setStatus("0");
-            viewObject.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
-            /* TODO: Written by - Han Yongding 2024/05/11 插入数据库 */
-            if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(viewObject))) {
-                return "任务计划插入失败";
+        if (this.isTaskPlanExistById(vo.getTaskId())) {
+            /* TODO: Written by - Han Yongding 2024/07/03 存在则删除，删除失败则返回，删除成功继续业务 */
+            if (this.deleteTaskPlanByTaskId(vo.getTaskId()) != null) {
+                return "任务计划没有完全清空，且本次删除操作失败，无法继续制定计划，请联系管理员处理";
             }
-
-            /* TODO: Written by - Han Yongding 2024/05/11 业务结束返回成功信息  */
-            return null;
         }
+
+        /* TODO: Written by - Han Yongding 2024/05/11 初始化 */
+        TaskPlan viewObject = vo.asViewObject(TaskPlan.class);
+        viewObject.setStatus("0");
+        viewObject.setCreateTime(CurrentUtils.getTheCurrentSystemTime());
+        /* TODO: Written by - Han Yongding 2024/05/11 插入数据库 */
+        if (CurrentUtils.isEmptyByDtoInsertOrUpdate(mapper.insert(viewObject))) {
+            return "任务计划新增失败";
+        }
+
+        /* TODO: Written by - Han Yongding 2024/05/11 业务结束返回成功信息  */
+        return null;
     }
 
     /* TODO: Written by - Han Yongding 2024/05/11 修改任务计划 */
     @Override
     public String updateTaskPlan(RestTaskPlanVO vo) {
-        if (vo  == null) {
+        if (vo == null) {
             return "任务计划不能为空";
         }
         /* TODO: Written by - Han Yongding 2024/05/11 初始化 */
@@ -101,7 +103,7 @@ public class TaskPlanServiceImpl extends ServiceImpl<TaskPlanMapper, TaskPlan> i
         }
 
         /* TODO: Written by - Han Yongding 2024/05/15 删除成功 */
-        return null ;
+        return null;
     }
 
     /* TODO: Written by - Han Yongding 2024/05/11 删除任务计划 */
@@ -126,6 +128,13 @@ public class TaskPlanServiceImpl extends ServiceImpl<TaskPlanMapper, TaskPlan> i
     /* TODO: Written by - Han Yongding 2024/05/13 查询所有任务的执行计划 */
     @Override
     public List<TaskExecutionPlan> getTaskPlan() {
-        return mapper.getTaskPlan() ;
+        return mapper.getTaskPlan();
+    }
+
+    @Override
+    public boolean isTaskPlanExistById(String taskId) {
+        QueryWrapper<TaskPlan> wrapper = new QueryWrapper<>();
+        wrapper.eq("task_id", taskId);
+        return mapper.exists(wrapper);
     }
 }

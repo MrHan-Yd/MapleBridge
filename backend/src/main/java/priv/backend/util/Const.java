@@ -27,14 +27,17 @@ public class Const {
     /* TODO: Written by - Han Yongding 2024/02/18 验证码RedisKey */
     public static final String CAPTCHA_CODE = "captcha:code:";
 
+    /* TODO: Written by - Han Yongding 2024/06/08 网站流量统计过滤器优先级 */
+    public static final int ORDER_WEBSITE_TRAFFIC = -101 ;
+
     /** TODO: Written by - Han Yongding 2023/08/22 限流过滤器优先级 */
-    public static final int ORDER_LIMIT = -101 ;
+    public static final int ORDER_LIMIT = -102 ;
+
+    /* TODO: Written by - Han Yongding 2024/06/30 敏感词过滤器优先级 */
+    public static final int ORDER_SENSITIVE_WORDS = -103 ;
 
     /** TODO: Written by - Han Yongding 2023/08/22 跨域过滤器优先级 */
-    public static final int ORDER_CORS = -103 ;
-
-    /* TODO: Written by - Han Yongding 2024/06/08 网站流量统计过滤器优先级 */
-    public static final int ORDER_WEBSITE_TRAFFIC = -102 ;
+    public static final int ORDER_CORS = -104 ;
 
     /* TODO: Written by - Han Yongding 2024/05/28 redis数据key */
     public static final String REDIS_DATA_KEY = "data:" ;
