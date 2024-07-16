@@ -1,12 +1,14 @@
 <script setup>
-import {defineProps, ref, computed, reactive} from 'vue';
+import {defineProps, ref, computed, reactive, watch} from 'vue';
 import {getAllParameters, getUserId, post, put} from '@/net/http' ;
 import {ElSuccess, ElWarning, ElWarningMessage} from "@/util/MessageUtil";
 import {CaretTop, ChatDotRound, CloseBold, Warning} from "@element-plus/icons-vue";
 import {formatNumber} from "@/util/FormatData" ;
 import PostUserAssembly from "@/components/PostUserAssembly.vue";
 import CommentAssembly from "@/components/CommentAssembly.vue";
-import { recordData } from "@/util/CollectingData" ;
+import {recordData} from "@/util/CollectingData" ;
+import PostHitsCollectionUtil from "@/util/ts/PostHitsCollectionUtil";
+import MyIconButton from "@/components/MyIconButton.vue";
 
 /* 分页信息 */
 const page = reactive({
@@ -28,6 +30,12 @@ const props = defineProps({
   user: {
     type: Object,
     default: {}
+  },
+  menu: {
+    type: String,
+  },
+  mainMenuId: {
+    type: String
   }
 });
 
@@ -38,22 +46,54 @@ const disabled = computed(() => loading.value || noMore.value);
 /* 滚动加载 */
 const load = () => {
   loading.value = true;
-
   if (!noMore.value) {
     page.num += 1;
   }
   getPostEs(page);
 }
 
+/* 暴露出去 */
+defineExpose({
+  getPostEs
+});
 
-let $emit = defineEmits(['whetherShow']);
+let $emit = defineEmits(['whetherShow', 'restScroll']);
 
+/* 记录主菜单和子菜单,存储用于验证是否有变动 */
+const menuMonitor = ref('');
+const mainMenuIdMonitor = ref('');
 
 /* 页面打开查询帖子数据 */
-function getPostEs(page) {
-  getAllParameters("api/index/post-es?pageNum=" + page.num + "&pageSize=" + page.size, (rs) => {
+function getPostEs(pages) {
+  if (!pages) {
+    page.num = 1;
+    page.size = 4;
+    page.total = 0;
+  } else {
+    page.num = pages.num;
+    page.size = pages.size;
+    page.total = pages.total;
+  }
+
+  let url;
+  if (props.mainMenuId === 'Home') {
+    url = "api/index/post-es?pageNum=" + page.num + "&pageSize=" + page.size + "&userId=" + getUserId() + "&type=" + props.menu;
+  } else {
+    url = "api/index/post-es?pageNum=" + page.num + "&pageSize=" + page.size + "&userId=" + getUserId() + "&type=" + props.menu + "&menuId=" + props.mainMenuId;
+  }
+  getAllParameters(url, (rs) => {
     if (rs.code === 200) {
-      data.value = [...data.value, ...rs.data.content];
+      /* 监听 */
+      if (menuMonitor.value !== props.menu || mainMenuIdMonitor.value !== props.mainMenuId) {
+        data.value = rs.data.content;
+        menuMonitor.value = props.menu;
+        mainMenuIdMonitor.value = props.mainMenuId;
+        /* 重置滚动条 */
+        $emit('restScroll');
+      }else {
+        data.value = [...data.value, ...rs.data.content];
+      }
+
       noMore.value = rs.data.last;
       page.num = rs.data.pageable.pageNumber + 1;
       page.size = rs.data.pageable.pageSize;
@@ -78,7 +118,6 @@ function getPostEs(page) {
   }));
 }
 
-getPostEs(page);
 
 // 使用 ref 创建响应式对象来保存点赞状态
 const likedPosts = ref({});
@@ -100,17 +139,19 @@ function toggleLike(postId, version, typeId) {
     });
   } else {
     // 点赞
-    // /* 记录收集用户偏好类型 */
-    recordData(typeId) ;
+    /* 收集帖子点击量 */
+    PostHitsCollectionUtil.collectData(postId);
+    /* 记录收集用户偏好类型 */
+    recordData(typeId);
     put("api/index/like", {id: postId, userId: getUserId(), version: version, type: 'like'},
         (rs) => {
-      if (rs.code === 200) {
-        // 更新帖子点赞数
-        updateLikeCount(postId, 1);
-        // 更新点赞状态
-        likedPosts.value[postId] = true;
-      }
-    });
+          if (rs.code === 200) {
+            // 更新帖子点赞数
+            updateLikeCount(postId, 1);
+            // 更新点赞状态
+            likedPosts.value[postId] = true;
+          }
+        });
   }
 }
 
@@ -131,7 +172,7 @@ function initLikedPosts() {
 }
 
 /* 浏览弹窗 */
-const dialogVisible = ref(false)
+const dialogVisible = ref(false);
 /* 浏览详情标题 */
 const dialogTitle = ref('');
 /* 浏览详情内容 */
@@ -166,8 +207,10 @@ function toggleCommentButton() {
 
 /* 点击查看帖子详情 */
 function check(item) {
+  /* 收集帖子点击量 */
+  PostHitsCollectionUtil.collectData(item.postId);
   /* 收集用户偏好类型 */
-  recordData(item.type.typeId) ;
+  recordData(item.type.typeId);
   dialogCommentButton.value = false;
   dialogVisible.value = true;
   dialogTitle.value = item.topic;
@@ -287,8 +330,8 @@ function submitComment() {
         /* 清空回复表单 */
         deleteReplyForm();
         commentForm.content = '';
-        commentForm.commentId =  '';
-        commentForm.replyId =  '';
+        commentForm.commentId = '';
+        commentForm.replyId = '';
         ElSuccess("发布成功");
       } else {
         ElWarning(rs.message);
@@ -296,6 +339,7 @@ function submitComment() {
     });
   }
 }
+
 /* 回复评论表单 */
 const replyForm = reactive({
   replyId: '',
@@ -323,6 +367,7 @@ function deleteReplyForm() {
        v-for="item in data" :key="item"
        :infinite-scroll-disabled="disabled"
        v-infinite-scroll="load"
+       :infinite-scroll-distance="-600"
        infinite-scroll-delay="1000"
   >
     <div class="title">
@@ -349,13 +394,24 @@ function deleteReplyForm() {
                  :plain="!likedPosts[item.postId]">
         {{ likedPosts[item.postId] ? '取消赞' : '点赞' }} {{ formatNumber(item.likeCount, "num") }}
       </el-button>
-      <el-button :icon="ChatDotRound" @click="check(item)">{{ formatNumber(item.commentCount, "num") }}条评论</el-button>
+      <el-button :icon="ChatDotRound" @click="check(item)">{{
+          formatNumber(item.commentCount, "num")
+        }}条评论
+      </el-button>
       <el-button :icon="Warning">举报</el-button>
+      <el-text style="margin-left: 10px;">
+        <my-icon-button name="icon-dianjiliang"/>
+        {{ formatNumber(item.views, "num") }}
+      </el-text>
     </div>
   </div>
   <div id="footer">
-    <p v-if="!noMore">加载中...</p>
-    <p v-if="noMore">没有更多数据...</p>
+    <p v-if="!noMore">
+      <svg class="circular" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none"/>
+      </svg>
+    </p>
+    <p v-if="noMore">没有更多分享...</p>
   </div>
   <!--浏览弹窗-->
   <el-dialog
@@ -417,7 +473,8 @@ function deleteReplyForm() {
       <div id="commentInputBox"
            v-if="!dialogCommentButton">
         <div id="left">
-          <el-avatar shape="square" :size="49" :src="user.avatars.avatarPath + user.avatars.fileName"/>
+          <el-avatar v-if="user.avatars" shape="square" :size="49" :src="user.avatars.avatarPath + user.avatars.fileName"/>
+          <el-avatar v-else :size="49" :src="'/images/touxiang-1.jpg'"/>
         </div>
         <div id="right">
           <div style="width: 80%;height:100%;position:relative;">
@@ -457,10 +514,16 @@ function deleteReplyForm() {
 </template>
 
 <style scoped>
+@import "@/assets/css/loading.css";
+
 .skeleton {
   border-top: 1px solid #e3e3e3;
   margin-top: 5px;
   margin-bottom: 5px;
+
+  &:hover {
+    background-color: #f5f6f9;
+  }
 
   .title {
     padding: 10px;
@@ -477,7 +540,7 @@ function deleteReplyForm() {
       height: 100%;
       display: flex;
       align-items: center;
-      background-color: white;
+      //background-color: white;
 
       .left {
         height: 100%;
@@ -526,7 +589,6 @@ function deleteReplyForm() {
 }
 
 #footer {
-  background-color: #f1f0f0;
   height: 50px;
   width: 100%;
   display: flex;
@@ -561,8 +623,6 @@ function deleteReplyForm() {
     #right {
       height: 100%;
       width: 89%;
-      //border: 1px solid #999999;
-      //border-radius: 5px;
       display: flex;
       align-items: center;
 

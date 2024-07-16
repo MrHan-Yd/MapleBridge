@@ -47,8 +47,6 @@ function initLikedPosts() {
     const userLike = item.likes.find(like => like.userId === getUserId());
     likedPosts.value[item.id] = !!userLike;
 
-    console.log(item)
-    console.log(item.subComments)
     if (item.subComments === undefined) {
       item.subComments = [] ;
     }

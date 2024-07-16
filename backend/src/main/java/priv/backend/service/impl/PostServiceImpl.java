@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.ObjectUtils;
 import priv.backend.domain.Files;
 import priv.backend.domain.PageBean;
 import priv.backend.domain.dto.Comment;
@@ -96,7 +97,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public String insertPost(RestPostsVO vo) {
         return insertPostTemplate.execute(status -> {
-            if (vo == null) {
+            if (ObjectUtils.isEmpty(vo)) {
                 return "数据为空，请稍后再试";
             }
 

@@ -13,7 +13,7 @@ import lombok.Getter;
 @Getter
 public enum RespMessageEnum {
     SUCCESS("请求成功"),
-    FAILED("操作失败"),
+    FAILED("请求失败"),
     PARAM_ERROR("参数错误"),
     PARAM_NOT_NULL("参数不能为空"),
     NOT_FOUND("未找到资源"),

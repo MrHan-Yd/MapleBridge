@@ -40,6 +40,9 @@ public class MailNoticeQueueListener {
                     MailSendUtils.createMessage("校友会",
                             "欢迎注册校友会平台，您的初始密码为：xyh123456，请尽快登录平台修改密码，以确保账号安全",
                             email, userName) ;
+            case "slowSQLWarning" ->
+                    MailSendUtils.createMessage("校友会管理平台慢SQL监控",
+                            "检测到您的SQL执行时间超过5秒，请及时优化您的SQL查询，以提高系统的运行效率，SQL:" + data.get("sql") + "，执行时间：" + data.get("time") + "，执行耗时：" + data.get("timeConsuming"), email, userName);
             default -> null ;
         } ;
         /* TODO: Written by - Han Yongding 2023/08/13 如果没有对应的类型 */

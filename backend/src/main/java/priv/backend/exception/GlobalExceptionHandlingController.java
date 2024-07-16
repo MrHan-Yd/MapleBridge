@@ -96,11 +96,11 @@ public class GlobalExceptionHandlingController {
     }
 
     /* TODO: Written by - Han Yongding 2024/03/05 处理通用异常 */
-    @ExceptionHandler(Exception.class)
-    public RestBean<Void> exception(Exception exception) {
-        log.warn("Resolve [{}: {}]", exception.getClass().getName() + "-" + Arrays.toString(exception.getStackTrace()), exception.getMessage());
-        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "服务器内部错误，请联系管理员");
-    }
+//    @ExceptionHandler(Exception.class)
+//    public RestBean<Void> exception(Exception exception) {
+//        log.warn("Resolve [{}: {}]", exception.getClass().getName() + "-" + Arrays.toString(exception.getStackTrace()), exception.getMessage());
+//        return RestBean.failure(CodeEnum.HTTP_500_INTERNAL_SERVER_ERROR.CODE, "服务器内部错误，请联系管理员");
+//    }
 
     /* TODO: Written by - Han Yongding 2024/05/29 处理Redis异常 */
     @ExceptionHandler(org.springframework.dao.InvalidDataAccessApiUsageException.class)

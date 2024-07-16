@@ -9,6 +9,7 @@ import priv.backend.domain.es.dto.ESPost;
 import priv.backend.service.impl.CommentServiceImpl;
 import priv.backend.service.impl.FilePostServiceImpl;
 import priv.backend.service.impl.LikeServiceImpl;
+import priv.backend.service.impl.PostHitsServiceImpl;
 
 import java.util.List;
 
@@ -34,15 +35,20 @@ public class ElasticsearchUtils {
     /* TODO: Written by - Han Yongding 2024/04/04 上载常用工具类 */
     private final UploadUtils uploadUtils;
 
+    /* TODO: Written by - Han Yongding 2024/07/09 帖子点击量业务层实现类 */
+    private final PostHitsServiceImpl postHitsService;
+
     @Autowired
     public ElasticsearchUtils(CommentServiceImpl commentService,
                               LikeServiceImpl likeService,
                               FilePostServiceImpl filePostService,
-                              UploadUtils uploadUtils) {
+                              UploadUtils uploadUtils,
+                              PostHitsServiceImpl postHitsService) {
         this.commentService = commentService;
         this.likeService = likeService;
         this.filePostService = filePostService;
         this.uploadUtils = uploadUtils;
+        this.postHitsService = postHitsService;
     }
 
     /* TODO: Written by - Han Yongding 2024/04/04 帖子数据处理，补充 */
@@ -87,6 +93,9 @@ public class ElasticsearchUtils {
         post.setFilePost(esFilePosts);
         /* TODO: Written by - Han Yongding 2024/04/27 帖子发布用户信息 */
         post.getUser().setPath(uploadUtils.generateAccessPath(post.getUser().getUserId(), post.getUser().getPath()));
+
+        /* TODO: Written by - Han Yongding 2024/07/09 帖子点击量 */
+        post.setViews(postHitsService.getHitsByPostId(post.getPostId()));
         /* TODO: Written by - Han Yongding 2024/04/04 返回处理好的数据 */
         return post;
     }

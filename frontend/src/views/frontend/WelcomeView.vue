@@ -2,7 +2,6 @@
 import router from "@/router";
 import {onMounted} from "vue";
 
-
 /* 页面打开时默认调用 */
 onMounted(() => {
   router.push('/frontend-welcome-login') ;
@@ -61,7 +60,6 @@ onMounted(() => {
 #login_logo_box{
   height: 100px ;
   width: 200px;
-  //overflow: hidden;
 }
 
 #login_right {

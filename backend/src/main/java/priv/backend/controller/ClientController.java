@@ -8,18 +8,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import priv.backend.domain.PageBean;
+import priv.backend.domain.PostPage;
 import priv.backend.domain.RestBean;
 import priv.backend.domain.es.dto.ESPost;
 import priv.backend.domain.mongo.vo.RestMongoPostTypeVO;
-import priv.backend.domain.vo.request.RestClientUserVO;
-import priv.backend.domain.vo.request.RestCommentVO;
-import priv.backend.domain.vo.request.RestCountVO;
-import priv.backend.domain.vo.request.RestPostsVO;
+import priv.backend.domain.vo.request.*;
+import priv.backend.enumeration.MenuTypeEnum;
+import priv.backend.service.es.impl.ESClientUserServiceImpl;
 import priv.backend.service.es.impl.ESPostServiceImpl;
-import priv.backend.service.impl.PostServiceImpl;
-import priv.backend.service.impl.TypesPostServiceImpl;
-import priv.backend.service.impl.UserLevelServiceImpl;
-import priv.backend.service.impl.UserServiceImpl;
+import priv.backend.service.impl.*;
 import priv.backend.util.KafkaProducerUtils;
 import priv.backend.util.ReturnUtils;
 
@@ -72,11 +69,11 @@ public class ClientController {
 
     /* TODO: Written by - Han Yongding 2024/04/02 新增帖子，分享中心分享 */
     @PostMapping("/post")
-    public RestBean<Void> addPost( List<MultipartFile> files,
-                                   String userId,
-                                   String topic,
-                                   String content,
-                                   String typeId) {
+    public RestBean<Void> addPost( @RequestParam(value = "files", required = false) List<MultipartFile> files,
+                                   @RequestParam("userId") String userId,
+                                   @RequestParam("topic") String topic,
+                                   @RequestParam("content") String content,
+                                   @RequestParam("typeId") String typeId) {
         RestPostsVO vo = new RestPostsVO() ;
         vo.setUserId(userId);
         vo.setTopic(topic);
@@ -88,11 +85,34 @@ public class ClientController {
         return ReturnUtils.messageHandle(vo, postService::insertPost);
     }
 
+    /* TODO: Written by - Han Yongding 2024/07/11 搜索建议 */
+    @GetMapping("search-suggest")
+    public RestBean<Object> searchSuggest(String queryString) {
+        return ReturnUtils.messageHandleData(() -> esPostService.searchSuggest(queryString)) ;
+    }
+
     /* TODO: Written by - Han Yongding 2024/04/04 分页查询帖子 ES */
     @GetMapping("post-es")
-    public RestBean<Page<ESPost>> getPostEs(PageBean pageBean) {
-        return ReturnUtils.messageHandleData(pageBean, esPostService::getAllESPost) ;
+    public RestBean<Page<ESPost>> getPostEs(PageBean pageBean, String userId, String type, @RequestParam(required = false) String menuId) {
+
+        return ReturnUtils.messageHandleData(new PostPage(pageBean, userId, type, menuId), esPostService::getAllESPost) ;
     }
+    /* TODO: Written by - Han Yongding 2024/07/12 客户端用户业务层实现类 */
+    @Resource
+    private ESClientUserServiceImpl clientUserService ;
+
+    /* TODO: Written by - Han Yongding 2024/07/12 搜索 */
+    @GetMapping("search")
+    public RestBean<Object> search(PageBean pageBean, String type, String queryString) {
+        /* TODO: Written by - Han Yongding 2024/07/12 帖子搜索 */
+        if (type.equals(MenuTypeEnum.POST.toString())) {
+            return ReturnUtils.messageHandleData(() -> esPostService.search(queryString, pageBean));
+        } else {
+            /* TODO: Written by - Han Yongding 2024/07/12 用户搜索 */
+            return ReturnUtils.messageHandleData(() -> clientUserService.searchByNickname(queryString, pageBean));
+        }
+    }
+
 
     /* TODO: Written by - Han Yongding 2024/04/07 根据用户ID查询相应信息 ES */
     @GetMapping("user/{userId}")
@@ -124,10 +144,19 @@ public class ClientController {
         return ReturnUtils.messageHandleData(vo, postService::commentPost) ;
     }
 
-
     /* TODO: Written by - Han Yongding 2024/05/07 收集用户喜好数据  */
     @PostMapping("collect-preference")
     public RestBean<Void> collectPreference(@RequestBody @Validated RestMongoPostTypeVO vo) {
         return ReturnUtils.messageHandle(vo, userService::collectUserHobby) ;
+    }
+
+    /* TODO: Written by - Han Yongding 2024/07/08 注入帖子点击量业务层实现类 */
+    @Resource
+    private PostHitsServiceImpl postHitsService ;
+
+    /* TODO: Written by - Han Yongding 2024/07/08 帖子点击量统计 */
+    @PostMapping("post-hits")
+    public RestBean<Void> postHits(@RequestBody List<RestPostHits> postIds) {
+        return ReturnUtils.messageHandle(postIds, postHitsService::postHitsByPostId);
     }
 }

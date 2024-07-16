@@ -2,6 +2,7 @@ import axios from 'axios';
 import {refreshToken, isRefresh} from '@/net/RefreshToken';
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
 import {unauthorized} from "@/net/Login";
+import router from "@/router";
 
 let accessAuthItem = "user";
 let tokenAuth = "token";
@@ -18,8 +19,8 @@ const http = axios.create({
 
 
 /* 请求拦截器 */
-http.interceptors.request.use( async (config) => {
-        if(!!config.__isLogin) {
+http.interceptors.request.use(async (config) => {
+        if (!!config.__isLogin) {
             config.headers["Content-Type"] = 'application/x-www-form-urlencoded';
         } else {
             config.headers["Content-Type"] = isFromData(config) ? 'application/json' : 'multipart/form-data';
@@ -240,14 +241,19 @@ function getRefreshToken() {
 }
 
 /* 内部使用Post请求 */
-function internalPost(url, data, header = true, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
-    http.post(url, data, header === 'login' ? { __isLogin : true} : isData(header))
+function internalPost(url, data, header, success = defaultSuccess, failure = defaultFailure, error = defaultError) {
+    http.post(url, data, header === 'login' ? { __isLogin : true } : isData(header))
         .then(({data}) => {
         if (data.code === 200 || data.code === 403) {
             if (data.code === 200) {
                 success(data);
             } else {
-                success(data.message);
+                if (data.code === 403) {
+                    failure(data.message, data.code, url);
+                } else {
+                    success(data.message);
+
+                }
             }
         } else {
             failure(data.message, data.code, url);
@@ -295,7 +301,6 @@ function internalGet(url, dataArray, success = defaultSuccess, failure = default
         } else {
             error(err);
         }
-
     });
 }
 

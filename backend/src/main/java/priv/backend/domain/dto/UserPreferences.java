@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,4 +30,15 @@ public class UserPreferences {
     private String interests2 ;
     @TableField("last_updated")
     private Timestamp lastUpdated ;
+
+    public List<String> getInterests() {
+        ArrayList<String> interests = new ArrayList<>();
+        if (interests1!= null) {
+            interests.add(interests1);
+        }
+        if (interests2!= null) {
+            interests.add(interests2);
+        }
+        return interests;
+    }
 }

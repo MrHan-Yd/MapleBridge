@@ -8,6 +8,7 @@ function ElSuccess(message) {
         title: '通知',
         message: h('i', { style: 'color: #67C23A' }, message),
         offset: 100,
+        duration: 1500
     })
 }
 
@@ -16,6 +17,7 @@ function ElInfo(message) {
         title: '通知',
         message: h('i', { style: 'color: #909399' }, message),
         offset: 100,
+        duration: 1500
     })
 }
 
@@ -24,6 +26,7 @@ function ElWarning(message) {
         title: '通知',
         message: h('i', { style: 'color: #E6A23C' }, message),
         offset: 100,
+        duration: 1500
     })
 }
 
@@ -32,6 +35,7 @@ function ElError(message) {
         title: '通知',
         message: h('i', { style: 'color: #F56C6C' }, message),
         offset: 100,
+        duration: 1500
     })
 }
 

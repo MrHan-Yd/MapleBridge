@@ -29,10 +29,7 @@ function login(username, password, remember, success, failure = defaultFailure) 
     /* 先存储记住状态 */
     setRemember(remember) ;
 
-    internalPost('/api/auth/login', {
-            username: username,
-            password: password
-        },
+    internalPost(`/api/auth/login?username=${username}&password=${password}`, "",
         'login',
         (rs) => {
 
@@ -53,7 +50,7 @@ function loginFrontend(username, password, success, failure = defaultFailure) {
     /* 先存储记住状态 */
     setRemember(true) ;
 
-    internalPost("/api/auth/login", {
+    internalPost(`/api/auth/login?username=${username}&password=${password}`, {
         username: username,
         password: password
     }, "login",(rs) => {

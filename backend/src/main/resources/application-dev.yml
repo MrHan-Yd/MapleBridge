@@ -9,7 +9,7 @@ spring:
     #服务器文件路径
     file_visit_path: /upload/
     #本地访问路径
-    file_host: https://localhost:9999
+    file_host: http://localhost:9999
 
 
   # 轻量级定时任务框架配置

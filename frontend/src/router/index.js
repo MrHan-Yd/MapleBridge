@@ -168,6 +168,10 @@ const router = createRouter({
                     path: "/frontend-index-home",
                     name: "indexHome",
                     component: () => import("@/views/frontend/index/IndexPage.vue")
+                } , {
+                    path: "/frontend-index-search",
+                    name: "indexSearch",
+                    component: () => import("@/views/frontend/index/SearchPage.vue")
                 }
             ]
         } , {

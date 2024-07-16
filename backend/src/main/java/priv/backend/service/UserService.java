@@ -50,4 +50,7 @@ public interface UserService extends IService<User>, UserDetailsService {
 
     /* TODO: Written by - Han Yongding 2024/05/08 收集用户喜好 */
     String collectUserHobby(RestMongoPostTypeVO vo) ;
+
+    /* TODO: Written by - Han Yongding 2024/07/15 获取管理员邮箱 */
+    String getAdminEmail() ;
 }

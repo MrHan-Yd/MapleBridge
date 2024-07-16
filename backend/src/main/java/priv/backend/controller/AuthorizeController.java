@@ -1,5 +1,6 @@
 package priv.backend.controller;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,8 +71,8 @@ public class AuthorizeController {
             String token = accountService.refreshToken(authorization);
             response.setHeader(HeaderEnum.AUTHORIZATION.headerName, token);
             return RestBean.success() ;
-        } catch (ProgramCustomException e) {
-            return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, e.getExceptionMessage()) ;
+        } catch (ProgramCustomException | TokenExpiredException e) {
+            return RestBean.failure(CodeEnum.HTTP_400_ERROR_REQUEST.CODE, e.getMessage()) ;
         }
     }
 

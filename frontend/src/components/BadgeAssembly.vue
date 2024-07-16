@@ -29,7 +29,7 @@ const props = defineProps({
       popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
   >
     <template #reference>
-      <el-avatar style="vertical-align: middle;" :size="size" :src="levelBadge(level)"/>
+      <el-avatar style="vertical-align: middle;" :size="size" :src="levelBadge(level.toString())"/>
     </template>
     <template #default>
       <div
@@ -38,7 +38,7 @@ const props = defineProps({
       >
         <el-avatar
             :size="60"
-            :src="levelBadge(level)"
+            :src="levelBadge(level.toString())"
             style="margin-bottom: 8px"
         />
         <div>

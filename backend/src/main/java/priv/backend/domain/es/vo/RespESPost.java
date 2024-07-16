@@ -33,4 +33,5 @@ public class RespESPost {
     private String commentCount ;
     private List<ESComment> comment ;
     private List<ESLike> like ;
+    private String hits;
 }

@@ -1,22 +1,32 @@
 <script setup>
-import {ref, reactive, onMounted} from 'vue'
-import { Plus, Search } from "@element-plus/icons-vue";
+import {ref, reactive, onMounted, nextTick, getCurrentInstance} from 'vue'
+import {Plus, Search} from "@element-plus/icons-vue";
 import MyIcon from "@/components/MyIcon.vue";
 import {logout} from "@/net/Login";
 import router from "@/router";
-import {get, put, getUserId, postFormData, putFormData } from "@/net/http";
+import {get, getUserId, postFormData, putFormData} from "@/net/http";
 import {ElSuccess, ElWarning} from "@/util/MessageUtil";
 import * as FormatDate from "@/util/FormatData";
 import {ElTag} from "element-plus";
+import {uploadData} from "@/util/CollectingData"
+import PostHitsCollectionUtil from "@/util/ts/PostHitsCollectionUtil";
+import Menu from "@/domain/enum/Menu";
 
 /* 页面打开时默认调用 */
 onMounted(() => {
+  if (postTypes) {
+    getPostTypes();
+  }
+
   router.push('/frontend-index-home');
 });
 
 /* 退出登录 */
 function userLogout() {
   logout(() => {
+    /*上传收集数据*/
+    uploadData();
+    PostHitsCollectionUtil.uploadData();
     router.push('/frontend-welcome-login');
   });
 }
@@ -27,12 +37,51 @@ const searchForm = reactive({
 });
 
 /* 菜单对应页面 */
-const activeIndex = ref('1');
+const activeIndex = ref('Home');
+
+const home = ref(new Menu("Home", "Home"));
+const learning = ref(new Menu("Learning", ""));
+const campus = ref(new Menu("Campus", ""));
+const help = ref(new Menu("Help", ""));
+const search = ref(new Menu("Search", "Search"));
+
+/* 菜单列表 */
+const menuType = reactive({
+  Home: home,
+  Learning: learning,
+  Campus: campus,
+  Help: help,
+  Search: search
+});
+/* 目前选中菜单id */
+const activeMenuId = ref(home.value.menuId);
 
 /* 菜单选择 */
 const handleSelect = (key, keyPath) => {
-  // console.log(key, keyPath)
+
+  if (menuType.Campus) {
+    menuType.Campus.menuId = postTypes.value[0].typeId;
+  }
+
+  if (menuType.Learning) {
+    menuType.Learning.menuId = postTypes.value[1].typeId;
+  }
+
+  if (menuType.Help) {
+    menuType.Help.menuId = postTypes.value[2].typeId;
+  }
+
+  /* 上次选中的菜单是搜索，且当前选中不是搜索，则清空搜索内容，并跳转回主页*/
+  if (activeIndex.value === 'Search' && key !== 'Search') {
+    searchForm.content = '';
+    router.push('/');
+  }
+  activeIndex.value = menuType[key].menuName;
+  activeMenuId.value = menuType[key].menuId;
 }
+
+/* 调用子组件搜索方法 */
+const childSearch = ref() ;
 
 /* 模态框 */
 const dialogVisible = ref(false)
@@ -99,6 +148,7 @@ const closeSharing = () => {
   /* 显示对话框 */
   dialogVisible.value = false;
 }
+
 
 /* 帖子类型选择器 */
 const postTypes = ref([{}]);
@@ -393,10 +443,10 @@ function saveButton() {
       clearPersonalInformationFromData();
 
       /* 做了缓存，有值不发请求，数据变动需要更新，清空缓存 */
-      userData.value = undefined ;
+      userData.value = undefined;
 
       /* 重新获取用户数据 */
-       getUser();
+      getUser();
 
       /* 切换为编辑按钮 */
       personalCenterOperationButton.value = true;
@@ -476,6 +526,50 @@ const handlePictureCardPreviewImg = () => {
   dialogVisibleImg.value = true;
 }
 
+
+/* 搜索异步请求 */
+const querySearchAsync = async (queryString, callback) => {
+  if (queryString === '') {
+    return;
+  }
+  get("api/index/search-suggest?queryString=" + queryString, (rs) => {
+    if (rs.code === 200 && rs.data.length > 0) {
+      callback(rs.data.map(item => ({value: item})));
+    }
+  }, (message, code) => {
+    if (!code === 408) {
+      ElWarning(message)
+    }
+    ElWarning("没有匹配的数据项")
+  });
+}
+
+/* 搜索框回车 */
+const searchSelect = (_) => {
+  jumpSearchPage();
+}
+
+/* 搜索按钮 */
+const searchBtn = () => {
+  jumpSearchPage();
+}
+
+/* 跳转到搜索页面 */
+const jumpSearchPage = () => {
+  /* 更换菜单项 */
+  handleSelect("Search");
+  if (router.currentRoute.value.name !== 'indexSearch') {
+    router.push('/frontend-index-search');
+  }
+  setTimeout(() => {
+    if (childSearch.value) {
+      nextTick(() => {
+        childSearch.value.loadData();
+      });
+    }
+  }, 500);
+}
+
 </script>
 
 <template>
@@ -494,25 +588,25 @@ const handlePictureCardPreviewImg = () => {
                 mode="horizontal"
                 @select="handleSelect"
             >
-              <el-menu-item index="1">
+              <el-menu-item index="Home">
                 <template #title>
                   <my-icon name="icon-shouye"/>
                   <span>首页</span>
                 </template>
               </el-menu-item>
-              <el-menu-item index="2">
+              <el-menu-item index="Learning">
                 <template #title>
                   <my-icon name="icon-fenxiang"/>
                   <span>学术分享</span>
                 </template>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="Campus">
                 <template #title>
                   <my-icon name="icon-xiaoyuanshenghuo"/>
                   <span>校园生活</span>
                 </template>
               </el-menu-item>
-              <el-menu-item index="4">
+              <el-menu-item index="Help">
                 <template #title>
                   <my-icon name="icon-hubanghuzhu"/>
                   <span>互帮互助</span>
@@ -521,16 +615,35 @@ const handlePictureCardPreviewImg = () => {
             </el-menu>
           </el-col>
           <el-col :span="8">
-            <el-input
+            <el-autocomplete
+                style="width: 350px;"
                 v-model="searchForm.content"
-                style="width: 350px; height: 40px;"
+                :fetch-suggestions="querySearchAsync"
                 placeholder="输入搜索关键词"
-                class="input-with-select"
+                select-when-unmatched
+                @select="searchSelect"
+                debounce="700"
             >
-              <template #append>
-                <el-button :icon="Search"/>
+              <template #loading>
+                <el-icon class="is-loading">
+                  <svg class="circular" viewBox="0 0 20 20">
+                    <g
+                        class="path2 loading-path"
+                        stroke-width="0"
+                        style="animation: none; stroke: none"
+                    >
+                      <circle r="3.375" class="dot1" rx="0" ry="0"/>
+                      <circle r="3.375" class="dot2" rx="0" ry="0"/>
+                      <circle r="3.375" class="dot4" rx="0" ry="0"/>
+                      <circle r="3.375" class="dot3" rx="0" ry="0"/>
+                    </g>
+                  </svg>
+                </el-icon>
               </template>
-            </el-input>
+              <template #append>
+                <el-button @click="searchBtn" :icon="Search"/>
+              </template>
+            </el-autocomplete>
           </el-col>
           <el-col :span="2" class="el-dropdown-link">
             <el-dropdown>
@@ -767,7 +880,6 @@ const handlePictureCardPreviewImg = () => {
                     }}</span>
                 </div>
                 <div id="bottom">
-
                 </div>
               </div>
             </el-dialog>
@@ -778,11 +890,12 @@ const handlePictureCardPreviewImg = () => {
     <div id="box_bottom">
       <div id="box_bottom_content">
         <div id="bottom_content_left">
-          <router-view :userInfo="userData" v-slot="{ Component }">
+          <router-view :searchStr="searchForm.content" :menuId="activeMenuId" :userInfo="userData"
+                       v-slot="{ Component }">
             <!--过渡动画-->
             <transition name="el-fade-in-linear" mode="out-in">
               <div :key="$route.path">
-                <component :is="Component"/>
+                <component ref="childSearch" :is="Component"/>
               </div>
             </transition>
           </router-view>
@@ -887,6 +1000,7 @@ const handlePictureCardPreviewImg = () => {
 </template>
 
 <style scoped>
+@import "@/assets/css/loading.css";
 
 .centered {
   display: flex;
@@ -930,7 +1044,6 @@ const handlePictureCardPreviewImg = () => {
   height: 100%;
   width: 70%;
   display: flex;
-  //background-color: white;
 }
 
 #bottom_content_left {
@@ -944,7 +1057,6 @@ const handlePictureCardPreviewImg = () => {
 #bottom_content_right {
   height: 100%;
   width: 25%;
-  //background-color: white;
 }
 
 #content_right_top {
@@ -971,9 +1083,6 @@ const handlePictureCardPreviewImg = () => {
   margin-top: 5px;
   height: 100%;
   width: 68%;
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
   padding-left: 10px;
 }
 
@@ -1175,4 +1284,5 @@ const handlePictureCardPreviewImg = () => {
   height: 90px;
   text-align: center;
 }
+
 </style>

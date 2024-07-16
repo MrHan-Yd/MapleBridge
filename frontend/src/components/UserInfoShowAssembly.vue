@@ -59,7 +59,8 @@ const handlePictureCardPreviewImg = (url) => {
     <div id="box">
       <div id="top">
         <div id="avatar">
-          <el-avatar @click="handlePictureCardPreviewImg(userInfo.avatars.avatarPath + userInfo.avatars.fileName)" :size="100" :src="userInfo.avatars.avatarPath + userInfo.avatars.fileName"/>
+          <el-avatar v-if="userInfo.avatars" @click="handlePictureCardPreviewImg(userInfo.avatars.avatarPath + userInfo.avatars.fileName)" :size="100" :src="userInfo.avatars.avatarPath + userInfo.avatars.fileName"/>
+          <el-avatar v-else :size="100" :src="'/images/touxiang-1.jpg'"/>
         </div>
         <el-dialog title="头像预览" v-model="dialogVisibleImg"
                    width="700">

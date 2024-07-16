@@ -2,6 +2,9 @@ package priv.backend.repository.elasticsearch;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.Highlight;
+import org.springframework.data.elasticsearch.annotations.HighlightField;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import priv.backend.domain.es.dto.ESClientUser;
@@ -16,4 +19,7 @@ import priv.backend.domain.es.dto.ESClientUser;
 @Repository
 public interface ESClientUserRepository extends ElasticsearchRepository<ESClientUser, String> {
 
+    /* TODO: Written by - Han Yongding 2024/07/12 根据昵称查询用户 */
+    @HighlightField(name = "nickname")
+    Page<SearchHit<ESClientUser>> findByNickname(String nickname, Pageable pageable);
 }

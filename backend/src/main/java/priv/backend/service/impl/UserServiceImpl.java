@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -150,6 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         /* TODO: Written by - Han Yongding 2024/02/08 新增成功 */
         return null;
     }
+
 
     /**
      * TODO: Written by - Han Yongding 2024/02/11 修改用户信息
@@ -426,5 +428,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public String collectUserHobby(RestMongoPostTypeVO vo) {
         kafkaUtils.sendMessage(KafkaTopicEnum.COLLECT_USER_PREFERENCES.topic, vo.asViewObject(MongoUserPreferences.class)) ;
         return null ;
+    }
+
+    @Override
+    public String getAdminEmail() {
+        return this.query()
+                .select("email")
+                .eq("account", "admin")
+                .one()
+                .getEmail();
     }
 }

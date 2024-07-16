@@ -33,4 +33,12 @@ public class UserPreferencesServiceImpl extends ServiceImpl<UserPreferencesMappe
     public UserPreferences selectByUserId(String userId){
         return this.query().eq("user_id", userId).one();
     }
+
+    @Override
+    public UserPreferences selectPreferenceByUserId(String userId) {
+        return this.query().
+                select("interests_1", "interests_2")
+                .eq("user_id", userId)
+                .one();
+    }
 }

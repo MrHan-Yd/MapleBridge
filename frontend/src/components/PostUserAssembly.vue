@@ -42,7 +42,8 @@ const handlePictureCardPreviewImg = (url) => {
 <template>
   <div id="post-user-assembly">
     <div id="left">
-      <el-avatar :shape="shape" @click="handlePictureCardPreviewImg(user.path + user.fileName)" :src="user.path + user.fileName" />
+      <el-avatar v-if="user.path && user.fileName" :shape="shape" @click="handlePictureCardPreviewImg(user.path + user.fileName)" :src="user.path + user.fileName" />
+      <el-avatar v-else :src="'/images/touxiang-1.jpg'"/>
     </div>
     <div id="middle">
       <span :style="`vertical-align: middle; margin-right: 10px;font-size:${fontSize}px;`">

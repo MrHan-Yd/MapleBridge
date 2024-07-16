@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2925703",
+      "name": "点击量",
+      "font_class": "dianjiliang",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
       "icon_id": "26500431",
       "name": "敏感词库管理",
       "font_class": "mingancikuguanli",

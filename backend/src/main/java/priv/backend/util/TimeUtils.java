@@ -26,6 +26,11 @@ public class TimeUtils {
         return (System.currentTimeMillis() - time)  / 1000 > 0 ? (System.currentTimeMillis() - time) / 1000 + "秒" : System.currentTimeMillis() - time + "毫秒" ;
     }
 
+    /* TODO: Written by - Han Yongding 2024/07/15 计算耗时 */
+    public static long getCostTime() {
+        return System.currentTimeMillis() - startTime ;
+    }
+
     /** TODO:结束时间 */
     public static String end() {
         return TimeUtils.getCurrentTime(TimeUtils.getStartTime()) ;

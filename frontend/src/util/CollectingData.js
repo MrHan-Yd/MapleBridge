@@ -54,4 +54,4 @@ function uploadData() {
     }
 }
 
-export {recordData} ;
+export {recordData, uploadData} ;
